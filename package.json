@@ -1,0 +1,26 @@
+{
+  "name": "isu-greek-week",
+  "version": "1.0.0",
+  "description": "A simple webpage for displaying times and locations for ISU's Greek Week events.",
+  "main": "Web.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/snowguy13/isu-greek-week.git"
+  },
+  "keywords": [
+    "Iowa",
+    "State",
+    "ISU",
+    "Greek",
+    "Week"
+  ],
+  "author": "Tom Scallon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/snowguy13/isu-greek-week/issues"
+  },
+  "homepage": "https://github.com/snowguy13/isu-greek-week"
+}
