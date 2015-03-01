@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Raleway:700,100,400,300);
+@import url(https://fonts.googleapis.com/css?family=Raleway:700,100,400,300);
 
 /* Root gold: http://www.color-hex.com/color/ffd700 */
 /* Root red: http://www.color-hex.com/color/b22222 */
@@ -101,7 +101,7 @@ main section.active {
 }
 
 .nav-in-footer #header {
- text-align: center;
+  text-align: center;
 }
 
 .nav-in-footer #footer {
