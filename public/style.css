@@ -1,0 +1,119 @@
+@import url(http://fonts.googleapis.com/css?family=Raleway:700,100,400,300);
+
+/* Root gold: http://www.color-hex.com/color/ffd700 */
+/* Root red: http://www.color-hex.com/color/b22222 */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Raleway", "Helvetica", sans-serif;
+  font-weight: 300;
+}
+
+#header,
+#footer {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  color: #b22222;
+  background-color: #fff3b2;
+  border: 0 solid #ffeb7f;
+}
+
+#header {
+  top: 0;
+  border-bottom-width: 1px;
+}
+
+#footer {
+  display: none;
+  bottom: 0;
+  text-align: center;
+  border-top-width: 1px;
+}
+
+#header h1 {
+  display: inline-block;
+  margin: 10px 0 10px 20px;
+}
+
+#header #nav {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  padding-right: 10px;
+}
+
+#footer #nav {
+  position: relative;
+  top: -1px;
+}
+
+#nav li {
+  -webkit-transition: border-color 0.3s;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 2px;
+  padding: 6px 10px 10px;
+  font-size: 20px;
+  border: 0px solid #ffeb7f;
+}
+
+#header #nav li {
+  border-bottom-width: 1px;
+}
+
+#footer #nav li {
+  border-top-width: 1px;
+}
+
+#nav li:hover {
+  border-color: #b22222;
+}
+
+#nav li.active {
+  cursor: default;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+  color: black;
+  border-color: black;
+}
+
+#nav li.active:hover {
+  border-color: black;
+}
+
+main {
+  box-sizing: border-box;
+  height: 100%;
+  padding-top: 58px;
+}
+
+main section {
+  -webkit-transition-property: visibility, opacity;
+  -webkit-transition-duration: ;
+  visibility: hidden;
+  opacity: 0;
+}
+
+main section.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.nav-in-footer #header {
+ text-align: center;
+}
+
+.nav-in-footer #footer {
+  display: block;
+}
+
+/*@media ( max-width: 630px ) {
+  #header {
+    text-align: center;
+  }
+
+  #footer {
+    display: block;
+  }
+}*/
