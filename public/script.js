@@ -18,6 +18,7 @@
     }
     
     //( ww <= MOVE_NAV_TO_FOOTER ? footer : header ).appendChild( nav );
+    alert( ww );
   }
 
   window.onload = function() {
