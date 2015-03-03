@@ -16,4 +16,11 @@ name		VARCHAR(50) PRIMARY KEY\
 location	VARCHAR(50) REFERENCES Location\
 locInfo		VARCHAR(50)\
 start		TIMESTAMP NOT NULL\
-end		TIMESTAMP}
+end		TIMESTAMP\
+\
+
+\b Bugs and How I Avoided Them\
+
+\b0 Webkit \'97 when parent and child have transition-duration on inheritable properties, the child's transition doesn't start until the parent's has finished. 
+\i Fix
+\i0 : reworked CSS to avoid these inheritance clashes.}

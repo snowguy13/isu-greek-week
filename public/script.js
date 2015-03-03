@@ -61,7 +61,7 @@
     Constraints.update( window.innerWidth );
     
     // remove body classes, detach <nav> (in preparation for size-based stuff)
-    document.body.className = "";
+    document.body.classList.remove("nav-in-footer");
     document.body.style.height = window.innerHeight + "px";
     nav.remove();
     
@@ -98,7 +98,7 @@
     };
 
     // make the first section active
-    setTimeout( function() { select( 0 ) }, 1 );
+    select( 0 );
     
     // initialize size-based necessities
     resize();
