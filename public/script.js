@@ -1,24 +1,57 @@
 (function() {
-  
-  var MOVE_NAV_TO_FOOTER = 630;
+
+  var Constraints = (function( CONSTS ) {
+    var FUNCS = {
+      "<" : function( a, b ) { return a < b },
+      "<=": function( a, b ) { return a <= b },
+      ">" : function( a, b ) { return a > b },
+      ">=": function( a, b ) { return a >= b }
+    }, current = {};  
+    
+    for( var name in CONSTS ) {
+      var val = CONSTS[ name ].split(" ");
+      
+      CONSTS[ name ] = {
+        "func": FUNCS[ val[0] ],
+        "val": +val[1]
+      };
+    }
+
+    return {
+      update: function( width ) {
+        for( var name in CONSTS ) {
+          var data = CONSTS[ name ];
+
+          current[ name ] = data.func( width, data.val );
+        }
+      },
+
+      get: function( name ) {
+        return current[ name ];
+      }
+    };
+  }({
+    "Nav in footer": "<= 630"
+  }));
 
   var nav, header, footer;
 
   var resize = function() {
     var ww = window.innerWidth;
     
+    // update width-related constraints
+    Constraints.update( ww );
+    
+    // remove body classes, detach <nav>
     document.body.className = "";
     nav.remove();
     
-    if( ww <= MOVE_NAV_TO_FOOTER ) {
+    if( Constraints.get("Nav in footer") ) {
       document.body.classList.add("nav-in-footer");
       footer.appendChild( nav );
     } else {
       header.appendChild( nav );
     }
-    
-    //( ww <= MOVE_NAV_TO_FOOTER ? footer : header ).appendChild( nav );
-    alert( ww );
   }
 
   window.onload = function() {
