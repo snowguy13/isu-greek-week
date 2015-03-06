@@ -42,7 +42,7 @@ app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'));
 });
 
-pg.connect( CONNECT, function( err, client, done ) {
+/*pg.connect( CONNECT, function( err, client, done ) {
   if( err ) {
     return console.error("Failed to connect to database " + CONNECT );
   }
@@ -58,4 +58,4 @@ pg.connect( CONNECT, function( err, client, done ) {
     console.log( res.rows );
     client.end();
   });
-});
+});*/

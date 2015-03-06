@@ -10,9 +10,13 @@ body {
   font-weight: 300;
 }
 
+:focus {
+  outline: none;
+}
+
 #header,
 #footer {
-  -webkit-transition-property: background-color;
+  -webkit-transition-property: background-color, border-color;
   -webkit-transition-duration: 0.3s;
   position: absolute;
   z-index: 1;
@@ -31,7 +35,7 @@ body {
   position: relative;
   box-sizing: border-box;
   height: 100%;
-  padding-top: 58px;
+  margin-top: 58px;
 }
 
 #footer {
@@ -41,15 +45,15 @@ body {
   border-top-width: 1px;
 }
 
-.nav-in-footer #header {
+.thin #header {
   text-align: center;
 }
 
-.nav-in-footer #main {
-  padding-bottom: 42px;
+.thin #main {
+  /*padding-bottom: 42px;*/
 }
 
-.nav-in-footer #footer {
+.thin #footer {
   display: block;
 }
 
@@ -208,4 +212,16 @@ body {
   -webkit-transition-delay: 0.3s;
   visibility: visible;
   opacity: 1;
+}
+
+.home .section {
+  height: 100%;
+  overflow-y: hidden;
+}
+
+iframe#twitter-widget-0 {
+  box-sizing: border-box;
+  width: 50%;
+  height: 100%;
+  padding: 5px;
 }
