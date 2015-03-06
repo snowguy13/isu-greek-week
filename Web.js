@@ -52,7 +52,7 @@ pg.connect( CONNECT, function( err, client, done ) {
     done();
 
     if( err ) {
-      return console.err("Error running query");
+      return console.error("Error running query");
     }
 
     console.log( res.rows );
