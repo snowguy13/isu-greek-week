@@ -214,14 +214,31 @@ body {
   opacity: 1;
 }
 
-.home .section {
+.home-section {
   height: 100%;
   overflow-y: hidden;
 }
 
-iframe#twitter-widget-0 {
+.media-container {
   box-sizing: border-box;
+  float: left;
   width: 50%;
   height: 100%;
   padding: 5px;
+}
+
+.media-container + .media-container {
+  float: right;
+}
+
+.thin .media-container {
+  width: 100%;
+  height: 50%;
+}
+
+iframe#twitter-widget-0 {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  /*padding: 5px;*/
 }

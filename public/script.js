@@ -41,7 +41,6 @@
       currentSection = 0,
       links,
       sections,
-      twitterWidget,
       lookForTwitter;
 
       // header 52
@@ -129,7 +128,6 @@
     sections = filter.call( document.getElementById("main").childNodes, isElement );
 
     // get the twitter widget
-    twitterWidget = document.getElementById("twitter-widget-0");
     lookForTwitter();
 
     // when nav is clicked, update selection if necessary
