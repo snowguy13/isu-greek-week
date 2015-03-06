@@ -229,6 +229,8 @@ body {
 
 .media-container + .media-container {
   float: right;
+  padding-top: 0;
+  padding-left: 0;
 }
 
 .thin .media-container {
