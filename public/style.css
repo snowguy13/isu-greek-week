@@ -100,6 +100,8 @@ body {
   cursor: default;
 }
 
+/* colors for the Home tab */
+
 .home #header,
 .home #footer {
   background-color: #fff3b2;
@@ -129,6 +131,8 @@ body {
   border-color: black;
 }
 
+/* colors for the Schedule tab */
+
 .schedule #header,
 .schedule #footer {
   background-color: #b22222;
@@ -140,7 +144,7 @@ body {
 }
 
 .schedule .section-link {
-  color: #ffeb7f;;
+  color: #ffeb7f;
   border-color: #7c1717;
 }
 
@@ -155,6 +159,37 @@ body {
 }
 
 .schedule .section-link.active:hover {
+  border-color: white;
+}
+
+/* colors for the Map tab  (#7DBF3B)  */
+
+.map #header,
+.map #footer {
+  background-color: #a4d275;
+  border-color: #324c17;
+}
+
+.map .title {
+  color: #324c17;
+}
+
+.map .section-link {
+  color: #324c17;
+  border-color: #324c17;
+}
+
+.map .section-link:hover {
+  border-color: #ffeb7f;
+}
+
+.map .section-link.active {
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+  color: white;
+  border-color: white;
+}
+
+.map .section-link.active:hover {
   border-color: white;
 }
 
