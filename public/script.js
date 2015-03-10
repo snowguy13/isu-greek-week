@@ -58,7 +58,6 @@
     currentLink = index;
     (link = links[ currentLink ]).classList.add("active");
     currentSection = link.dataset.select !== undefined ? link.dataset.select : index;
-    console.log(link, link.dataset, currentSection);
     sections[ currentSection ].classList.add("active");
     document.body.classList.add( link.innerHTML.toLowerCase() );
     link.focus();
@@ -80,11 +79,11 @@
       setTimeout( lookForTwitter, 100 );
     } else {
       setTimeout(function() {
-        
-      t.style.width = "";
-      t.style.height = "";
-      t.style.padding = "";
-      }, 500);
+        t.style.width = "";
+        t.style.height = "";
+        t.style.padding = "";
+        document.getElementById("twitter-outer").style.visibility = "";
+      }, 1000);
     }
   };
 
@@ -96,11 +95,9 @@
         container = document.getElementById("google-map-container"),
         map = new google.maps.Map( container, settings ),
         kmlLayer = new google.maps.KmlLayer({
-          url: "data/GW15.kmz"
+          url: "https://github.com/snowguy13/isu-greek-week/raw/master/data/GW15.kmz",
+          map: map
         });
-    
-    // set the layer to the map
-    kmlLayer.setMap( map );
   };
 
   var resize = function() {

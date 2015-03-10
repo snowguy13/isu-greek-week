@@ -7,7 +7,6 @@ var express = require('express'),
 
 // Determine port and set up static file serving
 app.set('port', ( process.env.PORT || 5000 ));
-app.use('/data', express.static( __dirname ) );
 app.use( express.static( __dirname + '/public' ) );
 
 // Api stuff
@@ -32,6 +31,12 @@ app.get('/api/locations', function( req, res ) {
   runQuery("SELECT * FROM Locations", function( result ) {
     
   });
+});
+
+// Map 'data/' to the folder
+app.use('/data/:what', function( req, res ) {
+  res.sendFile( __dirname + '/data/' + req.params.what );
+  console.log("Returning " + __dirname + '/data/' + req.params.what);
 });
 
 // Map the empty URL to index.htm
