@@ -7,6 +7,7 @@ var express = require('express'),
 
 // Determine port and set up static file serving
 app.set('port', ( process.env.PORT || 5000 ));
+app.use('/data', express.static( __dirname ) );
 app.use( express.static( __dirname + '/public' ) );
 
 // Api stuff

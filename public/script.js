@@ -38,10 +38,10 @@
       header,
       main,
       footer,
+      currentLink = 0,
       currentSection = 0,
       links,
-      sections,
-      lookForTwitter;
+      sections;
 
       // header 52
       // footer 48
@@ -50,13 +50,15 @@
     var link;
 
     // deselect the previous section
-    (link = links[ currentSection ]).classList.remove("active");
+    (link = links[ currentLink ]).classList.remove("active");
     sections[ currentSection ].classList.remove("active");
     document.body.classList.remove( link.innerHTML.toLowerCase() );
     
     // now select the next one
-    currentSection = index;
-    (link = links[ currentSection ]).classList.add("active");
+    currentLink = index;
+    (link = links[ currentLink ]).classList.add("active");
+    currentSection = link.dataset.select !== undefined ? link.dataset.select : index;
+    console.log(link, link.dataset, currentSection);
     sections[ currentSection ].classList.add("active");
     document.body.classList.add( link.innerHTML.toLowerCase() );
     link.focus();
@@ -68,6 +70,37 @@
 
   select.next = function() {
     select( (currentSection + 1) % sections.length );
+  };
+
+  var lookForTwitter = function() {
+    var t = document.getElementById("twitter-widget-0");
+      console.log("Looking for Twitter...");
+
+    if( !t ) {
+      setTimeout( lookForTwitter, 100 );
+    } else {
+      setTimeout(function() {
+        
+      t.style.width = "";
+      t.style.height = "";
+      t.style.padding = "";
+      }, 500);
+    }
+  };
+
+  var initializeGoogleMap = function() {
+    var settings = {
+          zoom: 15,
+          center: new google.maps.LatLng(42.022892, -93.646869)
+        },
+        container = document.getElementById("google-map-container"),
+        map = new google.maps.Map( container, settings ),
+        kmlLayer = new google.maps.KmlLayer({
+          url: "data/GW15.kmz"
+        });
+    
+    // set the layer to the map
+    kmlLayer.setMap( map );
   };
 
   var resize = function() {
@@ -93,22 +126,6 @@
 
     // update the height of the Twitter widget
     //twitterWidget.style.height = main.clientHeight - ( Constraints.get("Nav in footer") ? 58 + 42 + 10 : 58 + 10 );
-  };
-
-  lookForTwitter = function() {
-    var t = document.getElementById("twitter-widget-0");
-      console.log("Looking for Twitter...");
-
-    if( !t ) {
-      setTimeout( lookForTwitter, 100 );
-    } else {
-      setTimeout(function() {
-        
-      t.style.width = "";
-      t.style.height = "";
-      t.style.padding = "";
-      }, 500);
-    }
   };
 
   window.onload = function() {
@@ -159,6 +176,9 @@
 
       prevent && ev.preventDefault();
     };
+
+    // initialize the Google Map
+    initializeGoogleMap();
 
     // make the first section active
     select( 0 );
