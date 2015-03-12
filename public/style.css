@@ -252,18 +252,28 @@ iframe#twitter-widget-0 {
 
 #schedule {
   margin: 0;
+  padding: 10px 0;
+}
+
+.day-header {
+  display: block;
   padding: 10px;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 100;
+  color: white;
+  background-color: #333;
+  background-color: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 8px #666;
 }
 
 .event {
   -webkit-transition-property: box-shadow;
   -webkit-transition-duration: 0.3s;
   display: block;
-  margin: 10px;
-  border: none;
+  margin: 10px 20px;
+  border: 1px solid #AAA;
   border-radius: 4px;
-  box-shadow: 0 1px 3px #666;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .event-title {
@@ -325,7 +335,9 @@ iframe#twitter-widget-0 {
 }
 
 .event:hover {
-  box-shadow: none;
+  border-color: #3e5f1d;
+  box-shadow: 0 1px 3px #666;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .event:hover .event-title {

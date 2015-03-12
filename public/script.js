@@ -41,7 +41,8 @@
       currentLink = 0,
       currentSection = 0,
       links,
-      sections;
+      sections,
+      map;
 
       // header 52
       // footer 48
@@ -110,6 +111,7 @@
   };
 
   var DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  var DATE = 22;
   
   // NOTE: *daytime properties are integer counting # of 15-min chunks after midnight Sunday the 22nd
   // this function separates a *daytime value into hours since day (0 = Sunday 22nd) and time (# 15 increments since midnight)
@@ -163,6 +165,10 @@
     dayHeader: "day-header"
   };
 
+  var makeDayHeader = function( day ) {
+    return createElement("li", CLASSES.dayHeader, DAYS[ day % 7 ] + ", March " + (DATE + day));
+  };
+
   var eventToLI = function( ev ) {
     var li      = createElement("li",   CLASSES.event ),
         head    = createElement("h4",   CLASSES.title ),
@@ -176,6 +182,7 @@
     }
     
     head.appendChild( createElement("span", CLASSES.name, ev.name) );
+    head.appendChild( document.createTextNode(" ") );
     head.appendChild( timeBox );
     li.appendChild( head );
 
@@ -187,11 +194,19 @@
   };
 
   var prepareSchedule = function( events ) {
-    var els = events.sort( scheduleSort ).map( eventToLI ),
-        container = document.getElementById("schedule");
+    var events     = events.sort( scheduleSort )
+        els        = events.map( eventToLI ),
+        container  = document.getElementById("schedule"),
+        lastDay    = -1,
+        dayHeaders = [ 0, 1, 2, 3, 4, 5, 6, 7 ].map( makeDayHeader );
     console.log( "Mapped elements" );
 
-    els.forEach(function( li ) {
+    els.forEach(function( li, index ) {
+      var day = separateDaytime( events[ index ].startdaytime ).day;
+      while( lastDay < day ) {
+        lastDay++; // Move to next day, make header for this day
+        container.appendChild( dayHeaders[ lastDay ] );
+      }
       container.appendChild( li );
     });
   };
@@ -215,12 +230,15 @@
           zoom: 15,
           center: new google.maps.LatLng(42.022892, -93.646869)
         },
-        container = document.getElementById("google-map-container"),
-        map = new google.maps.Map( container, settings ),
-        kmlLayer = new google.maps.KmlLayer({
-          url: "https://github.com/snowguy13/isu-greek-week/raw/master/data/GW15.kmz",
-          map: map
-        });
+        container = document.getElementById("google-map-container");
+        
+    map = new google.maps.Map( container, settings );
+    kmlLayer = new google.maps.KmlLayer({
+      url: "https://github.com/snowguy13/isu-greek-week/raw/master/data/GW15.kmz",
+      map: map
+    });
+
+    window.map = map;
   };
 
   /** APPLIES TO ALL **/
