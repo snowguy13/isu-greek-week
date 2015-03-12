@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add an Event!</title>
+  <script type="text/javascript">
+    var locToOpt = function( loc ) {
+      var opt = document.createElement("option");
+      opt.innerHTML = loc.name;
+      return opt;
+    };
+
+    window.onload = function() {
+      var xhr = new XMLHttpRequest(), 
+          locations, 
+          combo = document.getElementById("location");
+
+      xhr.open("GET", "/api/locations");
+      xhr.onreadystatechange = function() {
+        if( xhr.readyState === 4 ) {
+          locations = JSON.parse( xhr.response );
+      
+          locations.map( locToOpt ).forEach(function( opt ) {
+            combo.appendChild( opt );
+          });
+        }
+      };
+      xhr.send();
+    };
+
+    var toDaytime = function( day, timeStr ) {
+      var time = ( +timeStr[0] * 4 ) + ( +timeStr[1] / 15 );
+      return day * 96 + time;
+    };
+
+    var submitForm = function( ev ) {
+      var xhr     = new XMLHttpRequest(),
+          form    = document.forms.item(0),
+          name    = form.name.value,
+          loc     = form.location.value,
+          locInfo = form.locInfo.value,
+          day     = form.day.selectedIndex,
+          starttime = form.starttime.value.split(":"),
+          endtime = form.endtime.value,
+          startdaytime,
+          enddaytime,
+          data;
+      
+      loc = loc === "(none)" ? null : loc;
+      startdaytime = toDaytime( day, starttime );
+      enddaytime = endtime ? toDaytime( day, endtime.split(":") ) : startdaytime;
+
+      data = {
+        name: name,
+        location: loc,
+        locInfo: locInfo,
+        startdaytime: startdaytime,
+        enddaytime: enddaytime
+      };
+
+      console.log( "Sent:", data);
+
+      xhr.open( "POST", "/api/events" );
+      xhr.setRequestHeader( "Content-Type", "application/json" );
+      xhr.send( JSON.stringify( data ) );
+    };
+  </script>
+</head>
+<body>
+  <form>
+    <fieldset>
+      <label for="name">Name:</label>
+      <input name="name" type="text" />
+    </fieldset><fieldset>
+      <label for="location">Location:</label>
+      <select name="location" id="location">
+        <option>(none)</option>
+      </select>
+    </fieldset><fieldset>
+      <label for="locInfo">Extra location info:</label>
+      <input name="locInfo" type="text" />
+    </fieldset><fieldset>
+      <label for="day">Day:</label>
+      <select name="day">
+        <option>Sunday</option>
+        <option>Monday</option>
+        <option>Tuesday</option>
+        <option>Wednesday</option>
+        <option>Thursday</option>
+        <option>Friday</option>
+        <option>Saturday</option>
+        <option>Sunday (vespers)</option>
+      </select>
+    </fieldset><fieldset>
+      <label for="starttime">Time:</label>
+      <input name="starttime" type="text" />
+    </fieldset><fieldset>
+      <label for="endtime">End time (can be blank):</label>
+      <input name="endtime" type="text" />
+    </fieldset>
+    <input type="button" value="submit" onclick="submitForm()" />
+  </form>
+</body>
+</html>

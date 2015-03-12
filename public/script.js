@@ -45,6 +45,8 @@
 
       // header 52
       // footer 48
+  
+  /** APPLIES TO ALL **/
 
   var select = function( index ) {
     var link;
@@ -70,6 +72,8 @@
   select.next = function() {
     select( (currentSection + 1) % sections.length );
   };
+  
+  /** TWITTER **/
 
   var lookForTwitter = function() {
     var t = document.getElementById("twitter-widget-0");
@@ -87,6 +91,125 @@
     }
   };
 
+  /** SCHEDULE **/
+  var scheduleSort = function( evA, evB ) {
+    if( evA.startdaytime < evB.startdaytime ) {
+      return -1;
+    } else if( evA.startdaytime > evB.startdaytime ) {
+      return 1;
+    } else {
+      // startdaytimes are the same
+      if( evA.enddaytime < evB.enddaytime ) {
+        return -1;
+      } else if( evA.enddaytime > evB.enddaytime ) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
+  };
+
+  var DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  
+  // NOTE: *daytime properties are integer counting # of 15-min chunks after midnight Sunday the 22nd
+  // this function separates a *daytime value into hours since day (0 = Sunday 22nd) and time (# 15 increments since midnight)
+  var separateDaytime = function( daytime ) {
+    var time = daytime % 96,
+        day  = ( daytime - time ) / 96;
+
+    return {
+      time: time,
+      day: day
+    };
+  };
+
+  var timeNumToStr = function( timeNum ) {
+    var min = timeNum % 4,
+        hr  = ( timeNum - min ) / 4,
+        pm  = hr >= 12;
+
+    /*return {
+      hour:   hr - ( pm ? 12 : 0 ),
+      minute: min * 15,
+      pm:     pm
+    };*/
+    return "<span class='hour'>" + (( pm ? hr - 12 : hr ) || 12) + "</span>:"
+         + "<span class='min'>"  + ( min === 0 ? "00" : min * 15 ) + "</span>"
+         + "<span class='ampm'>" + ( pm ? "PM" : "AM" ) + "</span>";
+  };
+
+  var daytimeToTimeStr = function( daytime ) {
+    return timeNumToStr( separateDaytime( daytime ).time );
+  };
+
+  var createElement = function( type, classes, innerHTML ) {
+    var el = document.createElement( type );
+
+    el.className = classes;
+    el.innerHTML = innerHTML || "";
+
+    return el;
+  };
+  
+  var CLASSES = {
+    event:     "event",
+    title:     "event-title",
+    name:      "event-name",
+    timeBox:   "event-time-box",
+    time:      "event-time",
+    body:      "event-body",
+    location:  "event-location",
+    locInfo:   "event-loc-info",
+    dayHeader: "day-header"
+  };
+
+  var eventToLI = function( ev ) {
+    var li      = createElement("li",   CLASSES.event ),
+        head    = createElement("h4",   CLASSES.title ),
+        timeBox = createElement("span", CLASSES.timeBox ),
+        body    = createElement("div",  CLASSES.body);
+    
+    timeBox.appendChild( createElement("time", CLASSES.time, daytimeToTimeStr( ev.startdaytime ) ) );
+    if( ev.startdaytime !== ev.enddaytime ) {
+      timeBox.appendChild( createElement("span", "", " - ") );
+      timeBox.appendChild( createElement("time", CLASSES.time, daytimeToTimeStr( ev.enddaytime ) ) );
+    }
+    
+    head.appendChild( createElement("span", CLASSES.name, ev.name) );
+    head.appendChild( timeBox );
+    li.appendChild( head );
+
+    body.appendChild( createElement("span", CLASSES.location, ev.location ) );
+    ev.locinfo && body.appendChild( createElement("span", CLASSES.locInfo, ev.locinfo) );
+    li.appendChild( body );
+
+    return li;
+  };
+
+  var prepareSchedule = function( events ) {
+    var els = events.sort( scheduleSort ).map( eventToLI ),
+        container = document.getElementById("schedule");
+    console.log( "Mapped elements" );
+
+    els.forEach(function( li ) {
+      container.appendChild( li );
+    });
+  };
+
+  var requestSchedule = function() {
+    var xhr = new XMLHttpRequest();
+
+    xhr.open("GET", "/api/events");
+    xhr.onreadystatechange = function() {
+      if( xhr.readyState !== 4 ) return; // quit if not DONE
+      console.log("XHR done");
+      prepareSchedule( JSON.parse( xhr.response ) );
+    };
+    xhr.send();
+  };
+  
+  /** MAP **/
+
   var initializeGoogleMap = function() {
     var settings = {
           zoom: 15,
@@ -99,6 +222,8 @@
           map: map
         });
   };
+
+  /** APPLIES TO ALL **/
 
   var resize = function() {
     var wh = window.innerHeight;
@@ -173,6 +298,9 @@
 
       prevent && ev.preventDefault();
     };
+
+    // do scheduley things
+    requestSchedule();
 
     // initialize the Google Map
     initializeGoogleMap();
