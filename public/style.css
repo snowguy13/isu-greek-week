@@ -255,25 +255,34 @@ iframe#twitter-widget-0 {
   padding: 10px 0;
 }
 
+.event-list {
+  margin: 0;
+  padding: 10px 0;
+}
+
 .day-header {
   display: block;
+  position: relative;
   padding: 10px;
   text-align: center;
   font-size: 30px;
   font-weight: 100;
   color: white;
   background-color: #333;
-  background-color: rgba(0, 0, 0, 0.8);
-  box-shadow: 0 0 8px #666;
+  box-shadow: 0 0 8px #333;
 }
 
 .event {
   -webkit-transition-property: box-shadow;
   -webkit-transition-duration: 0.3s;
   display: block;
-  margin: 10px 20px;
+  margin: 0 20px;
   border: 1px solid #AAA;
   border-radius: 4px;
+}
+
+.event:not(:first-child) {
+  margin-top: 10px;
 }
 
 .event-title {
@@ -347,4 +356,31 @@ iframe#twitter-widget-0 {
 
 .event:hover .event-body {
   background-color: #fff3b2;
+}
+
+#google-map-container {
+  -webkit-transition-property: visibility, opacity, margin-top;
+  -webkit-transition-duration: 0.3s;
+  visibility: hidden;
+  opacity: 0;
+  margin-top: -100%;
+}
+
+.map #google-map-container {
+  visibility: visible;
+  opacity: 1;
+  margin-top: 0;
+}
+
+.map #schedule,
+.map .day-header,
+.map .event-list,
+.map .event {
+  display: none;
+}
+
+.map #schedule
+.map .event-list.selected,
+.map .event.selected {
+  display: block;
 }

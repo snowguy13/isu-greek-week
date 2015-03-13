@@ -93,7 +93,7 @@
   };
 
   /** SCHEDULE **/
-  var scheduleSort = function( evA, evB ) {
+  var sortEvents = function( evA, evB ) {
     if( evA.startdaytime < evB.startdaytime ) {
       return -1;
     } else if( evA.startdaytime > evB.startdaytime ) {
@@ -130,11 +130,6 @@
         hr  = ( timeNum - min ) / 4,
         pm  = hr >= 12;
 
-    /*return {
-      hour:   hr - ( pm ? 12 : 0 ),
-      minute: min * 15,
-      pm:     pm
-    };*/
     return "<span class='hour'>" + (( pm ? hr - 12 : hr ) || 12) + "</span>:"
          + "<span class='min'>"  + ( min === 0 ? "00" : min * 15 ) + "</span>"
          + "<span class='ampm'>" + ( pm ? "PM" : "AM" ) + "</span>";
@@ -155,6 +150,7 @@
   
   var CLASSES = {
     event:     "event",
+    list:      "event-list",
     title:     "event-title",
     name:      "event-name",
     timeBox:   "event-time-box",
@@ -169,7 +165,7 @@
     return createElement("li", CLASSES.dayHeader, DAYS[ day % 7 ] + ", March " + (DATE + day));
   };
 
-  var eventToLI = function( ev ) {
+  var makeEventElement = function( ev ) {
     var li      = createElement("li",   CLASSES.event ),
         head    = createElement("h4",   CLASSES.title ),
         timeBox = createElement("span", CLASSES.timeBox ),
@@ -194,21 +190,56 @@
   };
 
   var prepareSchedule = function( events ) {
-    var events     = events.sort( scheduleSort )
-        els        = events.map( eventToLI ),
+    var events     = events.sort( sortEvents ),
+        elements   = events.map( makeEventElement ),
+        dayHeaders = [ 0, 1, 2, 3, 4, 5, 6, 7 ].map( makeDayHeader ),
         container  = document.getElementById("schedule"),
         lastDay    = -1,
-        dayHeaders = [ 0, 1, 2, 3, 4, 5, 6, 7 ].map( makeDayHeader );
-    console.log( "Mapped elements" );
-
-    els.forEach(function( li, index ) {
+        sublist    = createElement( "ul", CLASSES.list );
+    
+    // iterate through the event elements, adding day headers as normal
+    elements.forEach(function( li, index ) {
       var day = separateDaytime( events[ index ].startdaytime ).day;
-      while( lastDay < day ) {
-        lastDay++; // Move to next day, make header for this day
+
+      // remember, events are already sorted by time and day, so this will work
+      if( lastDay < day ) {
+        // Append the previous sublist (if it has children), and create a new list
+        if( sublist.childNodes.length ) { 
+          container.appendChild( sublist );
+          sublist = createElement( "ul", CLASSES.list );
+        }
+
+        // Move to the relevant day, append the header
+        lastDay = day;
         container.appendChild( dayHeaders[ lastDay ] );
       }
-      container.appendChild( li );
+      
+      // Add this element to the relevent sublist
+      sublist.appendChild( li );
     });
+
+    // Append the last sublist
+    sublist.childNodes.length && container.appendChild( sublist );
+
+    // Add a scroll listener to move the headers as need be
+    sections[ 1 ].addEventListener("scroll", function() {
+      console.log("Scroll:");
+      var scrollY = sections[ 1 ].scrollTop;
+
+      dayHeaders.forEach(function( header ) {
+        var eventList = header.nextSibling;
+        //console.log({ max: topMax, goal: topGoal });
+        
+        // Reset 'top' to ensure proper calculations
+        header.style.top = "0px";
+
+        // Get the bounds
+        topMax  = (eventList.offsetHeight || ( eventList.clientHeight + 20 )); // the height of the following list of elements
+        topGoal = scrollY - header.offsetTop;                                  // the scrolled height, less the position of the header
+
+        header.style.top = Math.max( 0, Math.min( topMax, topGoal )) + "px";
+      });
+    }, false);
   };
 
   var requestSchedule = function() {
