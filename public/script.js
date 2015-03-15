@@ -348,6 +348,21 @@
       prevent && ev.preventDefault();
     };
 
+    // make sure the helpful links open in a new tab
+    Array.prototype.forEach.call( document.querySelectorAll(".helpful-links"), function( list ) {
+      list.addEventListener('click', function( event ) {
+        var src = event.target;
+
+        if( src.tagName.toLowerCase() === "a" ) {
+          // don't navigate to the page
+          event.preventDefault();
+          
+          // instead, open in a new tab
+          window.open( src.href );
+        }
+      }, false);
+    });
+
     // do scheduley things
     requestSchedule();
 
