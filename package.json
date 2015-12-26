@@ -1,0 +1,27 @@
+{
+  "name": "isu-greek-week",
+  "version": "1.0.0",
+  "description": "Website for Greek Week 2016 at Iowa State",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/snowguy13/isu-greek-week.git"
+  },
+  "keywords": [
+    "Greek",
+    "Week",
+    "Iowa",
+    "State",
+    "University",
+    "2016"
+  ],
+  "author": "Tom Scallon, Nik Suvorov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/snowguy13/isu-greek-week/issues"
+  },
+  "homepage": "https://github.com/snowguy13/isu-greek-week"
+}
