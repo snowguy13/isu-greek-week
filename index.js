@@ -7,11 +7,11 @@ var express = require('express'),
 app.set('port', ( process.env.PORT || 5000 ));
 
 // Allow JSON parsing
-app.use( bParser.json() );
+app.use( bodyParser.json() );
 
 // Placeholder response
-app.get(function( req, res ) {
-  res.send("You requested the path <strong>" + req.url + "</strong>");
+app.use(function( req, res ) {
+  res.send("You requested the path \"<strong>" + req.url + "\"</strong>");
 });
 
 // Listen on the designated port
