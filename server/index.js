@@ -9,7 +9,7 @@ app.set('port', ( process.env.PORT || 5000 ));
 // Allow JSON parsing
 app.use( bodyParser.json() );
 
-// Placeholder response
+// Placeholder response -- just echo the path for now
 app.use(function( req, res ) {
   res.send("You requested the path \"<strong>" + req.url + "\"</strong>");
 });
