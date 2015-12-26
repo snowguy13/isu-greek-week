@@ -1,1 +1,1 @@
-web: node 2015/Web.js
+web: node Web.js
