@@ -14,6 +14,11 @@ app.use(function( req, res ) {
   res.send("You requested the path \"<strong>" + req.url + "\"</strong>");
 });
 
+// On empty url, return the main file
+app.get("/", function( req, res ) {
+  res.sendFile("webapp/index.htm");
+});
+
 // Listen on the designated port
 app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'));
