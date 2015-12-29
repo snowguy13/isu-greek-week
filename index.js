@@ -9,14 +9,16 @@ app.set('port', ( process.env.PORT || 5000 ));
 // Allow JSON parsing
 app.use( bodyParser.json() );
 
+// On empty url, return the main file
+app.get("/", function( req, res ) {
+  res.sendFile( __dirname + "/webapp/index.htm");
+});
+
+// TODO: add static serving of bower_components and webapp/js
+
 // Placeholder response -- just echo the path for now
 app.use(function( req, res ) {
   res.send("You requested the path \"<strong>" + req.url + "\"</strong>");
-});
-
-// On empty url, return the main file
-app.get("/", function( req, res ) {
-  res.sendFile("webapp/index.htm");
 });
 
 // Listen on the designated port
