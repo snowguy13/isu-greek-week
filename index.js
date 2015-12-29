@@ -15,6 +15,7 @@ app.get("/", function( req, res ) {
 });
 
 // TODO: add static serving of bower_components and webapp/js
+app.route("/bower")
 
 // Placeholder response -- just echo the path for now
 app.use(function( req, res ) {

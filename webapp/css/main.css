@@ -1,0 +1,21 @@
+@import url(https://fonts.googleapis.com/css?family=Titillium+Web:400,700,200,200italic,400italic,700italic);
+
+body {
+  font-family: 'Titillium Web', Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 200;
+}
+
+#countdown-wrapper {
+  text-align: center;
+}
+
+#countdown-wrapper h3 {
+  font-size: 48px;
+  font-weight: 200;
+}
+
+#countdown-wrapper h4 {
+  font-size: 40px;
+  font-weight: 200;
+}
