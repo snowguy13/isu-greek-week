@@ -9,6 +9,12 @@ app.set('port', ( process.env.PORT || 5000 ));
 // Allow JSON parsing
 app.use( bodyParser.json() );
 
+app.use(function( req, res, next ) {
+  console.log("Request to " + req.url );
+
+  next();
+})
+
 // On empty url, return the main file
 app.get("/", function( req, res ) {
   res.sendFile( __dirname + "/webapp/index.htm");
@@ -18,9 +24,6 @@ app.get("/", function( req, res ) {
 app.use("/css",   express.static( __dirname + "/webapp/css" ));
 app.use("/image", express.static( __dirname + "/webapp/image" ));
 app.use("/js",    express.static( __dirname + "/webapp/js" ));
-
-// TODO: add static serving of bower_components and webapp/js
-app.route("/bower")
 
 // Placeholder response -- just echo the path for now
 app.use(function( req, res ) {
