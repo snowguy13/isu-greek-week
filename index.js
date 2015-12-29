@@ -9,12 +9,6 @@ app.set('port', ( process.env.PORT || 5000 ));
 // Allow JSON parsing
 app.use( bodyParser.json() );
 
-app.use(function( req, res, next ) {
-  console.log("Request to " + req.url );
-
-  next();
-})
-
 // On empty url, return the main file
 app.get("/", function( req, res ) {
   res.sendFile( __dirname + "/webapp/index.htm");

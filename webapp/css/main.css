@@ -26,7 +26,7 @@ body {
   font-size: 60px;
 }
 
-#big-countdown-wrapper .part .label {
+#big-countdown-wrapper .countdown .label {
   display: block;
   margin-top: -10px;
   font-size: 30px;
@@ -40,4 +40,40 @@ body {
 
 .countdown .part .label {
   content: attr("data-label");
+}
+
+@media(max-width: 500px) {
+  #big-countdown-wrapper h3 {
+    font-size: 36px;
+  }
+
+  #big-countdown-wrapper h4 {
+    font-size: 28px;
+  }
+
+  #big-countdown-wrapper .countdown {
+    font-size: 48px;
+  }
+
+  #big-countdown-wrapper .countdown .label {
+    font-size: 24px;
+  }
+}
+
+@media(max-width: 500px) {
+  #big-countdown-wrapper h3 {
+    font-size: 30px;
+  }
+
+  #big-countdown-wrapper h4 {
+    font-size: 24px;
+  }
+
+  #big-countdown-wrapper .countdown {
+    font-size: 40px;
+  }
+
+  #big-countdown-wrapper .countdown .label {
+    font-size: 18px;
+  }
 }
