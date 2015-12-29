@@ -2,10 +2,10 @@
 require.config({
   baseUrl: "js/",
   paths: {
-    "jquery":           "lib/jquery/dist/jquery.js",
-    "jquery.countdown": "lib/jquery.countdown/dist/jquery.countdown.js"
+    "jquery":           "lib/jquery/dist/jquery",
+    "jquery.countdown": "lib/jquery.countdown/dist/jquery.countdown"
   }
 });
 
 // Start the app
-requirejs(["gw2016.js"]);
+requirejs(["js/gw2016.js"]);

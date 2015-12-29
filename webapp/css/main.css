@@ -4,18 +4,40 @@ body {
   font-family: 'Titillium Web', Arial, sans-serif;
   font-size: 12px;
   font-weight: 200;
+  background-color: #a4d275;
 }
 
-#countdown-wrapper {
+#big-countdown-wrapper {
   text-align: center;
 }
 
-#countdown-wrapper h3 {
+#big-countdown-wrapper h3 {
   font-size: 48px;
   font-weight: 200;
 }
 
-#countdown-wrapper h4 {
-  font-size: 40px;
+#big-countdown-wrapper h4 {
+  font-size: 36px;
   font-weight: 200;
+}
+
+#big-countdown-wrapper .countdown {
+  font-weight: bold;
+  font-size: 60px;
+}
+
+#big-countdown-wrapper .part .label {
+  display: block;
+  margin-top: -10px;
+  font-size: 30px;
+  font-weight: normal;
+}
+
+.countdown .part {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+.countdown .part .label {
+  content: attr("data-label");
 }
