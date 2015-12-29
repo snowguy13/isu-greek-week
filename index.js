@@ -14,6 +14,11 @@ app.get("/", function( req, res ) {
   res.sendFile( __dirname + "/webapp/index.htm");
 });
 
+// Serve files for paths under css/ image/ or js/
+app.use("/css",   express.static( __dirname + "/webapp/css" ));
+app.use("/image", express.static( __dirname + "/webapp/image" ));
+app.use("/js",    express.static( __dirname + "/webapp/js" ));
+
 // TODO: add static serving of bower_components and webapp/js
 app.route("/bower")
 
