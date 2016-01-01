@@ -2,8 +2,8 @@
 require.config({
   baseUrl: "js/",
   paths: {
-    "jquery":           "lib/jquery/dist/jquery",
-    "jquery.countdown": "lib/jquery.countdown/dist/jquery.countdown"
+    "jquery":           "lib/jquery/dist/jquery.min",
+    "jquery.countdown": "lib/jquery.countdown/dist/jquery.countdown.min"
   }
 });
 

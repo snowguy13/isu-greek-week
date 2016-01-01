@@ -11,11 +11,15 @@ app.use( bodyParser.json() );
 
 // On empty url, return the main file
 app.get("/", function( req, res ) {
-  res.sendFile( __dirname + "/webapp/index.htm");
+  res.sendFile( __dirname + "/webapp/index.htm" );
 });
 
-// Serve files for paths under css/ image/ or js/
-app.use("/css",   express.static( __dirname + "/webapp/css" ));
+// Server gw2016.css statically
+app.get("/gw2016.css", function( req, res ) {
+  res.sendFile( __dirname + "/webapp/gw2016.css" );
+});
+
+// Serve files for paths under image/ or js/
 app.use("/image", express.static( __dirname + "/webapp/image" ));
 app.use("/js",    express.static( __dirname + "/webapp/js" ));
 
