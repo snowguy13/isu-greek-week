@@ -1,4 +1,4 @@
-requirejs(["jquery", "components/countdown"], function( $, countdown ) {
+requirejs(["jquery", "comp/countdown"], function( $, countdown ) {
 
 $(function() {
   countdown();
