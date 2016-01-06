@@ -162,12 +162,95 @@ Color.fromCSSString = function Color_fromCSSString( str ) {
   );
 };
 
+/**
+ * Creates a function that returns a color whose red, green, and blue components are all the same as the base
+ * color and whose alpha component is randomly determined.
+ * 
+ * @param {Color}    color         The color to base all returned colors off
+ * @param {Number}   [minAlpha=0]      The minimum alpha value to use
+ * @param {Number}   [maxAlpha=1]      The maximum alpha value to use
+ * @param {Boolean}  [useBaseAlpha=false]
+ *   true if the given Color's alpha value should be multiplied through the determined alpha value for each
+ *   return color. For example, if the given color's alpha is 0.8 and 'true' is passed for useBaseAlpha, then
+ *   all returned colors will have their alpha based on 0.8 instead of 1.
+ * 
+ * @returns {Function}  A function that returns transparent versions of the base color
+ */
+Color.randomAlphaFunction = function Color_randomAlphaFunction( color, minAlpha, maxAlpha, useBaseAlpha ) {
+  var dif;
+  
+  // fill in defaults -- let the switch fall through
+  switch( arguments.length ) {
+    case 1:
+      minAlpha = 0;
+    case 2:
+      maxAlpha = 1;
+    case 3:
+      useBaseAlpha = false;
+  }
+  
+  if( useBaseAlpha ) {
+    minAlpha *= color.alpha;
+    maxAlpha *= color.alpha;
+  }
+  
+  dif = maxAlpha - minAlpha;
+  
+  return function _Color_randomAlphaFunction() {
+    var c = new Color(color);
+    c.alpha = minAlpha + (dif * Math.random());
+    return c.toRGBAString();
+  };
+};
+
+/**
+ * Creates a function that randomly creates tints and shades of the given color.
+ * 
+ * @param {Color}   color              The base color tints and shades will be based off
+ * @param {Number}  [tint=0.5]         The maximum fraction to tint the base color
+ * @param {Number}  [shade=tint]       The maximum fraction to shade the base color
+ * @param {Number}  [tintFreq=tint]    How often tints should occur
+ * @param {Number}  [shadeFreq=shade]  How often shades should occur
+ * 
+ * @returns {Function}  A function that randomly tints or shades the base color
+ */
+Color.randomTintShadeFunction = function Color_randomShadeTintFunction( color, tint, shade, tintFreq, shadeFreq ) {
+  var tintCutoff;
+  
+  // fill in defaults -- let the switch fall through
+  /*switch( arguments.length ) {
+    case 1:
+      tint = 0.5;
+    case 2:
+      shade = tint;
+    case 3:
+      tintFreq = tint;
+    case 4:
+      shadeFreq = shade;
+  }*/
+  tint  = fillDefault( tint, 0.5 );
+  shade = fillDefault( shade, tint );
+  tintFreq  = fillDefault( tintFreq, tint );
+  shadeFreq = fillDefault( shadeFreq, shade );
+  
+  // used to determine how often tints should occur
+  tintCutoff = tintFreq / (tintFreq + shadeFreq);
+  
+  return function _Color_randomShadeTintFunction() {
+    if( Math.random() < tintCutoff ) {
+      return color.tint( Math.random() * tint ).toRGBAString();
+    } else {
+      return color.shade( Math.random() * shade ).toRGBAString();
+    }
+  };
+};
+
 // on load, retrieve common colors as constants
-window.addEventListener("load", function _Color_getNamedColors() {
+//window.addEventListener("DOMContentLoaded", function _Color_getNamedColors() {
   "White Silver Gray Black Red Maroon Yellow Olive Lime Green Aqua Teal Blue Navy Fuchsia Purple Transparent".split(" ").forEach(function( colorName ) {
     Color[ colorName.toUpperCase() ] = Color.fromCSSString( colorName );
   });
-});
+//});
 
 return Color;
 

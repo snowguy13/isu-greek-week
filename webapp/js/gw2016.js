@@ -1,11 +1,14 @@
-requirejs(["jquery", "comp/countdown"], function( $, countdown ) {
+requirejs(["jquery", "comp/countdown", "comp/coolBackground"], function( $, countdown, background ) {
 
 // Remove jQuery from the global namespace
 $.noConflict();
 
-// Activate components on the page
 $(function() {
+  // Activate components on the page
   countdown();
+
+  // Draw the background
+  background();
 });
 
 });

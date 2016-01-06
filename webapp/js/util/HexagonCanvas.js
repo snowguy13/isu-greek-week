@@ -2,7 +2,7 @@
  * An aesthetic utility used to draw a grid of regular hexagons on an
  * arbitrarily sized canvas.
  */
-define(["util/Color"], function( Color ) {
+define(function() {
 
 var SQRT3   = Math.sqrt( 3 ),
     SQRT3_2 = SQRT3 / 2,
@@ -31,7 +31,7 @@ var makeHexagonPath = function( ctx, center, radius ) {
   lineToRelative( -rad_2,   sqrt3rad_2 );
   lineToRelative( -radius,  0 );
   lineToRelative( -rad_2,  -sqrt3rad_2 );
-  lineToRelative(  rad_2,   sqrt3rad_2 );
+  lineToRelative(  rad_2,  -sqrt3rad_2 );
 
   // Close the path
   ctx.closePath();
@@ -77,7 +77,7 @@ HexagonCanvas.prototype = {
    * inscribed. This will be the distance from the center of the
    * hexagon to any of its six vertices.
    */
-  radius: 10,
+  radius: 50,
 
   /**
    * A nonnegative Number.
@@ -139,22 +139,24 @@ HexagonCanvas.prototype = {
         ctx = this.canvas.getContext("2d"),
 
         // Save the dimensions
-        width  = this.width,
-        height = this.height,
+        width  = this._width,
+        height = this._height,
 
         // Save control properties
-        radius = wrapSimple( this.radius ),
-        space  = wrapSimple( this.spacing ),
+        radius = this.radius,
+        space  = this.spacing,
         bWidth = wrapSimple( this.borderWidth ),
         bStyle = wrapSimple( this.borderStyle ),
         fStyle = wrapSimple( this.fillStyle ),
 
         // Used to track the center of a hexagon and the v-unit offset
-        pos, vOff,
+        // Data is used to group current hexagon information
+        // bw is used to temporarily store the border width of a certain hexagon
+        pos, vOff, data, bw,
 
         // Calculate the "unit" vectors for hexagon centers
         U = {
-          x: 3 * radius / 2 + SQRT3 * space,
+          x: 3 * radius / 2 + SQRT3_2 * space,
           y: SQRT3_2 * radius + space / 2
         },
 
@@ -166,13 +168,13 @@ HexagonCanvas.prototype = {
         // Calculate the index bounds for hexagons to be drawn
         uMax = ceil( width / U.x ) + 1,
         vMax = ceil( height / V.y ) + 1;
-
+    
     // First, clear the canvas
     ctx.fillStyle = "transparent";
     ctx.fillRect( 0, 0, width, height );
 
     // Then, iterate over the necessary hexagons
-    for( int u = 0; u < uMax; u++ ) {
+    for( var u = 0; u < uMax; u++ ) {
       // Determine the v-offset and the position
       vOff = -floor( u / 2 );
       pos  = {
@@ -181,16 +183,43 @@ HexagonCanvas.prototype = {
       };
       
       // Draw hexagons down the column
-      for( int v = 0; v < vMax; v++, pos.x += V.x, pos.y += V.y ) {
+      for( var v = 0; v < vMax; v++, pos.x += V.x, pos.y += V.y ) {
+        
+        // Outline the path
+        makeHexagonPath( ctx, pos, radius );
+        
+        // Group relevant data about this hexagon
         data = {
           row: u,
           col: v,
           x: pos.x,
           y: pos.y
         };
+
+        // Set the relevant properties
+        ctx.fillStyle   = fStyle( data );
+        ctx.lineWidth   = bw = bWidth( data );
+        ctx.strokeStyle = bStyle( data );
+
+        // Draw!
+        ctx.fill();
+        bw && ctx.stroke();
       }
     }
+
+    // Save the context for use with getImageData
+    this._lastContext = ctx;
+  },
+
+  getImageData: function() {
+    return this._lastContext.getImageData( 0, 0, this._width, this._height );
+  },
+
+  toDataURL: function() {
+    return this.canvas.toDataURL();
   }
 };
+
+return HexagonCanvas;
 
 });
