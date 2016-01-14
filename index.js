@@ -1,13 +1,11 @@
-var express = require('express'),
-    app     = express(),
-
-    bodyParser = require('body-parser');
+var app = require("./server/app"),
+    express = require("express");
 
 // Determine the port to bind to (process.env.PORT is for Heroku)
 app.set('port', ( process.env.PORT || 5000 ));
 
-// Allow JSON parsing
-app.use( bodyParser.json() );
+// Save the top directory
+app.set('dir', __dirname );
 
 // On empty url, return the main file
 app.get("/", function( req, res ) {
@@ -25,7 +23,7 @@ app.use("/js",    express.static( __dirname + "/webapp/js" ));
 
 // Placeholder response -- just echo the path for now
 app.use(function( req, res ) {
-  res.send("You requested the path \"<strong>" + req.url + "\"</strong>");
+  res.send("You requested the path \"<strong>" + req.url + "</strong>\"");
 });
 
 // Listen on the designated port

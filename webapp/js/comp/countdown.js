@@ -1,10 +1,10 @@
 define(["jquery", "jquery.countdown"], function( $ ) {
 
 var timeParts = {
-  "days":    "totalDays",
-  "hours":   "hours",
-  "minutes": "minutes",
-  "seconds": "seconds"
+  "day":    "totalDays",
+  "hour":   "hours",
+  "minute": "minutes",
+  "second": "seconds"
 };
 
 var createTimeParts = function() {
@@ -35,7 +35,12 @@ return function() {
     $( this ).countdown("2016/03/27")
       .on("update.countdown", function( evt ) {
         for( var part in parts ) {
-          parts[ part ].find(".time").text( evt.offset[ timeParts[ part ] ] );
+          var time = evt.offset[ timeParts[ part ] ];
+
+          parts[ part ]
+            .attr("data-plural", time !== 1 )
+            .find(".time")
+            .text( time );
         }
       });
   });

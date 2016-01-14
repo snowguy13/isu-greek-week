@@ -3,6 +3,16 @@
   margin: 0 10px;
 
   .label {
-    content: attr("data-label");
+    padding: 0 0.5ex;
+  }
+
+  &[data-plural=true] {
+    .label {
+      padding: 0;
+    }
+
+    .label::after {
+      content: "s";
+    }
   }
 }

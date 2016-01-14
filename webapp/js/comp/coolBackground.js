@@ -13,8 +13,6 @@ return function() {
   var imageData = hc.toDataURL();
   document.body.style.backgroundImage = "url(" + imageData + ")";
 
-  console.log( imageData );
-
   $( hc.canvas ).detach();
 };
 
