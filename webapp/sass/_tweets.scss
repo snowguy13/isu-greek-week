@@ -24,7 +24,13 @@
     }
   }
   
-  .tweet {
+  .tweet-container {
+    margin-left: 10px;
+    flex-grow: 1;
+    overflow: hidden;
+  }
 
+  .tweet {
+    white-space: nowrap;
   }
 }
