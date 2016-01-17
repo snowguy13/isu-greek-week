@@ -5,6 +5,9 @@
 @import "countdown";
 
 body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: 'Titillium Web', Arial, sans-serif;
   font-size: 12px;
   font-weight: 200;

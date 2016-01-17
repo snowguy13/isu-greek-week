@@ -1,5 +1,6 @@
 var app = require("./server/app"),
-    express = require("express");
+    express = require("express"),
+    twitter = require("./server/twitter");
 
 // Determine the port to bind to (process.env.PORT is for Heroku)
 app.set('port', ( process.env.PORT || 5000 ));
