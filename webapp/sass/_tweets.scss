@@ -29,12 +29,18 @@
   }
   
   .tweet-container {
+    position: relative;
     margin-left: 10px;
     flex-grow: 1;
     overflow: hidden;
   }
 
   .tweet {
+    position: absolute;
+    left: 0;
+    top: 0;
     white-space: nowrap;
+
+    
   }
 }
