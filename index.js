@@ -1,6 +1,7 @@
 var app = require("./server/app"),
-    express = require("express"),
-    twitter = require("./server/twitter");
+    api = require("./server/api"),
+
+    express = require("express");
 
 // Determine the port to bind to (process.env.PORT is for Heroku)
 app.set('port', ( process.env.PORT || 5000 ));
@@ -12,6 +13,9 @@ app.set('dir', __dirname );
 app.get("/", function( req, res ) {
   res.sendFile( __dirname + "/webapp/index.htm" );
 });
+
+// Mount the API router
+app.use("/api", api );
 
 // Server gw2016.css statically
 app.get("/gw2016.css", function( req, res ) {

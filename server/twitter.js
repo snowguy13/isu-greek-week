@@ -1,33 +1,45 @@
-var K = "D2Hn4JUwDmCl276uhQIXrMsje",
+var // App secrets
+    K = "D2Hn4JUwDmCl276uhQIXrMsje",
     S = "lSQLivroVR1Op0j0pcavybrDHynMse1gMDgKHpHB6YzqL48xRH",
-
-    https = require("https"),
+    
+    // NodeJS requires
+    https       = require("https"),
     querystring = require("querystring"),
-
+    
+    // To hold the resulting bearer token
     bearer,
     
+    // Remembering and requesting Tweets
     tweets,
     getTweets,
+    
+    // Refreshing of Tweets
     REQUEST_SPACING = 60000,
+    
+    // Request to get relevant Tweets
     TWEET_REQUEST = {
       method: 'GET',
       host:   'api.twitter.com',
       path:   '/1.1/statuses/user_timeline.json',
       headers: {
-        'User-Agent':    'Iowa State Greek Week 2016',
-        'Content-Type':  'application/json;charset=UTF-8'
+        'User-Agent':      'Iowa State Greek Week 2016',
+        'Content-Type':    'application/json;charset=UTF-8'
       },
 
       // Not used by https.request, but put here for convenience
-      body: {
+      params: {
         "screen_name": "greekweekISU",
         "count":       20
       }
     };
 
+// First, append query parameters to url for requesting Tweets
+TWEET_REQUEST.path += "?" + querystring.stringify( TWEET_REQUEST.params );
+
 // Method to obtain tweets based on TWEET_REQUEST
 getTweets = function() {
-  console.log( TWEET_REQUEST );
+  console.log("Updating Tweets...");
+
   var req = https.request( TWEET_REQUEST, function( res ) {
     var data = "";
   
@@ -38,13 +50,12 @@ getTweets = function() {
     
     // Once all chunks are received, parse as JSON
     res.on("end", function() {
-      console.log( data );
+      tweets = JSON.parse( data );
+      console.log("Tweets have been updated.");
     });
   });
   
-  // Send the request content
-  console.log( JSON.stringify( TWEET_REQUEST.body ) );
-  req.write( JSON.stringify( TWEET_REQUEST.body ) );
+  // End the request
   req.end();
 };
 
@@ -63,8 +74,6 @@ var req = new https.request({
   }
 }, function( res ) {
   var data = "";
-  
-  console.log(res.statusCode);
 
   // Receive chunks of data
   res.on("data", function( chunk ) {
@@ -82,13 +91,20 @@ var req = new https.request({
       // Otherwise save the token!
       bearer = resData.access_token;
       TWEET_REQUEST.headers['Authorization'] = "Bearer " + bearer;
+
+      // Once this happens, get relevantTweets and refresh at an interval
       getTweets();
+      setInterval( getTweets, REQUEST_SPACING );
     }
   });
 });
 
-// Write the request
+// Write the request for API authorization
 req.write("grant_type=client_credentials");
 req.end();
 
-module.exports = {};
+module.exports = {
+  getTweets: function() {
+    return tweets;
+  }
+};
