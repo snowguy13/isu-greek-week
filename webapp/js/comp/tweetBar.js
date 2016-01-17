@@ -26,7 +26,7 @@ var getTweetBar,
     BEFORE_SCROLL = 2000,
 
     // The rate at which extra Tweet width is scrolled through (in px/s)
-    SCROLL_RATE = 100,
+    SCROLL_RATE = 75,
 
     // The duration between the time a Tweet stops scrolling and is hidden 
     BEFORE_SWAP = 1000,
