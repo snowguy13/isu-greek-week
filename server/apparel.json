@@ -1,0 +1,22 @@
+[
+  {
+    "name":  "Short Sleeve A",
+    "sizes": ["S", "M", "L", "XL"],
+    "cost":  12,
+    "image": "ssa.png"
+  },
+
+  {
+    "name":  "Short Sleeve B",
+    "sizes": ["S", "M", "L", "XL"],
+    "cost":  14,
+    "image": "ssa.png"
+  },
+
+  {
+    "name":  "Long Sleeve",
+    "sizes": ["S", "M", "L", "XL"],
+    "cost":  18,
+    "image": "ls.jpg"
+  }
+]
