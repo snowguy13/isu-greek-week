@@ -170,8 +170,7 @@ HexagonCanvas.prototype = {
         vMax = ceil( height / V.y ) + 1;
     
     // First, clear the canvas
-    ctx.fillStyle = "transparent";
-    ctx.fillRect( 0, 0, width, height );
+    ctx.clearRect( 0, 0, width, height );
 
     // Then, iterate over the necessary hexagons
     for( var u = 0; u < uMax; u++ ) {
