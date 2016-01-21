@@ -3,7 +3,8 @@ define(["jquery", "util/HexagonCanvas", "util/Color"], function( $, HexagonCanva
 var HEX_SPACING      = 0,
     HEX_BORDER_WIDTH = 0,
     HEX_FILL_STYLE   = Color.randomAlphaFunction( Color.BLACK, 0.05, 0.15 ),
-    FADE_DURATION    = 2000;
+    FADE_DURATION    = 3000,
+    FADE_GAP         = 3000;
 
 var swapBGs = function( current, hexCanvas ) {
   var next = current.data("next"),
@@ -15,7 +16,9 @@ var swapBGs = function( current, hexCanvas ) {
   // A function to initiate the next swap
   swapAgain = function() {
     if( ready ) {
-      swapBGs( next, hexCanvas );
+      setTimeout(function() {
+        swapBGs( next, hexCanvas );
+      }, FADE_GAP );
     } else {
       ready = true;
     }
