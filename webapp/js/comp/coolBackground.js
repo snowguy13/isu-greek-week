@@ -16,10 +16,14 @@ var swapBGs = function( current, hexCanvas ) {
   // A function to initiate the next swap
   swapAgain = function() {
     if( ready ) {
+      // If this function has been called once already,
+      // trigger the next swap
       setTimeout(function() {
         swapBGs( next, hexCanvas );
       }, FADE_GAP );
     } else {
+      // If this function hasn't been called yet,
+      // mark it as having been so
       ready = true;
     }
   };
@@ -57,7 +61,7 @@ return function() {
   // Append the canvas to the document
   $( document.body ).append( hc.canvas );
 
-  // Have bg divs refer to one another
+  // Have bg divs refer to one another (for use within swapBGs)
   bg1.data("next", bg2 );
   bg2.data("next", bg1 );
   
