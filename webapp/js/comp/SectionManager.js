@@ -1,5 +1,8 @@
 define(["jquery"], function( $ ) {
 
+// No-op used for simplifying conditional calls
+var NOOP = function() {};
+
 // Default show function
 var SHOW = function( el, done ) {
   el.css("display", "block");
@@ -43,6 +46,9 @@ var HIDE = function( el, done ) {
  *   A function that shows the section whose root element is "el"
  *   and calls done() once the section has been shown.
  *
+ * onShow  function( name, el )  (optional)
+ *   A function that is called whenever any section is shown
+ * 
  * showFirst  string  (optional)
  *   The name of the section to show first. If omitted, no section
  *   is shown first.
@@ -50,12 +56,17 @@ var HIDE = function( el, done ) {
  * hide  function( el, done )  (optional)
  *   A function that hides the section whose root element is "el"
  *   and calls done() once the section has been hidden.
+ *
+ * onHide  function( name, el )  (optional)
+ *   A function that is called whenever any section is hidden
  */
 var SectionManager = function( opts ) {
   // Save the properties on the object
   this._sections = opts.sections;
-  this._show     = opts.show || SHOW;
-  this._hide     = opts.hide || HIDE;
+  this._show     = opts.show   || SHOW;
+  this._onShow   = opts.onShow || NOOP;
+  this._hide     = opts.hide   || HIDE;
+  this._onHide   = opts.onHide || NOOP
 
   // The currently active section
   this._current   = undefined;
@@ -116,7 +127,16 @@ SectionManager.prototype = {
         self._current = which;
 
         // Then show the section
-        show( next.element, done );
+        show( next.element, function() {
+          // Call the given callback
+          done();
+
+          // Call this section's onHide callback
+          ( currObj.onShow || NOOP )();
+
+          // Call the global onHide
+          self.onShow( which, next.element );
+        });
       }
     };
 
@@ -127,20 +147,31 @@ SectionManager.prototype = {
   // Hides the currently shown section (if there is one)
   hide: function( done ) {
     var self = this,
-        curr = this._current;
+        sections = this._sections,
+        curr = this._current
+        currObj;
     
     // If nothing is currently shown, quit
     if( !curr ) {
       return;
     }
 
+    // Get a reference to the current section
+    currObj = sections[ curr ];
+
     // Otherwise, hide that section
-    this._hide( this._sections[ curr ].element, function() {
+    this._hide( currObj.element, function() {
       // Remove the current element marker
       self._current = undefined;
 
       // Call the given callback
       done();
+
+      // Call this section's onHide callback
+      ( currObj.onHide || NOOP )();
+
+      // Call the global onHide
+      self.onHide( curr, currObj.element );
     });
   }
 };
