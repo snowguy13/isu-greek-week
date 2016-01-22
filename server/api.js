@@ -15,9 +15,9 @@ router.get("/apparel", function( req, res ) {
 });
 
 // Return chapter list when it is requested
-router.get("/chapters", function( req, res ) {
+/*router.get("/chapters", function( req, res ) {
   res.json( chapters );
-});
+});*/
 
 // Export the router
 module.exports = router;

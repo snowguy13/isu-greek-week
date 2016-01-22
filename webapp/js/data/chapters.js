@@ -1,4 +1,4 @@
-[
+define([
   "Alpha Chi Omega",
   "Alpha Delta Pi",
   "Alpha Gamma Delta",
@@ -60,4 +60,4 @@
   "Delta Sigma Theta",
   "Kappa Alpha Psi",
   "Zeta Phi Beta"
-]
+]);

@@ -19,6 +19,9 @@ var HIDE = function( el, done ) {
  * Initially, no section is active unless "showFirst" is given. 
  *
  * Parameters:
+ * 
+ * element  jQuery
+ *   The root element containing every section 
  *
  * sections  Object<Object>
  *   A map of the sections this manager should oversee. The name of the
@@ -28,7 +31,7 @@ var HIDE = function( el, done ) {
  *   element  jQuery
  *     A reference to the root element of this section
  *
- *   prepare  function( done )  (optional)
+ *   prepare  function( el, done )  (optional)
  *     A function that performs necessary set-up work for this
  *     section and calls done() when it is ready. If omitted,
  *     the section is assumed to be prepared immediately.
@@ -122,7 +125,7 @@ SectionManager.prototype = {
         // Call the preparation function if it is given
         if( next.prepare ) {
           // Invoke the preparation function, then show the section
-          next.prepare(function() {
+          next.prepare( next.element, function() {
             prepared[ which ] = true;
             showNext();
           });
