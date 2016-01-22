@@ -16,3 +16,69 @@
     }
   }
 }
+
+#big-countdown-wrapper {
+  h3 {
+    font-size: 48px;
+    font-weight: 200;
+  }
+
+  h4 {
+    font-size: 36px;
+    font-weight: 200;
+  }
+
+  .countdown {
+    font-weight: bold;
+    font-size: 60px;
+
+    .label {
+      display: block;
+      margin-top: -10px;
+      font-size: 30px;
+      font-weight: normal;
+    }
+  }
+}
+
+@media(max-width: 500px) {
+  #big-countdown-wrapper {
+
+    h3 {
+      font-size: 36px;
+    }
+
+    h4 {
+      font-size: 28px;
+    }
+
+    .countdown {
+      font-size: 48px;
+
+      .label {
+        font-size: 24px;
+      }
+    }
+  }
+}
+
+@media(max-width: 500px) {
+  #big-countdown-wrapper {
+    
+    h3 {
+      font-size: 30px;
+    }
+
+    h4 {
+      font-size: 24px;
+    }
+
+    .countdown {
+      font-size: 40px;
+
+      .label {
+        font-size: 18px;
+      }
+    }
+  }
+}

@@ -10,7 +10,7 @@ router.get("/tweets", function( req, res ) {
 });
 
 // Return apparel info when it is requested
-router.get("/apparel", function( req, res ) {
+router.get(/\/apparel(\.js(on)?)?/, function( req, res ) {
   res.json( apparel );
 });
 

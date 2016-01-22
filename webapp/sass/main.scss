@@ -5,18 +5,46 @@
 @import "countdown", "tweets", "sections";
 
 body {
+  margin: 0;
+
   font-family: 'Titillium Web', Arial, sans-serif;
   font-size: 12px;
   font-weight: 200;
+
   background-color: #a4d275;
 }
 
 .main {
   position: relative;
   z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding-bottom: 65px;
+  text-align: center;
+
+  #section-back-button {
+    position: absolute;
+    left: 27px;
+    top: 17px; // +10px from margin
+
+    display: none;
+
+    @media(max-width: 500px) {
+      position: static;
+    }
+  }
+
+  &.section-active {
+    #big-countdown-wrapper {
+      display: none;
+    }
+
+    #section-back-button {
+      display: inline-block;
+    }
+
+    .button-container {
+      display: none;
+    }
+  }
 }
 
 .canvas {
@@ -33,70 +61,47 @@ body {
   background-position: center center;
 }
 
-#big-countdown-wrapper {
-  text-align: center;
+.button {
+  transition: transform 0.1s;
 
-  h3 {
-    font-size: 48px;
-    font-weight: 200;
-  }
+  cursor: pointer;
+  
+  margin: 10px;
+  padding: 10px 20px;
 
-  h4 {
-    font-size: 36px;
-    font-weight: 200;
-  }
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: inherit;
 
-  .countdown {
-    font-weight: bold;
-    font-size: 60px;
+  background-color: white;
+  background-color: rgba( 255, 255, 255, 0.8 );
 
-    .label {
-      display: block;
-      margin-top: -10px;
-      font-size: 30px;
-      font-weight: normal;
-    }
-  }
-}
+  border: none;
+  border-radius: 2px;
+ 
+  box-shadow: 0 1px 2px black;
+  box-shadow: 0 1px 2px rgba( 0, 0, 0, 0.6 );
 
-@media(max-width: 500px) {
-  #big-countdown-wrapper {
-
-    h3 {
-      font-size: 36px;
-    }
-
-    h4 {
-      font-size: 28px;
-    }
-
-    .countdown {
-      font-size: 48px;
-
-      .label {
-        font-size: 24px;
-      }
-    }
+  @media(max-width: 500px) {
+    /*font-size: 16px;
+    padding: 6px 12px;*/
   }
 }
 
-@media(max-width: 500px) {
-  #big-countdown-wrapper {
-    
-    h3 {
-      font-size: 30px;
-    }
+.button:hover,
+.button:active {
+  transform: scale( 1.1 );
+}
 
-    h4 {
-      font-size: 24px;
-    }
+.button:active {
+  background-color: rgb( 200, 200, 200 );
+  background-color: rgba( 200, 200, 200, 0.8 );
+}
 
-    .countdown {
-      font-size: 40px;
+:focus {
+  outline: 2px solid #a4d275;
+}
 
-      .label {
-        font-size: 18px;
-      }
-    }
-  }
+:focus:active {
+  outline: none;
 }

@@ -1,48 +1,40 @@
-define(["jquery", "data/chapters"], function( $, chapters ) {
+define(["jquery", "data/chapters", "json!/api/apparel"], function( $, chapters, apparel ) {
 
-// Actual prepare method. Call once apparel info is loaded
-// and .prepare on the returned object has been invoked
+// Parse the apparel
+apparel = JSON.parse( apparel );
+console.log( apparel );
+
 var prepare = function( el, done ) {
-  
+  // Grab references to important elements
+  var grid  = el.find("#apparel-grid"),
+      formA = el.find("#apparel-form-part-a"),
+      formB = el.find("#apparel-form-part-b");
+
+  // Add apparel images to the page
+  apparel.forEach(function( type ) {
+    var cell = $("<div />")
+      .addClass("cell")
+      .css("background-image", "url(image/apparel/" + type.images[0] + ")")
+      .append("<span class='apparel-title'>" + type.name + "</span>");
+
+    // Append images
+    /*type.images.slice(0,1).forEach(function( src ) {
+      var img = $("<img />")
+        .attr("src", "/image/apparel/" + src );
+
+      cell.append( img );
+    });*/
+
+    // Append the cell to the grid
+    grid.append( cell );
+  });
 
   // Notify the SectionManager the section is ready
   done();
 };
 
-// Make a request to get apparel information
-var done = false,
-    shouldCallPrepare
-    
-    // only needed if .prepare is called before apparel is loaded
-    prepareElement,
-    prepareDone;
-
-$.ajax({
-  method: "GET",
-  url:    "/api/apparel"
-  success: function( data ) {
-    // Save the apparel information
-    apparel = data;
-
-    // If the prepare callback hasn't been ca
-    if( !shouldCallPrepare ) {
-      shouldCallPrepare = true;
-    } else {
-      prepare( prepareElement, prepareDone );
-    }
-  }
-});
-
 return {
-  prepare: function( el, done ) {
-    if( !shouldCallPrepare ) {
-      shouldCallPrepare = true;
-      prepareElement = el;
-      prepareDone = done;
-    } else {
-      prepare( el, done );
-    }
-  }
+  prepare: prepare
 };
 
 });

@@ -1,4 +1,5 @@
-define([
+define(function() {
+return [
   "Alpha Chi Omega",
   "Alpha Delta Pi",
   "Alpha Gamma Delta",
@@ -60,4 +61,5 @@ define([
   "Delta Sigma Theta",
   "Kappa Alpha Psi",
   "Zeta Phi Beta"
-]);
+];
+});
