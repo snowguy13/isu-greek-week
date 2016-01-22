@@ -1,5 +1,5 @@
 var apparel  = require("./apparel.json"),
-    chapters = require("./chapters.json"),
+    //chapters = require("./chapters.json"),
     twitter  = require("./twitter"),
 
     router  = require("express").Router();
