@@ -1,8 +1,8 @@
 CREATE TABLE Apparel(
-  name  VARCHAR(30) PRIMARY KEY,
-  sizes VARCHAR(20), -- Comma-separated list of possibles sizes for this apparel
-  cost  MONEY,
-  image VARCHAR(20)  -- The name of the image file for this item's proof, located in webapp/image/apparel/
+  name   VARCHAR(30) PRIMARY KEY,
+  sizes  VARCHAR(20),  -- Comma-separated list of possibles sizes for this apparel
+  cost   MONEY,
+  images VARCHAR(100)  -- The name of the image files for this item's proof, located in webapp/image/apparel/
 );
 
 CREATE TABLE Orders(
