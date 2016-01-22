@@ -5,7 +5,7 @@ var manager;
 
 var opts = {
   sections: {
-    Apparel: apparel
+    //Apparel: apparel
   },
 
   onShow: function() {
