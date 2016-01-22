@@ -102,8 +102,7 @@ SectionManager.prototype = {
         sections = this._sections,
         prepared = this._prepared,
         show = this._show,
-
-        curr = this._current, 
+ 
         next,
         showNext;
     
@@ -144,23 +143,23 @@ SectionManager.prototype = {
           ( done || NOOP )();
 
           // Call this section's onHide callback
-          currObj.onShow();
+          sections[ self._current ].onShow();
 
           // Call the global onHide
-          self.onShow( which, next.element );
+          self._onShow( which, next.element );
         });
       }
     };
 
     // If there is a current section, hide it
-    curr ? this.hide( showNext ) : showNext();
+    self._current ? this.hide( showNext ) : showNext();
   },
   
   // Hides the currently shown section (if there is one)
   hide: function( done ) {
     var self     = this,
         sections = this._sections,
-        curr     = this._current
+        curr     = this._current,
         currObj;
     
     // If nothing is currently shown, quit
@@ -183,7 +182,7 @@ SectionManager.prototype = {
       currObj.onHide();
 
       // Call the global onHide
-      self.onHide( curr, currObj.element );
+      self._onHide( curr, currObj.element );
     });
   }
 };

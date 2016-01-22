@@ -10,7 +10,7 @@ $(function() {
   tweetBar();
 
   // Ready sections
-  
+  prepareSections();
 
   // Draw the background
   background();
