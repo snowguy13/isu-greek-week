@@ -81,6 +81,11 @@ var SectionManager = function( opts ) {
 };
 
 SectionManager.prototype = {
+  // Returns true if there is an active section, false if not
+  hasActiveSection: function() {
+    return !!this._current;
+  },
+
   // Returns the root element of the currently shown section,
   // or null if there is no section shown at the moment
   getCurrentSectionElement: function() {
@@ -111,6 +116,10 @@ SectionManager.prototype = {
     showNext = function() {
       if( !prepared[ which ] ) {
         // Section needs to be prepared
+        next.onShow = next.onShow || NOOP;
+        next.onHide = next.onHide || NOOP;
+
+        // Call the preparation function if it is given
         if( next.prepare ) {
           // Invoke the preparation function, then show the section
           next.prepare(function() {
@@ -129,10 +138,10 @@ SectionManager.prototype = {
         // Then show the section
         show( next.element, function() {
           // Call the given callback
-          done();
+          ( done || NOOP )();
 
           // Call this section's onHide callback
-          ( currObj.onShow || NOOP )();
+          currObj.onShow();
 
           // Call the global onHide
           self.onShow( which, next.element );
@@ -146,9 +155,9 @@ SectionManager.prototype = {
   
   // Hides the currently shown section (if there is one)
   hide: function( done ) {
-    var self = this,
+    var self     = this,
         sections = this._sections,
-        curr = this._current
+        curr     = this._current
         currObj;
     
     // If nothing is currently shown, quit
@@ -165,10 +174,10 @@ SectionManager.prototype = {
       self._current = undefined;
 
       // Call the given callback
-      done();
+      ( done || NOOP )();
 
       // Call this section's onHide callback
-      ( currObj.onHide || NOOP )();
+      currObj.onHide();
 
       // Call the global onHide
       self.onHide( curr, currObj.element );

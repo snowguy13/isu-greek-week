@@ -1,8 +1,8 @@
 // Import the font, Titillium Web
-@import url(https://fonts.googleapis.com/css?family=Titillium+Web:400,700,200,200italic,400italic,700italic);
+@import url("https://fonts.googleapis.com/css?family=Titillium+Web:400,700,200,200italic,400italic,700italic");
 
 // Import partials for components
-@import "countdown", "tweets";
+@import "countdown", "tweets", "sections";
 
 body {
   font-family: 'Titillium Web', Arial, sans-serif;
