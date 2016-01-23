@@ -17,14 +17,6 @@ var prepare = function( el, done ) {
       .css("background-image", "url(image/apparel/" + type.images[0] + ")")
       .append("<span class='apparel-title'>" + type.name + "</span>");
 
-    // Append images
-    /*type.images.slice(0,1).forEach(function( src ) {
-      var img = $("<img />")
-        .attr("src", "/image/apparel/" + src );
-
-      cell.append( img );
-    });*/
-
     // Append the cell to the grid
     grid.append( cell );
   });
