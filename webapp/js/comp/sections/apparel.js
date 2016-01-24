@@ -8,6 +8,18 @@ var prepare = function( el, done ) {
   // Grab references to important elements
   var grid = el.find("#apparel-grid .grid"),
       form = el.find("#apparel-form"),
+
+      errorP = el.find(".error"),
+
+      newOrder,
+
+      part = {
+        netid: el.find("#apparel-form-netid"),
+        code:  el.find("#apparel-form-code"),
+        info:  el.find("#apparel-form-info"),
+        order: el.find("#apparel-form-order")
+      },
+
       input = {
         netid: el.find("input[name=netid]")
       },
@@ -15,7 +27,10 @@ var prepare = function( el, done ) {
       button = {
         netid: el.find("#apparel-form-netid-button")
       };
-  console.log( input, button );
+
+  // Hide the error paragraph
+  errorP.hide();
+  
   // Add apparel images to the page
   apparel.forEach(function( type ) {
     var cell = $("<div />")
@@ -38,7 +53,34 @@ var prepare = function( el, done ) {
 
   // Net ID form part
   var checkNetID = function() {
-    alert("Clicked!");
+    // Disable input, hide error
+    errorP.hide();
+    input.netid.attr("disabled", true );
+    button.netid.attr("disabled", true );
+    
+    // Check the net id
+    OrderManager.orderExists( input.netid.val(), function( res ) {
+      if( res.valid ) {
+        // Valid netid was given, so hide current section and show the code section
+        part.netid.hide();
+        part.code.show();
+        
+        // Remember whether the order exists or not
+        newOrder = !res.exists;
+
+        // Hide the appropriate label
+        part.code.find( newOrder ? "#apparel-form-code-existing" : "#apparel-form-code-new" )
+          .hide();
+      } else {
+        // Not valid, show a warning message
+        errorP.text("The Net ID you entered is not valid.")
+              .show();
+      }
+
+      // Re-enable inputs
+      input.netid.attr("disabled", false );
+      button.netid.attr("disabled", false );
+    });
   };
 
   input.netid.on("input", function() {
@@ -58,6 +100,9 @@ var prepare = function( el, done ) {
   });
 
   button.netid.click( checkNetID );
+
+  // Show the first form part
+  part.netid.show();
 
   // Notify the SectionManager the section is ready
   done();

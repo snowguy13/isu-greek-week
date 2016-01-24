@@ -2,15 +2,20 @@ define(function() {
 
 return {
   // Returns true if the given netid already has an order
-  orderExists: function( netid ) {
+  orderExists: function( netid, fn ) {
     // No api calls prepared yet
-    return Math.random() < .5;
+    fn({
+      valid:  Math.random() < .9,
+      exists: Math.random() < .5
+    });
   },
 
   // Retrieves the order for a netid
-  retrieveOrder: function( netid ) {
+  retrieveOrder: function( netid, fn ) {
     // No api calls prepared yet
-    return [];
+    fn({
+      items: []
+    });
   }
 };
 

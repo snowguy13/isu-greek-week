@@ -57,6 +57,7 @@
           <p class="note"><strong>Disclaimer:</strong> While this site takes care of ordering apparel, you
             <strong>cannot</strong> pay here due to university policy. Once you get your total, turn that money
             into your chapter's Greek Week representative.</p>
+          <p class="error"></p>
 
           <!-- form section asking for Net ID -->
           <div id="apparel-form-netid" class="form-part">
@@ -67,7 +68,8 @@
 
           <!-- form section for verifying order code -->
           <div id="apparel-form-code" class="form-part">
-            <label>An email has been sent to <strong><span class="netid"></span>@iastate.edu</strong>. Enter the code here.</label>
+            <label id="apparel-form-code-new">An email has been sent to <strong><span class="netid"></span>@iastate.edu</strong>. Enter the code here.</label>
+            <label id="apparel-form-code-existing">Looks like you've already started an order! You should already have received an email. Enter the code here.</label>
             <input name="code" type="text" placeholder="Code from email" />
             <button id="apparel-form-code-button" class="button small" disabled>Check</button>
           </div>
