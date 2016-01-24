@@ -6,10 +6,10 @@ CREATE TABLE Apparel(
 );
 
 CREATE TABLE Orders(
-  id      SERIAL PRIMARY KEY,
-  name    VARCHAR(50),  -- Who knows? It could happen.
-  email   VARCHAR(254), -- Emails can only be 254 characters long
-  chapter VARCHAR(19)  -- The longest chapter name is 19 characters
+  netid   VARCHAR(50) PRIMARY KEY,  -- Who knows? It could happen
+  code    CHAR(10)                  -- Random log-in code
+  name    VARCHAR(50),
+  chapter VARCHAR(19)               -- The longest chapter name is 19 characters
 );
 
 CREATE TABLE OrderLineItems(

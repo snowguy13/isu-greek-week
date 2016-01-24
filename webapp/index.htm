@@ -30,28 +30,60 @@
 
 <body>
   <main class="main">
+    <!-- contains the countdown on the homepage -->
     <div id="big-countdown-wrapper">
       <h3>Greek Week starts in...</h3>
       <div class="countdown"></div>
       <h4>More information coming soon.</h4>
     </div>
+
+    <!-- wrapper for the various sections of the webpage -->
     <div class="section-container">
+
+      <!-- links to enter the sections, shown only on the homepage -->
       <div class="button-container"></div>
+
+      <!-- apparel section, for viewing and ordering apparel -->
       <section id="apparel-section" class="section">
+
+        <!-- grid of apparel items, for browsing options -->
         <div id="apparel-grid">
           <div class="grid"></div>
           <button id="apparel-grid-order-button" class="button">Order Now</button>
         </div>
+
+        <!-- form for ordering apparel -->
         <div id="apparel-form">
           <p class="note"><strong>Disclaimer:</strong> While this site takes care of ordering apparel, you
             <strong>cannot</strong> pay here due to university policy. Once you get your total, turn that money
-            into your chapter's Greek Week representative.
-          <div id="apparel-form-part-a">
+            into your chapter's Greek Week representative.</p>
+
+          <!-- form section asking for Net ID -->
+          <div id="apparel-form-netid" class="form-part">
             <label>To start, enter your Net ID (the part of your Iowa State email before @iastate.edu)</label>
             <input name="netid" type="text" placeholder="Type your Net ID" />
-            <button id="apparel-form-part-a-go-button" class="button small">Go</button>
+            <button id="apparel-form-netid-button" class="button small" disabled>Go</button>
           </div>
-          <div id="apparel-form-part-b"></div>
+
+          <!-- form section for verifying order code -->
+          <div id="apparel-form-code" class="form-part">
+            <label>An email has been sent to <strong><span class="netid"></span>@iastate.edu</strong>. Enter the code here.</label>
+            <input name="code" type="text" placeholder="Code from email" />
+            <button id="apparel-form-code-button" class="button small" disabled>Check</button>
+          </div>
+
+          <!-- form section for entering name and chapter -->
+          <div id="apparel-form-info" class="form-part">
+            <label>Thanks! Almost there. Please fill out your name and chapter:</label>
+            <input name="name" type="text" placeholder="Your first and last name" />
+            <select name="chapter">
+              <option value="">(pick your chapter)</option>
+            </select>
+            <button id="apparel-form-info-button" class="button small">Done</button>
+          </div>
+
+          <!-- for section for ordering apparel -->
+          <div id="apparel-form-order" class="form-part"></div>
           <button id="apparel-form-grid-button" class="button">Back to Apparel Listing</button>
         </div>
       </section>
