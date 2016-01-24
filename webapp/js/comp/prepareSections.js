@@ -45,7 +45,7 @@ return function() {
   // Get the section elements, create a button for each one
   for( var sName in sections ) {
     // Have the section refer to the element
-    sections[ sName ].element = $(".section[name='" + sName + "']")
+    sections[ sName ].element = $("#" + sName.toLowerCase() + "-section")
       // Create a header in the section
       .prepend("<h3>" + sName + "</h3>");
     

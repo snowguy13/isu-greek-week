@@ -74,7 +74,7 @@ body {
   font-weight: inherit;
 
   background-color: white;
-  background-color: rgba( 255, 255, 255, 0.8 );
+  background-color: rgba( 255, 255, 255, 0.7 );
 
   border: none;
   border-radius: 2px;
@@ -96,6 +96,69 @@ body {
 .button:active {
   background-color: rgb( 200, 200, 200 );
   background-color: rgba( 200, 200, 200, 0.8 );
+}
+
+.button[disabled],
+.button[disabled]:active {
+  cursor: default;
+  
+  color: #333;
+  background-color: #DDD;
+
+  box-shadow: none;
+}
+
+.button[disabled]:hover,
+.button[disabled]:active {
+  transform: none;
+}
+
+.button.small {
+  margin: 0;
+  padding: 6px 12px;
+}
+
+.note {
+  margin: 0;
+  padding: 15px;
+
+  font-size: 20px;
+  line-height: 22px;
+
+  background-color: #a4d275;
+}
+
+label {
+  display: block;
+
+  margin-top: 10px;
+
+  font-size: 20px;
+  font-weight: 200;
+}
+
+input[type="text"] {
+  transition: width 0.3s;
+
+  width: 400px;
+
+  margin: 10px;
+  padding: 10px;
+  
+  font-size: 20px;
+  font-weight: 200;
+  text-align: center;
+
+  color: white;
+  background-color: rgb( 98, 126, 70);
+
+  border: none;
+  border-radius: 5px;
+
+  @media(max-width: 500px) {
+    box-sizing: border-box;
+    width: 300px;
+  }
 }
 
 :focus {

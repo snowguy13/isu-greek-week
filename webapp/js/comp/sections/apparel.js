@@ -6,9 +6,8 @@ console.log( apparel );
 
 var prepare = function( el, done ) {
   // Grab references to important elements
-  var grid  = el.find("#apparel-grid"),
-      formA = el.find("#apparel-form-part-a"),
-      formB = el.find("#apparel-form-part-b");
+  var grid = el.find("#apparel-grid .grid"),
+      form = el.find("#apparel-form");
 
   // Add apparel images to the page
   apparel.forEach(function( type ) {
@@ -19,6 +18,15 @@ var prepare = function( el, done ) {
 
     // Append the cell to the grid
     grid.append( cell );
+  });
+
+  // Prepare buttons
+  el.find("#apparel-grid-order-button").click(function() {
+    el.addClass("show-form");
+  });
+
+  el.find("#apparel-form-grid-button").click(function() {
+    el.removeClass("show-form");
   });
 
   // Notify the SectionManager the section is ready

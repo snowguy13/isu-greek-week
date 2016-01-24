@@ -37,17 +37,26 @@
     </div>
     <div class="section-container">
       <div class="button-container"></div>
-      <section class="section" name="Apparel">
-        <div id="apparel-grid" class="grid"></div>
+      <section id="apparel-section" class="section">
+        <div id="apparel-grid">
+          <div class="grid"></div>
+          <button id="apparel-grid-order-button" class="button">Order Now</button>
+        </div>
         <div id="apparel-form">
+          <p class="note"><strong>Disclaimer:</strong> While this site takes care of ordering apparel, you
+            <strong>cannot</strong> pay here due to university policy. Once you get your total, turn that money
+            into your chapter's Greek Week representative.
           <div id="apparel-form-part-a">
-            <input name="netid" type="text" placeholder="To start, enter your NetID" />
+            <label>To start, enter your Net ID (the part of your Iowa State email before @iastate.edu)</label>
+            <input name="netid" type="text" placeholder="Type your Net ID" />
+            <button id="apparel-form-part-a-go-button" class="button small">Go</button>
           </div>
           <div id="apparel-form-part-b"></div>
+          <button id="apparel-form-grid-button" class="button">Back to Apparel Listing</button>
         </div>
       </section>
     </div>
-    <button id="section-back-button" class="button">◄ Back</button>
+    <button id="section-back-button" class="button">Home</button>
     <div id="tweet-wrapper">
       <a class="label" href="https://twitter.com/greekweekISU?lang=en">@greekweekISU</a>
       <div class="tweet-container"></div>

@@ -6,14 +6,42 @@
 
   color: white;
   background-color: rgb( 98, 126, 70);
+}
 
-  .grid .cell {
-    position: absolute;
-    left: 0;
-    bottom: 0;
+.grid .cell .apparel-title {
+  position: absolute;
+  left: 0;
+  bottom: 0;
 
-    box-sizing: border-box;
-    display: inline-block;
-    width: 100%;
+  box-sizing: border-box;
+  display: inline-block;
+  width: 100%;
+}
+
+#apparel-form {
+  display: none;
+}
+
+&.show-form {
+  #apparel-grid {
+    display: none;
+  }
+
+  #apparel-form {
+    display: block;
+  }
+}
+
+#apparel-form-part-b {
+  display: none;
+}
+
+.show-order {
+  #apparel-form-part-a {
+    display: none;
+  }
+
+  #apparel-form-part-b {
+    display: block;
   }
 }
