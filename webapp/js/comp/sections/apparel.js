@@ -15,7 +15,7 @@ var prepare = function( el, done ) {
       button = {
         netid: el.find("#apparel-form-netid-button")
       };
-
+  console.log( input, button );
   // Add apparel images to the page
   apparel.forEach(function( type ) {
     var cell = $("<div />")
@@ -27,12 +27,7 @@ var prepare = function( el, done ) {
     grid.append( cell );
   });
 
-  // Prepare input
-  input.netid.on("input", function() {
-    var text = input.netid.text();
-  });
-
-  // Prepare buttons
+  // Buttons for showing / hiding order form
   el.find("#apparel-grid-order-button").click(function() {
     el.addClass("show-form");
   });
@@ -41,9 +36,28 @@ var prepare = function( el, done ) {
     el.removeClass("show-form");
   });
 
-  button.netid.click(function() {
+  // Net ID form part
+  var checkNetID = function() {
+    alert("Clicked!");
+  };
+
+  input.netid.on("input", function() {
+    var text = input.netid.val();
     
+    // Enable the button if there's text
+    button.netid.attr("disabled", !text );
+  }).keydown(function( ev ) {
+    // Ignore everything but [Enter]
+    if( (ev.keyCode || ev.which) !== 13 ) return;
+
+    // Do nothing if empty
+    if( !input.netid.val() ) return;
+
+    // Check the code
+    checkNetID();
   });
+
+  button.netid.click( checkNetID );
 
   // Notify the SectionManager the section is ready
   done();
