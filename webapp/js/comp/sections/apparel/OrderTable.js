@@ -232,7 +232,7 @@ OrderRow.prototype = {
   }
 };
 
-OrderTable = function( table, orderInfo, items ) {
+OrderTable = function( table, items ) {
   var head = $("<thead />"),
       headRow = $("<tr />"),
 

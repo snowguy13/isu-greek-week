@@ -7,6 +7,26 @@ console.log( apparel );
 
 var alphaNumeric = /[^0-9a-zA-Z]/;
 
+var prepareOrderPart = function( part, isNew ) {
+  var table;
+
+  if( isNew ) {
+    // Create the table with no items
+    table = new OrderTable( part.find("#order-table"), [] );
+
+    // Then show the part
+    part.show();
+  } else {
+    // Otherwise, retrieve the items
+    OrderManager.retrieveOrder(function( items ) {
+      // Then create the table
+      table = new OrderTable( part.find("#order-table"), [] );
+
+      // And show the part
+    });
+  }
+};
+
 var prepare = function( el, done ) {
   // Grab references to important elements
   var grid = el.find("#apparel-grid .grid"),
@@ -177,11 +197,8 @@ var prepare = function( el, done ) {
             .focus();
           input.chapter.val("none");
         } else {
-          // Otherwise, just show the order section
-          part.order.show();
-
           // Prepare the order part
-          // prepareOrder();
+          prepareOrderPart( part.order, false ); // false indicates existing order
         }
       } else {
         // Otherwise, show an error
@@ -259,7 +276,7 @@ var prepare = function( el, done ) {
         part.info.hide();
 
         // Prepare the order part
-        // prepareOrderPart()
+        prepareOrderPart( part.order, true ); // true indicates new order
       } else {
         // Something went wrong, show error message
         errorP.text("Whoops, something went wrong, and your info wasn't updated. Please try again.")

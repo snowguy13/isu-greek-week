@@ -71,11 +71,7 @@ return {
     });
   },
 
-  // Retrieves the order for a netid
-  //
-  // Accepted args fields:
-  //   netid  String  The Net ID of the order to update
-  //   token  String  The auth code for that Net ID
+  // Retrieves the order for the stored credentials
   //
   // Responds with:
   //   success  Boolean  true if the order was retrieved successfully
@@ -86,7 +82,7 @@ return {
   //     name   String
   //     size   String
   //     count  Number
-  retrieveOrder: function( args, fn ) {
+  retrieveOrder: function( fn ) {
     if( !auth ) {
       fn({
         success: false,
