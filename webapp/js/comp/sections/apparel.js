@@ -32,7 +32,8 @@ var prepare = function( el, done ) {
       button = {
         netid:       el.find("#apparel-form-netid-button"),
         checkCode:   el.find("#apparel-form-code-button"),
-        switchNetid: el.find("#apparel-form-code-switch-button")
+        switchNetid: el.find("#apparel-form-code-switch-button"),
+        info:        el.find("#apparel-form-info-button")
       };
 
   // Hide the error paragraph
@@ -218,6 +219,34 @@ var prepare = function( el, done ) {
   //
   // Info form part
   //
+
+  var validateForm = function() {
+    var name    = input.name.val(),
+        chapter = input.chapter.val(),
+
+        valid = name !== "" && chapter !== "none";
+    
+    // Disable the button if not valid, otherwise enable it
+    button.info.attr("disabled", !valid );
+  };
+
+  var postInfo = function() {
+
+  };
+
+  // Listen to updates on the input
+  input.name
+    .on("input", validateForm )
+    .keydown(function( ev ) {
+      // Ignore everything but [Enter]
+      if( (ev.keyCode || ev.which) !== 13 ) return;
+  
+      // Do nothing if form not valid
+      if( button.info.attr("disabled") ) return;
+  
+      // If everything is valid, post the info
+      postInfo();
+    });
   
   // Populate the chapter select with the list of chapters
   chapters.forEach(function( chapter ) {
@@ -225,7 +254,13 @@ var prepare = function( el, done ) {
       .attr("val", chapter )
       .text( chapter )
     );
-  });
+  })
+  
+  // When chapter is changed, validate the form
+  input.chapter.on("change", validateForm );
+
+  // If the button is clicked, post the info
+  button.info.click( postInfo );
 
   // Show the first form part
   part.netid.show();
