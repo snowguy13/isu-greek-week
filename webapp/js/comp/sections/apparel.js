@@ -83,7 +83,9 @@ var prepare = function( el, done ) {
     }
     
     // Check the net id
-    OrderManager.orderExists( val, function( res ) {
+    OrderManager.orderExists({
+      netid: val
+    }, function( res ) {
       if( res.valid ) {
         // Valid netid was given, so hide current section and show the code section
         part.netid.hide();
@@ -147,11 +149,17 @@ var prepare = function( el, done ) {
     button.switchNetid.attr("disabled", true );
 
     // Check the code
-    OrderManager.checkOrderCode( orderInfo.id, code, function( res ) {
+    OrderManager.checkOrderCode({
+      netid: orderInfo.id,
+      code:  code
+    }, function( res ) {
       // If there was a match...
       if( res.match ) {
         // Hide the current section
         part.code.hide();
+
+        // Save the token
+        orderInfo.token = res.token;
 
         // Re-enable controls
         input.code.attr("disabled", false );
@@ -231,7 +239,7 @@ var prepare = function( el, done ) {
   };
 
   var postInfo = function() {
-
+    
   };
 
   // Listen to updates on the input
