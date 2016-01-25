@@ -13,7 +13,7 @@ var prepare = function( el, done ) {
 
       errorP = el.find(".error"),
 
-      newOrder,
+      orderInfo = {},
 
       part = {
         netid: el.find("#apparel-form-netid"),
@@ -24,7 +24,9 @@ var prepare = function( el, done ) {
 
       input = {
         netid: el.find("input[name=netid]"),
-        code:  el.find("input[name=code]")
+        code:  el.find("input[name=code]"),
+        name:  el.find("input[name=name]"),
+        chapter: el.find("select[name=chapter]")
       },
 
       button = {
@@ -87,14 +89,15 @@ var prepare = function( el, done ) {
         part.code.show();
         
         // Remember whether the order exists or not
-        newOrder = !res.exists;
+        orderInfo.new = !res.exists;
+        orderInfo.id  = val;
 
         // Hide the appropriate label
         var newLabel = part.code.find("#apparel-form-code-new"),
             extLabel = part.code.find("#apparel-form-code-existing");
         
-        newLabel[ newOrder ? "show" : "hide" ]();
-        extLabel[ newOrder ? "hide" : "show" ]();
+        newLabel[ orderInfo.new ? "show" : "hide" ]();
+        extLabel[ orderInfo.new ? "hide" : "show" ]();
 
         input.code.val("")
           .focus();
@@ -133,7 +136,67 @@ var prepare = function( el, done ) {
   //
   // Code form part
   //
+  var checkCode = function( code ) {
+    var code = input.code.val();
+
+    // Disable controls, hide error
+    errorP.hide();
+    input.code.attr("disabled", true );
+    button.checkCode.attr("disabled", true );
+    button.switchNetid.attr("disable", true );
+
+    // Check the code
+    OrderManager.checkOrderCode( orderInfo.id, code, function( res ) {
+      // If there was a match...
+      if( res.match ) {
+        // Hide the current section
+        part.code.hide();
+
+        // If the order is new...
+        if( orderInfo.new ) {
+          // Show the info section
+          part.info.show();
+
+          // Reset inputs, focus the first one
+          input.name.val("")
+            .focus();
+          input.chapter.val("none");
+        } else {
+          // Otherwise, just show the order section
+          part.order.show();
+
+          // prepareOrder();
+        }
+      } else {
+        // Otherwise, show an error
+        errorP.text("The code you provided doesn't match our records.")
+              .show();
+      }
+    });
+  };
+
+  input.code.on("input", function() {
+    var text = input.netid.val();
+    
+    // Enable the button if there's text
+    button.checkCode.attr("disabled", !text );
+  }).keydown(function( ev ) {
+    // Ignore everything but [Enter]
+    if( (ev.keyCode || ev.which) !== 13 ) return;
+
+    // Do nothing if empty
+    if( !input.code.val() ) return;
+
+    // Check the code
+    checkCode();
+  });
+
+  button.checkCode.click( checkCode );
+
   button.switchNetid.click(function() {
+    // Reset order info
+    orderInfo = {};
+
     // Switch back to netid part
     part.code.hide();
     part.netid.show();
@@ -141,6 +204,12 @@ var prepare = function( el, done ) {
     input.netid.val("")
       .focus();
   });
+
+  //
+  // Info form part
+  //
+  
+  
 
   // Show the first form part
   part.netid.show();
