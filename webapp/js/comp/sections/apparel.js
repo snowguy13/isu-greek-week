@@ -1,4 +1,5 @@
-define(["jquery", "data/chapters", "json!/api/apparel", "util/OrderManager"], function( $, chapters, apparel, OrderManager ) {
+define(["jquery", "data/chapters", "json!/api/apparel", "util/OrderManager", "./apparel/OrderTable"], 
+function( $,       chapters,        apparel,             OrderManager,        OrderTable ) {
 
 // Parse the apparel
 apparel = JSON.parse( apparel );
@@ -154,7 +155,7 @@ var prepare = function( el, done ) {
       code:  code
     }, function( res ) {
       // If there was a match...
-      if( res.match ) {
+      if( res.valid ) {
         // Hide the current section
         part.code.hide();
 
