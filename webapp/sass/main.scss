@@ -176,6 +176,12 @@ select {
   border-radius: 5px;
 }
 
+input[disabled],
+select[disabled] {
+  color: #333;
+  background-color: #DDD;
+}
+
 input[type="text"] {
   transition-property: width, transform, box-shadow;
   transition-duration: 0.1s;

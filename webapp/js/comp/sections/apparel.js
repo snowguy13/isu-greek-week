@@ -179,6 +179,7 @@ var prepare = function( el, done ) {
           // Otherwise, just show the order section
           part.order.show();
 
+          // Prepare the order part
           // prepareOrder();
         }
       } else {
@@ -239,7 +240,36 @@ var prepare = function( el, done ) {
   };
 
   var postInfo = function() {
-    
+    // Hide error paragraph, disable form controls
+    errorP.hide();
+    input.name.attr("disabled", true );
+    input.chapter.attr("disabled", true );
+    button.info.attr("disabled", true );
+
+    // Post the information
+    OrderManager.updateOrderInfo({
+      netid:   orderInfo.id,
+      token:   ordenInfo.token,
+      name:    input.name.val(),
+      chapter: input.chapter.val()
+    }, function( res ) {
+      if( res.success ) {
+        // Post was successful, so show the order screen
+        part.info.hide();
+
+        // Prepare the order part
+        // prepareOrderPart()
+      } else {
+        // Something went wrong, show error message
+        errorP.text("Whoops, something went wrong, and your info wasn't updated. Please try again.")
+          .show();
+      }
+
+      // Re-enable controls
+      input.name.attr("disabled", false );
+      input.chapter.attr("disabled", false );
+      button.info.attr("disabled", false );
+    });
   };
 
   // Listen to updates on the input

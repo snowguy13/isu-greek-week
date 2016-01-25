@@ -39,7 +39,7 @@ return {
   //
   // Accepted args fields:
   //   netid    String  The Net ID of the order to update
-  //   code     String  The auth code for that Net ID
+  //   token    String  The auth code for that Net ID
   //   name     String  The name to use with the order
   //   chapter  String  The chapter this order is for
   // 
@@ -47,15 +47,15 @@ return {
   //   success  Boolean  true if the update was successful
   updateOrderInfo: function( args, fn ) {
     fn({
-      success: true,
+      success: Math.random() < .5,
     });
   },
 
   // Retrieves the order for a netid
   //
   // Accepted args fields:
-  //   netid    String  The Net ID of the order to update
-  //   code     String  The auth code for that Net ID
+  //   netid  String  The Net ID of the order to update
+  //   token  String  The auth code for that Net ID
   //
   // Responds with:
   //   match  Boolean  true if the code matches the netid
