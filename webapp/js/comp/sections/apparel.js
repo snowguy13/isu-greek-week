@@ -143,7 +143,7 @@ var prepare = function( el, done ) {
     errorP.hide();
     input.code.attr("disabled", true );
     button.checkCode.attr("disabled", true );
-    button.switchNetid.attr("disable", true );
+    button.switchNetid.attr("disabled", true );
 
     // Check the code
     OrderManager.checkOrderCode( orderInfo.id, code, function( res ) {
@@ -151,6 +151,11 @@ var prepare = function( el, done ) {
       if( res.match ) {
         // Hide the current section
         part.code.hide();
+
+        // Re-enable controls
+        input.code.attr("disabled", false );
+        button.checkCode.attr("disabled", false );
+        button.switchNetid.attr("disabled", false );
 
         // If the order is new...
         if( orderInfo.new ) {
@@ -171,6 +176,11 @@ var prepare = function( el, done ) {
         // Otherwise, show an error
         errorP.text("The code you provided doesn't match our records.")
               .show();
+
+        // Re-enable controls
+        input.code.attr("disabled", false );
+        button.checkCode.attr("disabled", false );
+        button.switchNetid.attr("disabled", false );
       }
     });
   };
@@ -209,7 +219,13 @@ var prepare = function( el, done ) {
   // Info form part
   //
   
-  
+  // Populate the chapter select with the list of chapters
+  chapters.forEach(function( chapter ) {
+    input.chapter.append( $("<option />")
+      .attr("val", chapter )
+      .text( chapter )
+    );
+  });
 
   // Show the first form part
   part.netid.show();

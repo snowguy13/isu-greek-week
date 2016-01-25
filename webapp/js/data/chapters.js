@@ -38,7 +38,7 @@ return [
   "Phi Kappa Theta",
   "Pi Kappa Alpha",
   "Pi Kappa Phi",
-  "Sigma Alpha Epsilon",
+  /*"Sigma Alpha Epsilon",*/  // yeah, they aren't a thing anymore
   "Sigma Chi",
   "Sigma Phi Epsilon",
   "Sigma Pi",
@@ -61,5 +61,5 @@ return [
   "Delta Sigma Theta",
   "Kappa Alpha Psi",
   "Zeta Phi Beta"
-];
+].sort();
 });
