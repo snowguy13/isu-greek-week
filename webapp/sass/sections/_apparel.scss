@@ -31,3 +31,48 @@
     display: block;
   }
 }
+
+.apparel-order {
+  width: 90%;
+  max-width: 800px;
+  margin: 10px auto 0;
+
+  font-size: 16px;
+  font-weight: 200;
+  text-align: center;
+
+  border-spacing: 0;
+  
+  .header {
+    padding: 10px 15px;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    background-color: #a4d275;
+
+    border-bottom: 3px solid rgb( 98, 126, 70);
+  }
+
+  .foot-left {
+    text-align: right;
+  }
+
+  .total {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  tbody tr {
+    &:nth-child(even) td {
+      background-color: white;
+      background-color: rgba( 255, 255, 255, 0.8 );
+    }
+
+    &:nth-child(odd) td {
+      background-color: #EEE;
+      background-color: rgba( 255, 255, 255, 0.7 );
+    }
+  }
+}

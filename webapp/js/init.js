@@ -5,9 +5,7 @@ require.config({
     "json":             "lib/requirejs-plugins/lib/text",
 
     "jquery":           "lib/jquery/dist/jquery.min",
-    "jquery.countdown": "lib/jquery.countdown/dist/jquery.countdown.min",
-
-    "data/apparel":     "json!/api/apparel.json"
+    "jquery.countdown": "lib/jquery.countdown/dist/jquery.countdown.min"
   }
 });
 

@@ -1,5 +1,7 @@
-define(["jquery", "data/apparel", "util/OrderManager"],
+define(["jquery", "json!/api/apparel", "util/OrderManager"],
 function( $,       apparel,        OrderManager ) {
+
+apparel = JSON.parse( apparel );
 
 var NUM_COLS = 6,
 
@@ -233,7 +235,9 @@ OrderRow.prototype = {
 };
 
 OrderTable = function( table, items ) {
-  var head = $("<thead />"),
+  var self = this,
+
+      head = $("<thead />"),
       headRow = $("<tr />"),
 
       foot = $("<tfoot />"),
@@ -261,7 +265,10 @@ OrderTable = function( table, items ) {
   // Prepare the footer row
   newItem
     .addClass("button")
-    .text("+ New");
+    .text("+ New")
+    .click(function() {
+      self._addItem();
+    });
 
   totalCell
     .addClass("total")
@@ -270,6 +277,7 @@ OrderTable = function( table, items ) {
   foot.append( $("<tr />")
     .append( $("<td />") 
       .attr("colspan", NUM_COLS - 2 )
+      .addClass("foot-left")
       .append( newItem )
     )
     .append( totalCell )
@@ -304,8 +312,8 @@ OrderTable = function( table, items ) {
 };
 
 OrderTable.prototype = {
-  _addItem: function( item ) {
-    var row = new OrderRow( item );
+  _addItem: function( item /* may be left blank */ ) {
+    var row = new OrderRow( this, item );
     
     // Append the row to the table
     this._body.append( row._row );
@@ -315,7 +323,7 @@ OrderTable.prototype = {
 
     // Remove the empty row from the table
     this._emptyRow.detach();
-  }
+  },
 
   _itemDeleted: function( index ) {
     // Remove the row

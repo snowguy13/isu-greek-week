@@ -3,7 +3,6 @@ function( $,       chapters,        apparel,             OrderManager,        Or
 
 // Parse the apparel
 apparel = JSON.parse( apparel );
-console.log( apparel );
 
 var alphaNumeric = /[^0-9a-zA-Z]/;
 
@@ -23,6 +22,7 @@ var prepareOrderPart = function( part, isNew ) {
       table = new OrderTable( part.find("#order-table"), [] );
 
       // And show the part
+      part.show();
     });
   }
 };
@@ -109,6 +109,7 @@ var prepare = function( el, done ) {
     }, function( res ) {
       if( res.valid ) {
         // Valid netid was given, so hide current section and show the code section
+        button.checkCode.attr("disabled", true );
         part.netid.hide();
         part.code.show();
         
@@ -234,6 +235,9 @@ var prepare = function( el, done ) {
   button.switchNetid.click(function() {
     // Reset order info
     orderInfo = {};
+    
+    // Disable the button
+    button.netid.attr("disabled", true );
 
     // Switch back to netid part
     part.code.hide();
@@ -267,7 +271,7 @@ var prepare = function( el, done ) {
     // Post the information
     OrderManager.updateOrderInfo({
       netid:   orderInfo.id,
-      token:   ordenInfo.token,
+      token:   orderInfo.token,
       name:    input.name.val(),
       chapter: input.chapter.val()
     }, function( res ) {
