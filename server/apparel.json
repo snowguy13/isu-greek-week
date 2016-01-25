@@ -8,7 +8,7 @@
 
   {
     "name":  "Short Sleeve B",
-    "sizes": ["S", "M", "L", "XL"],
+    "sizes": ["S", "M", "L"],
     "cost":  14,
     "images": ["ssb.png"]
   },

@@ -67,7 +67,9 @@ OrderRow = function( table, item ) {
   // Prepare the controls
   // (1) Name select
   apparel.forEach(function( item ) {
-    addOption( nameSelect, item.name );
+    var name = item.name;
+
+    addOption( nameSelect, name, name + " - $" + findApparelByName( name ).cost );
   });
 
   // On change, update size select and cost
@@ -123,6 +125,7 @@ OrderRow = function( table, item ) {
 
   // (4) Delete button -- TODO
   deleteButton
+    .addClass("button small")
     .text("✕")
     .click(function() {
       self._delete();
@@ -150,13 +153,13 @@ OrderRow = function( table, item ) {
 
 OrderRow.prototype = {
   _makeSizeSelect: function() {
-    var name = this._nameSelect,
-        size = this._sizeSelect,
+    var nameSelect = this._nameSelect,
+        sizeSelect = this._sizeSelect,
 
-        val  = size.val();
+        val  = sizeSelect.val();
 
     // Empty the current sizeSelect
-    size.empty();
+    sizeSelect.empty();
 
     // Then reconstruct the options based on the current name
     findApparelByName( nameSelect.val() ).sizes.forEach(function( size ) {
@@ -164,10 +167,10 @@ OrderRow.prototype = {
     });
 
     // Try selecting the previously selected element
-    size.val( val );
+    sizeSelect.val( val );
 
     // Update the change (if any) in data
-    this._item.size = size.val();
+    this._item.size = sizeSelect.val();
   },
 
   _updateCost: function() {
@@ -198,7 +201,7 @@ OrderRow.prototype = {
       // If successful, save the id
       if( res.success ) {
         self._item.id = res.id;
-        this._setControlsEnabled( true );
+        self._setControlsEnabled( true );
       } else {
         // Otherwise, show an error
         row.addClass("error");
@@ -215,8 +218,13 @@ OrderRow.prototype = {
 
     OrderManager.deleteItem( this._item, function( res ) {
       if( res.success ) {
+        // Notify the parent table
         self._table._itemDeleted( index );
+
+        // And remove the element
+        self._row.remove();
       } else {
+        // Mark an error
         self._row
           .removeClass("deleting")
           .addClass("error");
@@ -255,8 +263,8 @@ OrderTable = function( table, items ) {
   // Prepare the header row
   ["" /* for numbering */, "Name", "Size", "Count", "Cost", "" /* for delete buttons */].forEach(function( header ) {
     headRow.append( $("<th />")
-      .addClass("header")
-      .text( header )
+      .addClass("header" + ( header === "Count" ? " count" : "" ))
+      .text( header === "Count" ? "" : header )
     );
   });
 
@@ -264,7 +272,7 @@ OrderTable = function( table, items ) {
 
   // Prepare the footer row
   newItem
-    .addClass("button")
+    .addClass("button small")
     .text("+ New")
     .click(function() {
       self._addItem();
@@ -272,7 +280,8 @@ OrderTable = function( table, items ) {
 
   totalCell
     .addClass("total")
-    .attr("colspan", 2 );
+    .attr("colspan", 2 )
+    .text("0");
 
   foot.append( $("<tr />")
     .append( $("<td />") 
@@ -323,6 +332,9 @@ OrderTable.prototype = {
 
     // Remove the empty row from the table
     this._emptyRow.detach();
+
+    // Update the cost
+    this._updateCost();
   },
 
   _itemDeleted: function( index ) {
@@ -331,15 +343,24 @@ OrderTable.prototype = {
 
     // And update the cost
     this._updateCost();
+
+    // If there are no rows, add the empty row
+    if( this._rows.length === 0 ) {
+      this._body.append( this._emptyRow );
+    }
   },
 
   _updateCost: function() {
     var totalCell = this._totalCell,
         total;
-
+    
+    // Find the cost
     total = this._rows.reduce(function( total, row ) {
       return total + row._cost;
     }, 0 );
+
+    // Put the number in the total cell
+    totalCell.text( total );
   }
 };
 

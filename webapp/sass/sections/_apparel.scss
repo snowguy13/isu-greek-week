@@ -33,6 +33,8 @@
 }
 
 .apparel-order {
+  counter-reset: row-num;
+
   width: 90%;
   max-width: 800px;
   margin: 10px auto 0;
@@ -42,6 +44,40 @@
   text-align: center;
 
   border-spacing: 0;
+
+  input[type="number"],
+  select {
+    width: auto;
+    margin: 0;
+    padding: 5px;
+    
+    font-size: 16px;
+    text-align: center;
+    
+    color: black;
+    background-color: transparent;
+
+    border: none;
+  }
+
+  input[type="number"] {
+    width: 50px;
+    padding: 10px 0;
+  }
+
+  select {
+    -webkit-appearance: menulist;
+    -moz-appearance: menulist;
+    appearance: menulist;
+  }
+
+  .index {
+    counter-increment: row-num;
+
+    &::before {
+      content: counter(row-num);
+    }
+  }
   
   .header {
     padding: 10px 15px;
@@ -52,6 +88,19 @@
     background-color: #a4d275;
 
     border-bottom: 3px solid rgb( 98, 126, 70);
+
+    &.count::before {
+      content: "Count";
+
+      @media(max-width: 570px) {
+        content: "#";
+      }
+    }
+  }
+
+  tfoot td {
+    background-color: #a4d275;
+    border-top: 3px solid rgb( 98, 126, 70);
   }
 
   .foot-left {
@@ -62,6 +111,10 @@
     font-size: 24px;
     font-weight: bold;
     text-align: left;
+
+    &::before {
+      content: "$";
+    }
   }
 
   tbody tr {
@@ -73,6 +126,27 @@
     &:nth-child(odd) td {
       background-color: #EEE;
       background-color: rgba( 255, 255, 255, 0.7 );
+    }
+  }
+
+  @media(max-width: 570px) {
+    font-size: 10px;
+
+    input[type="number"],
+    select {
+      font-size: 10px;
+    }
+
+    input[type="number"] {
+      width: 20px;
+    }
+
+    .header {
+      font-size: 16px;
+    }
+
+    .total {
+      font-size: 20px;
     }
   }
 }
