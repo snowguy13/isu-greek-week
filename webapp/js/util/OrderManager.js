@@ -1,4 +1,5 @@
-define(function() {
+define(["jquery"],
+function( $ ) {
 
 var auth = false,
     netid, token;
@@ -14,11 +15,22 @@ return {
   //   valid   Boolean  true if the Net ID is valid
   //   exists  Boolean  true if an order exists for the given netid
   orderExists: function( args, fn ) {
+    $.ajax({
+      method: "GET",
+      url:    "/api/orders/" + args.netid + "/exists",
+      success: function( res ) {
+        alert( res );
+        fn({
+          valid:  true,
+          exists: res
+        });
+      }
+    })
     // No api calls prepared yet
-    fn({
-      valid:  Math.random() < .9,
-      exists: Math.random() < .5
-    });
+    //fn({
+      //valid:  Math.random() < .9,
+      //exists: Math.random() < .5
+    //});
   },
 
   // Checks if the given code matches the given netid

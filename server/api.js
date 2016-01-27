@@ -1,6 +1,5 @@
-var apparel  = require("./apparel.json"),
-    //chapters = require("./chapters.json"),
-    twitter  = require("./twitter"),
+var db      = require("./database"),
+    twitter = require("./twitter"),
 
     router  = require("express").Router();
 
@@ -11,13 +10,17 @@ router.get("/tweets", function( req, res ) {
 
 // Return apparel info when it is requested
 router.get(/\/apparel(\.js(on)?)?/, function( req, res ) {
-  res.json( apparel );
+  db.getApparel(function( err, apparel ) {
+    res.json( err ? {} : apparel );
+  });
 });
 
-// Return chapter list when it is requested
-/*router.get("/chapters", function( req, res ) {
-  res.json( chapters );
-});*/
+// Return true if an order exists
+router.get("/orders/:netid/exists", function( req, res ) {
+  db.checkOrderExists( req.params.netid, function( err, exists ) {
+    res.json( exists );
+  });
+});
 
 // Export the router
 module.exports = router;
