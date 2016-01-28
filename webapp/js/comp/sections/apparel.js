@@ -220,6 +220,7 @@ var prepare = function( el, done ) {
 
   input.code.on("input", function() {
     var text = input.netid.val();
+    console.log("text is " +text );
     
     // Enable the button if there's text
     button.checkCode.attr("disabled", !text );
