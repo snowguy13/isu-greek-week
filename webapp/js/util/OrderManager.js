@@ -21,7 +21,6 @@ return {
       url:    "/api/orders/" + args.netid + "/create",
       success: function( res ) {
         res.valid = true;
-        alert( res );
         fn( res );
       }
     })
