@@ -104,17 +104,13 @@ var prepare = function( el, done ) {
     }
     
     // Check the net id
-    OrderManager.orderExists({
+    OrderManager.createOrder({
       netid: val
     }, function( res ) {
       if( res.valid ) {
-        // Valid netid was given, so hide current section and show the code section
-        button.checkCode.attr("disabled", true );
-        part.netid.hide();
-        part.code.show();
-        
         // Remember whether the order exists or not
-        orderInfo.new = !res.exists;
+        orderInfo.new = res.newOrderCreated;
+        orderInfo.hasInfo = res.hasOrderInfo;
         orderInfo.id  = val;
 
         // Hide the appropriate label
@@ -123,6 +119,14 @@ var prepare = function( el, done ) {
         
         newLabel[ orderInfo.new ? "show" : "hide" ]();
         extLabel[ orderInfo.new ? "hide" : "show" ]();
+
+        // Fill in the given netid in the netid span
+        part.code.find(".netid").text( orderInfo.id );
+
+        // Valid netid was given, so hide current section and show the code section
+        button.checkCode.attr("disabled", true );
+        part.netid.hide();
+        part.code.show();
 
         input.code.val("")
           .focus();
@@ -188,8 +192,8 @@ var prepare = function( el, done ) {
         button.checkCode.attr("disabled", false );
         button.switchNetid.attr("disabled", false );
 
-        // If the order is new...
-        if( orderInfo.new ) {
+        // If the order is lacking info...
+        if( !orderInfo.hasInfo ) {
           // Show the info section
           part.info.show();
 
@@ -198,7 +202,7 @@ var prepare = function( el, done ) {
             .focus();
           input.chapter.val("none");
         } else {
-          // Prepare the order part
+          // Otherwise, order has info, so prepare the order part
           prepareOrderPart( part.order, false ); // false indicates existing order
         }
       } else {

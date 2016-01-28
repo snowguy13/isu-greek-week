@@ -16,9 +16,9 @@ router.get(/\/apparel(\.js(on)?)?/, function( req, res ) {
 });
 
 // Return true if an order exists
-router.get("/orders/:netid/exists", function( req, res ) {
-  db.checkOrderExists( req.params.netid, function( err, exists ) {
-    res.json( exists );
+router.post("/orders/:netid/create", function( req, res ) {
+  db.createOrder( req.params.netid, function( err, info ) {
+    res.json( info );
   });
 });
 

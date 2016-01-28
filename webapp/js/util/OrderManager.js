@@ -12,25 +12,19 @@ return {
   //   netid  String  The Net ID check
   //
   // Responds with:
-  //   valid   Boolean  true if the Net ID is valid
-  //   exists  Boolean  true if an order exists for the given netid
-  orderExists: function( args, fn ) {
+  //   valid            Boolean  true if the given value is a valid netid
+  //   newOrderCreated  Boolean  true if a new order was created, false if one already existed
+  //   hasOrderInfo     Boolean  true if the order has name and chapter info already
+  createOrder: function( args, fn ) {
     $.ajax({
-      method: "GET",
-      url:    "/api/orders/" + args.netid + "/exists",
+      method: "POST",
+      url:    "/api/orders/" + args.netid + "/create",
       success: function( res ) {
+        res.valid = true;
         alert( res );
-        fn({
-          valid:  true,
-          exists: res
-        });
+        fn( res );
       }
     })
-    // No api calls prepared yet
-    //fn({
-      //valid:  Math.random() < .9,
-      //exists: Math.random() < .5
-    //});
   },
 
   // Checks if the given code matches the given netid

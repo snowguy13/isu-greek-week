@@ -11,8 +11,12 @@ var STMT = {
                     + "regexp_split_to_array( images, ',' ) AS images "
              + "FROM Apparel;",
 
-  CHECK_ORDER_EXISTS: function( netid ) {
-    return "SELECT EXISTS( SELECT 1 FROM Orders WHERE netid = '" + netid + "' ) AS exists;";
+  GET_ORDER: function( netid ) {
+    return "SELECT * FROM Orders WHERE netid = '" + netid + "';";
+  },
+
+  CREATE_ORDER: function( netid ) {
+    return "INSERT INTO Orders (netid) VALUES ('" + netid + "')";
   }
 };
 
@@ -45,10 +49,34 @@ module.exports = {
     }
   },
 
-  checkOrderExists: function( netid, cb ) {
+  createOrder: function( netid, cb ) {
     // Query the database to see if such an order exists
-    client.query( STMT.CHECK_ORDER_EXISTS( netid ), function( err, res ) {
-      cb( err, res.rows[ 0 ].exists );
+    client.query( STMT.GET_ORDER( netid ), function( err, res ) {
+      // If there was an error, quit now
+      if( err ) {
+        cb( err );
+      }
+      
+      // Grab the row (if it's there)
+      var row = res.rows[ 0 ];
+      
+      // If no such order exists...
+      if( !row ) {
+        // ...create the order
+        client.query( STMT.CREATE_ORDER( netid ), function( err, res ) {
+          // If there was an error, quit now
+          cb( err, err ? undefined : {
+            newOrderCreated: true,
+            orderHasInfo:    false
+          });
+        });
+      } else {
+        // Otherwise, the order already exists
+        cb( undefined, {
+          newOrderCreated: false,
+          orderHasInfo:    !!(row.name && row.chapter)
+        });
+      }
     });
   }
 };
