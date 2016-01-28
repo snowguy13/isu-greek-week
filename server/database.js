@@ -3,6 +3,20 @@ var pg = require("pg");
 // Should work remotely or locally
 var DB = process.env.DATABASE_URL || "tomscallon:tomscallon@localhost/isugreekweek";
 
+// Creates a random code (used in CREATE_ORDER)
+var LEN = 10,
+    CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+var generateCode = function() {
+  var code = "";
+
+  for( var i = 0; i < LEN; i++ ) {
+    code += CHARS[ Math.floor( Math.random() * CHARS.length ) ];
+  }
+
+  return code;
+};
+
 // Common statements
 var STMT = {
   GET_APPAREL: "SELECT name, "
@@ -16,7 +30,7 @@ var STMT = {
   },
 
   CREATE_ORDER: function( netid ) {
-    return "INSERT INTO Orders (netid) VALUES ('" + netid + "')";
+    return "INSERT INTO Orders (netid, code) VALUES ('" + netid + "', '" + generateCode() + "')";
   }
 };
 
@@ -78,5 +92,9 @@ module.exports = {
         });
       }
     });
+  },
+
+  checkOrderCode: function( netid, code, cb ) {
+
   }
 };
