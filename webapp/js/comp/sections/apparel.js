@@ -110,7 +110,7 @@ var prepare = function( el, done ) {
       if( res.valid ) {
         // Remember whether the order exists or not
         orderInfo.new = res.newOrderCreated;
-        orderInfo.hasInfo = res.hasOrderInfo;
+        orderInfo.hasInfo = res.orderHasInfo;
         orderInfo.id  = val;
 
         // Hide the appropriate label
