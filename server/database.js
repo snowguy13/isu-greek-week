@@ -4,13 +4,14 @@ var pg = require("pg");
 var DB = process.env.DATABASE_URL || "tomscallon:tomscallon@localhost/isugreekweek";
 
 // Creates a random code (used in CREATE_ORDER)
-var LEN = 10,
+var CODE_LEN = 10,
+    TOKEN_LEN = 20,
     CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-var generateCode = function() {
+var generateRandom = function( len ) {
   var code = "";
 
-  for( var i = 0; i < LEN; i++ ) {
+  for( var i = 0; i < len; i++ ) {
     code += CHARS[ Math.floor( Math.random() * CHARS.length ) ];
   }
 
@@ -30,7 +31,7 @@ var STMT = {
   },
 
   CREATE_ORDER: function( netid ) {
-    return "INSERT INTO Orders (netid, code) VALUES ('" + netid + "', '" + generateCode() + "')";
+    return "INSERT INTO Orders (netid, code) VALUES ('" + netid + "', '" + generateRandom( CODE_LEN ) + "')";
   }
 };
 

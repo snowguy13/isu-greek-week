@@ -33,8 +33,8 @@ return {
   //   code   String  The code to check
   //
   // Responds with:
-  //   valid  Boolean  true if the code matches the netid
-  //   token  String   The token to use when validating API calls
+  //   valid    Boolean  true if the code matches the netid
+  //   [token]  String   If valid=true, the token to use when validating API calls
   checkOrderCode: function( args, fn ) {
     // When a new order code is tried, remove authentication
     auth = false;

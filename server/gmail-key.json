@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "isu-greek-week",
+  "private_key_id": "4bd67a944c32f5a51c9a7e43ec1ca32cc940c49d",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCJb4Eu5sh0XlTb\n3Q+2g4u7fPv2OV3uMvMUL0JT96GuF+31uCqbNEadzRsS9T+2XXUNFi1ozwc/WATW\nbp5CSvZVtGSICxmPHxEf1noKFwBji40Y1/rKudcSUgn1gg2txtfma6PoTVwqPudD\nIt2hQLz+4e/f5Kr+2WDcAJ2wwMwJeu3H9lAaKbA3augSLIPpT1vILskNF45RjqXI\nwZcPKy0XBnbT+321elTnwxMKZiskFrDI8A8FqN3vq70fDPXsrg0WULkF5X/nhX1A\nbQL3aPMMD40KAvN7E6iQ/wAvt3tRyyKYY3m7uhXEfns9cm0NN23+tXa4ocPryMWF\nZftAbk6lAgMBAAECggEATkXoMBsWPVhgQhwDz/HZij1jjtcbTQdNc8h6oTHerjVI\nvHJYKa67LTJcYg61a5qMiJiB4jhOq1/o2WuEzMK+yw8DVovj0aRi71wKg2aYPRmE\nkYqodf8jo3Z/34hjW/5shfn2Dt7IR/MtaQoZabZiLVPmdwBX9u88/++F393eFuNF\nLUkoYB7DeeL+JWxGE+26nguU19p/0TFA3LK2j81pvCu06oHSEtdk7k30uLVeweq5\nZx1mmj7dDnZ35886MJklE7QakpahU/dDxqgWwOL8cslf3cX9RaksKoqhk4dxrpdp\n1JlR8anHS4IkdTyZnjZwwMgWU3rhRNrEDcMziHgM/QKBgQDvblUSPhcjKDQTPH/K\ngXK2DTstJESMjzt5Y+zwgpZcRt7PGjLNBRX51YA+n60fbiTVuV/dV4nK156k/qQJ\nLMhBJL3r5JiuV91826RQ/3ukZSWrpBQykpyKgRIDb/SbkkMRpXPYi2e/YCM+JaPa\ne2LZufwBOynzCUBTTZYnp9064wKBgQCS8kKu9RCESiJDEj9kv2oJAtmGuFTBMZJ1\nQP87+347tVkiD/qMfAJVSOCgiIeuQKF0xYn35DLmpAFyGMZ2oXaiLOSTSwGbYWIy\nGxvonlj+M4nHc2dwPt/rTZmuWLIfqfXX3vntelejtvkVmuH0xf8/Sbf6Czb/EPBE\nO90RkPve1wKBgEF0LBV8m96kkvffRiAaGz3hiBfjHko+rceVpaRqTqiTRz3er5yU\nk1llIFX+WNmKxs8Wijp8P9MP9vKsGjPX5jbI0JK4P3UJ2CbV9Kmf7jEW5aFyjYL1\nyY2jk0UVSg1tgqBEVtMP6SDMK1ZF+/EyYeebjGTZw7IJCWi8gRv+K+B5AoGAPTkU\nUWKnPAbLGZi7stURb6mxSbD5Fvj5ZULsVGhm4qee+FMh93AfZLsVY60eopoo6sb2\nwcJg9rk0JP5vibOiAtWjcj7Y74z2ZZvn19ZJi7ebWu8ZFKoNjzLoqbwokoq0c/lh\ntfC4HOy6AKdkJyBrRUoIjfQoOMMs57DtXUlDt0cCgYEA3MLRbcTzJnz/AbXHhcYm\nsNqws5L0CEZqfIWgjWBTT1d/706isWvMbZZ/CmVYrTYwzvF0tXzooIw930uQUmzb\nYqy3q/x9LDV/oLhjtNBRgfeMAyJ9iTw9DQTmyq4mkgQQzwDHj2oNu5NWKGYdwq48\ntdPS/J4NSgfiLOrgNtEUHx0=\n-----END PRIVATE KEY-----\n",
+  "client_email": "gmail-account@isu-greek-week.iam.gserviceaccount.com",
+  "client_id": "107922256748565549281",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/gmail-account%40isu-greek-week.iam.gserviceaccount.com"
+}
