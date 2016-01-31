@@ -3,6 +3,9 @@ var app = require("./server/app"),
 
     express = require("express");
 
+    // just for testing
+    require("./server/mail");
+
 // Determine the port to bind to (process.env.PORT is for Heroku)
 app.set('port', ( process.env.PORT || 5000 ));
 
