@@ -2,7 +2,7 @@ var Handlebars = require("handlebars"),
     fs   = require("fs"),
     templates = {},
 
-    EXT = ".dust.html";
+    EXT = ".html";
 
 // Read in all templates
 fs.readdir( __dirname, function( err, files ) {
