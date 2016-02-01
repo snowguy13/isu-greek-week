@@ -4,6 +4,14 @@ var Handlebars = require("handlebars"),
 
     EXT = ".html";
 
+// Read in the css file
+Handlebars.registerPartial(
+  "style", 
+  "<style type='text/css'>\n" +
+  fs.readFileSync( __dirname + "/style.css") +
+  "\n</style>\n"
+);
+
 // Read in all templates
 fs.readdir( __dirname, function( err, files ) {
   // If the was an error, quit

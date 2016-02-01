@@ -1,0 +1,6 @@
+/* Import the font, Titillium Web */
+@import url("https://fonts.googleapis.com/css?family=Titillium+Web:400,700,200,200italic,400italic,700italic");
+
+body, .main {
+  font-family: 'Titillium Web', Helvetica, sans-serif;
+}
