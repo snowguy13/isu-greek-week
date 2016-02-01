@@ -1,8 +1,7 @@
-var SendGrid = require("sendgrid")( process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD );
-console.log( process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD );
-console.log("trying to send email...");
+var SendGrid = require("sendgrid")( process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD )
+    render   = require("./templates/render");
 
-SendGrid.send({
+/*SendGrid.send({
   to:       'tscallon@iastate.edu',
   from:     'isugwtechnology@gmail.com',
   subject:  "Let's see...",
@@ -10,4 +9,4 @@ SendGrid.send({
 }, function(err, json) {
   if (err) { return console.error(err); }
   console.log(json);
-});
+});*/
