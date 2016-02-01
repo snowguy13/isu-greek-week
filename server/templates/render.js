@@ -1,5 +1,8 @@
-var Dust = require("dust"),
-    templates = {};
+var Handlebars = require("handlebars"),
+    fs   = require("fs"),
+    templates = {},
+
+    EXT = ".dust.html";
 
 // Read in all templates
 fs.readdir( __dirname, function( err, files ) {
@@ -11,16 +14,28 @@ fs.readdir( __dirname, function( err, files ) {
 
   // Otherwise, iterate over the files looking for .dust.html extensions
   files.forEach(function( file ) {
-    console.log( file );
+    var name;
+    
+    // Make sure the extension is .dust.html
+    if( file.substring( file.length - EXT.length ) !== EXT ) {
+      return;
+    }
+
+    // Save the file name
+    name = file.substring( 0, file.length - EXT.length );
+
+    // Otherwise, register the template
+    templates[ name ] = Handlebars.compile( fs.readFileSync( __dirname + "/" + file ).toString() );
   });
 });
 
-module.exports = function render( name, context, callback ) {
+module.exports = function render( name, context ) {
   if( !( name in templates ) ) {
     // Couldn't find the requested template, return an empty string
-    callback("Could not find a template called '%s'", null );
+    console.log("Could not find a template called '%s'", name );
+    return "";
   }
 
-  // Otherwise, resolve the template with dust
-  dust.render( name, context, callback );
+  // Otherwise, resolve the template with the cached callback
+  return templates[ name ]( context );
 };

@@ -30,9 +30,9 @@
   },
   "dependencies": {
     "base64url": "^1.0.5",
-    "dust": "^0.3.0",
     "google-auth-library": "^0.9.7",
     "googleapis": "^2.1.7",
+    "handlebars": "^4.0.5",
     "pg": "4.4.3",
     "sendgrid": "^2.0.0"
   }
