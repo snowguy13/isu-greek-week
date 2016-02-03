@@ -17,7 +17,6 @@ var SendGrid = require("sendgrid")( process.env.SENDGRID_USERNAME, process.env.S
  *
  */
 module.exports = function send( opts, cb ) {
-  console.log( render( opts.template, opts.context ) );
   SendGrid.send({
     from:     "Nik Suvorov & Tom Scallon <isugwtechnology@gmail.com>",
     to:       opts.to || [],

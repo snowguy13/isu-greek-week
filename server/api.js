@@ -1,5 +1,6 @@
-var db      = require("./database"),
-    twitter = require("./twitter"),
+var db        = require("./database"),
+    twitter   = require("./twitter"),
+    sendEmail = require("./sendEmail"),
 
     router  = require("express").Router();
 
@@ -17,8 +18,26 @@ router.get(/\/apparel(\.js(on)?)?/, function( req, res ) {
 
 // Return true if an order exists
 router.post("/orders/:netid/create", function( req, res ) {
-  db.createOrder( req.params.netid, function( err, info ) {
-    res.json( info );
+  var netid = req.params.netid;
+
+  db.createOrder( netid, function( err, info ) {
+    // If this is a new order, send an email now
+    if( info.newOrderCreated ) {
+      sendEmail({
+        to:       netid + "@iastate.edu",
+        subject:  "Greek Week Apparel Code",
+        template: "send-code",
+        context:  {
+          code: info.orderCode
+        },
+      });
+    }
+
+    // Send the response
+    res.json({
+      newOrderCreated: info.newOrderCreated,
+      orderHasInfo:    info.orderHasInfo
+    });
   });
 });
 

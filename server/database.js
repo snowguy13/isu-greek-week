@@ -30,8 +30,8 @@ var STMT = {
     return "SELECT * FROM Orders WHERE netid = '" + netid + "';";
   },
 
-  CREATE_ORDER: function( netid ) {
-    return "INSERT INTO Orders (netid, code) VALUES ('" + netid + "', '" + generateRandom( CODE_LEN ) + "')";
+  CREATE_ORDER: function( netid, code ) {
+    return "INSERT INTO Orders (netid, code) VALUES ('" + netid + "', '" + code + "')";
   }
 };
 
@@ -43,6 +43,25 @@ client.connect();
 var apparel;
 
 module.exports = {
+  /**
+   * Retrieves a listing of the available apparel items in JSON format.
+   *
+   * Parameters:
+   *   cb  Function( err, apparel )
+   *     A callback to invoke on error or success
+   *     
+   *     err  Anything
+   *       Any error arising during the retrieval process.
+   *     apparel  Array
+   *       An array of the apparel items, each a JSON object with the following
+   *       properties:
+   *       
+   *       name    String         The name of the apparel item
+   *       sizes   Array<String>  The sizes available for this item
+   *       cost    Number         The cost of this item
+   *       images  Array<String>  A list of file names -- these files, located in the folder
+   *                              'webapp/image/apparel', contain images of this item
+   */
   getApparel: function( cb ) {
     if( apparel ) {
       // If we already have the apparel, just return the cached value
@@ -63,7 +82,26 @@ module.exports = {
       });
     }
   },
-
+  
+  /**
+   * Creates an order for the given Net ID (if one does not already exist).
+   *
+   * Parameters:
+   *   cb  Function( err, info )
+   *     A callback to invoke when the creation succeeds or fails.
+   * 
+   *     err  Anything
+   *       Any error raised while checking the order's existence or creating an order.
+   *     info  Object
+   *       A JSON object containing information about the status of the order. It has
+   *       the following properties:
+   *       
+   *       newOrderCreated  Boolean  true if a new order was created, false if an order
+   *                                 already existed for the given Net ID
+   *       orderCode        String   The password-code associated with the order
+   *       orderHasInfo     Boolean  true if the order has valid 'name' and 'chapter'
+   *                                 values associated with it, false otherwise
+   */
   createOrder: function( netid, cb ) {
     // Query the database to see if such an order exists
     client.query( STMT.GET_ORDER( netid ), function( err, res ) {
@@ -78,10 +116,12 @@ module.exports = {
       // If no such order exists...
       if( !row ) {
         // ...create the order
-        client.query( STMT.CREATE_ORDER( netid ), function( err, res ) {
+        var code = generateRandom( CODE_LEN );
+        client.query( STMT.CREATE_ORDER( netid, code ), function( err, res ) {
           // If there was an error, quit now
           cb( err, err ? undefined : {
             newOrderCreated: true,
+            orderCode:       code,
             orderHasInfo:    false
           });
         });
@@ -89,6 +129,7 @@ module.exports = {
         // Otherwise, the order already exists
         cb( undefined, {
           newOrderCreated: false,
+          orderCode:       row.code,
           orderHasInfo:    !!(row.name && row.chapter)
         });
       }
