@@ -107,7 +107,7 @@ var prepare = function( el, done ) {
     OrderManager.createOrder({
       netid: val
     }, function( res ) {
-      if( res.valid ) {
+      if( !res.err ) {
         // Remember whether the order exists or not
         orderInfo.new = res.newOrderCreated;
         orderInfo.hasInfo = res.orderHasInfo;
@@ -180,7 +180,7 @@ var prepare = function( el, done ) {
       code:  code
     }, function( res ) {
       // If there was a match...
-      if( res.valid ) {
+      if( res.match ) {
         // Hide the current section
         part.code.hide();
 

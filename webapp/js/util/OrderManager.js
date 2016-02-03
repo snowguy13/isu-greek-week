@@ -12,7 +12,6 @@ return {
   //   netid  String  The Net ID check
   //
   // Responds with:
-  //   valid            Boolean  true if the given value is a valid netid
   //   newOrderCreated  Boolean  true if a new order was created, false if one already existed
   //   hasOrderInfo     Boolean  true if the order has name and chapter info already
   createOrder: function( args, fn ) {
@@ -20,10 +19,9 @@ return {
       method: "POST",
       url:    "/api/orders/" + args.netid + "/create",
       success: function( res ) {
-        res.valid = true;
         fn( res );
       }
-    })
+    });
   },
 
   // Checks if the given code matches the given netid
@@ -40,16 +38,24 @@ return {
     auth = false;
     netid = undefined;
     token = undefined;
+    
+    // Make the api call
+    $.ajax({
+      method: "POST",
+      url:    "/api/orders/" + args.netid + "/check",
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify({
+        code: args.code
+      }),
+      success: function( res ) {
+        // If valid, save the netid and token
+        auth  = true;
+        netid = args.netid;
+        token = res.token;
 
-    // If valid, save the netid and token
-    auth = true;
-    netid = args.netid;
-    token = "test";
-
-    // No api calls prepared yet
-    fn({
-      valid: Math.random() < .5,
-      token: "test"
+        // No api calls prepared yet
+        fn( res );
+      }
     });
   },
 

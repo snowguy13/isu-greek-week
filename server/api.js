@@ -16,7 +16,7 @@ router.get(/\/apparel(\.js(on)?)?/, function( req, res ) {
   });
 });
 
-// Return true if an order exists
+// Creates an order if need be
 router.post("/orders/:netid/create", function( req, res ) {
   var netid = req.params.netid;
 
@@ -37,6 +37,24 @@ router.post("/orders/:netid/create", function( req, res ) {
     res.json({
       newOrderCreated: info.newOrderCreated,
       orderHasInfo:    info.orderHasInfo
+    });
+  });
+});
+
+// Check if a given code matches the given Net ID
+router.post("/orders/:netid/check", function( req, res ) {
+  var netid = req.params.netid,
+      code  = req.body.code;
+
+      console.log( req.body );
+
+  // Check the code
+  db.checkOrderCode( netid, code, function( err, info ) {
+    // Simply return whether or not there was a match
+    // and the token (if there was a match)
+    res.json({
+      match: info.match,
+      token: info.token
     });
   });
 });
