@@ -3,12 +3,8 @@
 
 .main {
   font-family: 'Titillium Web', Helvetica, sans-serif;
-  font-size: 20px;
+  font-size: 14px;
   font-weight: 200;
-}
-
-.big {
-  font-size: 26px;
 }
 
 a {
@@ -18,4 +14,18 @@ a {
 
 a:hover {
   color: black;
+}
+
+p {
+  margin: 0;
+  padding: 10px;
+  background-color: #a4d275;
+}
+
+.big {
+  padding: 20px 10px;
+  font-size: 26px;
+  text-align: center;
+  color: white;
+  background-color: rgb(98, 126, 70);
 }

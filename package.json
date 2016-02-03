@@ -33,6 +33,7 @@
     "google-auth-library": "^0.9.7",
     "googleapis": "^2.1.7",
     "handlebars": "^4.0.5",
+    "juice": "^1.9.0",
     "pg": "4.4.3",
     "sendgrid": "^2.0.0"
   }

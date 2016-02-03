@@ -1,7 +1,9 @@
 var Handlebars = require("handlebars"),
-    fs   = require("fs"),
-    templates = {},
+    juice      = require("juice"),
 
+    fs         = require("fs"),
+    
+    templates = {},
     EXT = ".html";
 
 // Read in the css file
@@ -45,5 +47,6 @@ module.exports = function render( name, context ) {
   }
 
   // Otherwise, resolve the template with the cached callback
-  return templates[ name ]( context );
+  // Send the resolved template to juice to inline all css styles
+  return juice( templates[ name ]( context ) );
 };
