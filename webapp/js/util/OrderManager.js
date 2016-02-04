@@ -31,7 +31,8 @@ return {
   //   code   String  The code to check
   //
   // Responds with:
-  //   valid    Boolean  true if the code matches the netid
+  //   [error]  String   Any error occurring during the request
+  //   [valid]  Boolean  If no error, true if the code matches the netid
   //   [token]  String   If valid=true, the token to use when validating API calls
   checkOrderCode: function( args, fn ) {
     // When a new order code is tried, remove authentication
@@ -48,10 +49,12 @@ return {
         code: args.code
       }),
       success: function( res ) {
-        // If valid, save the netid and token
-        auth  = true;
-        netid = args.netid;
-        token = res.token;
+        // If valid, save the netid and token (if there was no error)
+        if( !( "error" in res ) ) {
+          auth  = true;
+          netid = args.netid;
+          token = res.token;
+        }
 
         // No api calls prepared yet
         fn( res );

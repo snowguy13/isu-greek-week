@@ -21,6 +21,14 @@ router.post("/orders/:netid/create", function( req, res ) {
   var netid = req.params.netid;
 
   db.createOrder( netid, function( err, info ) {
+    // If there was an error, just send that in the response
+    if( err ) {
+      res.json({
+        error: err
+      });
+      return;
+    }
+
     // If this is a new order, send an email now
     if( info.newOrderCreated ) {
       sendEmail({
@@ -46,10 +54,16 @@ router.post("/orders/:netid/check", function( req, res ) {
   var netid = req.params.netid,
       code  = req.body.code;
 
-      console.log( req.body );
-
   // Check the code
   db.checkOrderCode( netid, code, function( err, info ) {
+    // If there was an error, just send that in the response
+    if( err ) {
+      res.json({
+        error: err
+      });
+      return;
+    }
+
     // Simply return whether or not there was a match
     // and the token (if there was a match)
     res.json({

@@ -170,18 +170,15 @@ module.exports = {
    *       match  Boolean  true if the code matches the Net ID, false otherwise
    */
   checkOrderCode: function( netid, code, cb ) {
-    console.log("Checking match for %s and %s", netid, code );
     // Query the database to see if the given credentials match
     client.query( STMT.CHECK_ORDER_CODE( netid, code ), function( err, res ) {
       // If the was an error, quit now
       if( err ) {
-        console.log();
         cb("Error while checking code: " + err );
         return;
       }
 
       // If there was no match, notify the caller now
-      console.log( res );
       var match = res.rows[0].exists;
       if( !match ) {
         cb( null, {

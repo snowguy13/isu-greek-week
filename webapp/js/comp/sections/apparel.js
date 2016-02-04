@@ -107,7 +107,7 @@ var prepare = function( el, done ) {
     OrderManager.createOrder({
       netid: val
     }, function( res ) {
-      if( !res.err ) {
+      if( !( "error" in res ) ) {
         // Remember whether the order exists or not
         orderInfo.new = res.newOrderCreated;
         orderInfo.hasInfo = res.orderHasInfo;
@@ -132,7 +132,7 @@ var prepare = function( el, done ) {
           .focus();
       } else {
         // Not valid, show a warning message
-        errorP.text("The Net ID you entered is not valid.")
+        errorP.text("Uh-oh! Something went wrong: " + res.err );
               .show();
 
         input.netid.focus().select();
@@ -179,18 +179,19 @@ var prepare = function( el, done ) {
       netid: orderInfo.id,
       code:  code
     }, function( res ) {
-      // If there was a match...
-      if( res.match ) {
-        // Hide the current section
+      // If there was an error
+      if( "error" in res ) {
+        // Not valid, show a warning message
+        errorP.text("Uh-oh! Something went wrong: " + res.err );
+              .show();
+
+        input.code.focus().select();
+      } else if( res.match ) {
+        //If there was a match...hide the current section
         part.code.hide();
 
         // Save the token
         orderInfo.token = res.token;
-
-        // Re-enable controls
-        input.code.attr("disabled", false );
-        button.checkCode.attr("disabled", false );
-        button.switchNetid.attr("disabled", false );
 
         // If the order is lacking info...
         if( !orderInfo.hasInfo ) {
@@ -209,12 +210,12 @@ var prepare = function( el, done ) {
         // Otherwise, show an error
         errorP.text("The code you provided doesn't match our records.")
               .show();
-
-        // Re-enable controls
-        input.code.attr("disabled", false );
-        button.checkCode.attr("disabled", false );
-        button.switchNetid.attr("disabled", false );
       }
+
+      // Re-enable controls
+      input.code.attr("disabled", false );
+      button.checkCode.attr("disabled", false );
+      button.switchNetid.attr("disabled", false );
     });
   };
 
