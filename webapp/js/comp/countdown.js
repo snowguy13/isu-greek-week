@@ -34,14 +34,24 @@ return function() {
     // Then create the countdown
     $( this ).countdown("2016/03/27")
       .on("update.countdown", function( evt ) {
-        for( var part in parts ) {
-          var time = evt.offset[ timeParts[ part ] ];
-
-          parts[ part ]
-            .attr("data-plural", time !== 1 )
-            .find(".time")
+        Object.keys( parts ).forEach(function( part ) {
+          var time = evt.offset[ timeParts[ part ] ],
+              timeEl = parts[ part ].find(".time"),
+              last = timeEl.text();
+          
+          // Indicate plural if need be
+          parts[ part ].attr("data-plural", time !== 1 );
+          
+          // Update the time component
+          timeEl
+            .addClass( time != last ? "changed" : "" )
             .text( time );
-        }
+          
+          // Add changed class if need be
+          setTimeout(function() {
+            timeEl.removeClass("changed");
+          }, 500 );
+        });
       });
   });
 };
