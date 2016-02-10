@@ -1,11 +1,12 @@
-define(["jquery", "util/SectionManager", "comp/sections/apparel"], 
-function( $,       SectionManager,        apparel ) {
+define(["jquery", "util/SectionManager", "comp/sections/apparel", "comp/sections/rulebook"], 
+function( $,       SectionManager,        apparel,                 rulebook ) {
 
 var manager;
 
 var opts = {
   sections: {
     //Apparel: apparel
+    Rulebook: rulebook
   },
 
   onShow: function() {
