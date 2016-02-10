@@ -28,7 +28,10 @@ body {
     display: none;
 
     @media(max-width: 500px) {
-      position: static;
+      position: relative;
+      left: 0;
+      top: 0;
+      z-index: 2;
     }
   }
 
