@@ -1,4 +1,4 @@
-define(["jquery"], function( $ ) {
+define(["jquery", "util/mobile"], function( $, Mobile ) {
 
 var sectionElement;
 
@@ -15,7 +15,11 @@ var prepare = function( el, done ) {
 };
 
 var onShow = function() {
-  sectionElement.append( iframe );
+  if( Mobile.is("iPhone") ) {
+    window.location.href = iframe.attr("src");
+  } else {
+    sectionElement.append( iframe );
+  }
   tweetWrapper.addClass("dark");
 };
 
