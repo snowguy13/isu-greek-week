@@ -9,9 +9,14 @@
   padding: 10px;
 
   color: white;
+  background-color: rgb( 98, 126, 70 );
   background-color: rgba( 98, 126, 70, 0.4 );
 
   font-size: 20px;
+
+  &.dark {
+    background-color: rgba( 98, 126, 70, 0.8 );
+  }
 
   @media(max-width: 600px) {
     font-size: 14px;
