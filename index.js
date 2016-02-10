@@ -22,9 +22,10 @@ app.get("/gw2016.css", function( req, res ) {
   res.sendFile( __dirname + "/webapp/gw2016.css" );
 });
 
-// Serve files for paths under image/ or js/
+// Serve files for paths under image/ js/ or doc/
 app.use("/image", express.static( __dirname + "/webapp/image" ));
 app.use("/js",    express.static( __dirname + "/webapp/js" ));
+app.use("/doc",   express.static( __dirname + "/webapp/doc" ));
 
 // Placeholder response -- just echo the path for now
 app.use(function( req, res ) {
