@@ -47,6 +47,19 @@ body {
   }
 }
 
+.full {
+  position: fixed;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+
+  section & {
+    padding-top: 109px;
+  }
+}
+
 .canvas {
   position: fixed;
   left: 100%;

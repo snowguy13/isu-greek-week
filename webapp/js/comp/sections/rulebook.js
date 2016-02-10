@@ -1,7 +1,11 @@
 define(["jquery"], function( $ ) {
 
+var prepare = function( el, done ) {
+  done();
+};
+
 return {
-  // nothing for now!
+  prepare: prepare
 };
 
 });
