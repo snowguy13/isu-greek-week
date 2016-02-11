@@ -38,6 +38,16 @@ return function() {
   opts.element = $(".section-container");
   buttonContainer = opts.element.find(".button-container");
 
+  // Listen for clicks on elements with [data-href]
+  opts.element.click(function( ev ) {
+    var href = $( ev.target ).attr("data-href");
+
+    // If the element has [data-href], go to that link
+    if( href ) {
+      window.open( href );
+    }
+  });
+
   // When the section-back-button is clicked, hide the section
   $("#section-back-button").click(function() {
     manager.hide();
