@@ -21,6 +21,9 @@ var createElementForTeam = function( team ) {
 
   // Add the name and chapter to the container
   container.append([ name, chapters ]);
+
+  // Then return the container
+  return container;
 };
 
 var prepare = function( el, done ) {
