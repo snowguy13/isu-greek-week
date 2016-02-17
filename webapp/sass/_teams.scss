@@ -1,0 +1,53 @@
+.team-container {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: flex-start;
+
+  margin: 10px;
+
+  text-align: center;
+
+  .column {
+    flex: 1 0 260px;
+
+    + .column {
+      padding-left: 10px;
+    }
+  }
+}
+
+.team {
+  background-color: #EEE;
+  background-color: rgba( 255, 255, 255, 0.9 );
+  box-shadow: 0 2px 4px black;
+  box-shadow: 0 2px 4px rgba( 0, 0, 0, 0.6 );
+
+  + .team {
+    margin-top: 10px;
+  }
+
+  .name {
+    padding: 5px 10px;
+
+    font-size: 28px;
+    font-weight: 200;
+
+    background-color: #a4d275;
+  }
+
+  .chapter-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+
+    .chapter {
+      display: block;
+      padding: 5px;
+
+      &:nth-child(even) {
+        background-color: rgba( 0, 0, 0, 0.2 );
+      }
+    }
+  }
+}
