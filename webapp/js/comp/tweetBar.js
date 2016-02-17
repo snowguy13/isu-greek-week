@@ -69,7 +69,29 @@ setInterval( requestTweets, REFRESH_RATE );
 
 // Turns Tweet JSON into HTML element
 tweetToHTML = function( tweetData ) {
-  return $("<span class='tweet'></span>").html( tweetData.text );
+  var el = $("<span />").addClass("tweet"),
+      html = tweetData.text,
+      offset = 0;
+  
+  // Add links to the html
+  tweetData.entities.urls.forEach(function( urlData ) {
+    var indices = urlData.indices,
+        start = offset + indices[0],
+        end = offset + indices[1],
+        href = urlData.expanded_url,
+        text = html.substring( start, end ),
+        link = "<a href='" + href + "'>" + text + "</a>";
+    // Add the link to the html
+    html = html.substring( 0, start ) + link + html.substring( end );
+
+    // And update the offset
+    offset += (start - end);
+  });
+
+  // Add the html to the Tweet span
+  el.html( html );
+
+  return el;
 };
 
 // Assumes Tweets have been loaded and DOM is ready

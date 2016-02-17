@@ -46,6 +46,13 @@
     top: 0;
     white-space: nowrap;
 
-    
+    a {
+      text-decoration: none;
+      color: #c8e4ac;
+
+      &:hover {
+        color: #41542e;
+      }
+    }
   }
 }
