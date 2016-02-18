@@ -127,7 +127,6 @@ return [
     "chapters": [
       "Alpha Phi",
       "Sigma Phi Epsilon",
-      "Theta Xi",
       "ACACIA"
     ]
   }
