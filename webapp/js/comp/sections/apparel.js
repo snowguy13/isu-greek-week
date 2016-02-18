@@ -2,7 +2,6 @@ define(["jquery", "data/chapters", "json!/api/apparel"], function( $, chapters, 
 
 // Parse the apparel
 apparel = JSON.parse( apparel );
-console.log( apparel );
 
 var prepare = function( el, done ) {
   // Grab references to important elements
