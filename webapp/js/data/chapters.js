@@ -23,7 +23,7 @@ return [
   "Alpha Sigma Phi",
   "Alpha Tau Omega",
   "Beta Sigma Psi",
-  "Beta Theta Pi",
+  /*"Beta Theta Pi",*/  // not participating this year
   "Chi Phi",
   "Delta Chi",
   "Delta Sigma Phi",
