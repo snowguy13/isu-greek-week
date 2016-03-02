@@ -60,3 +60,8 @@ for( var i = 1, end = sheet['!range'].e.r - 1; i < end; i++ ) {
 }
 
 // Add each of the rows to the database, if it isn't there already
+rows.forEach(function( row ) {
+  db.addMemberToRoster( row, function( err, res ) {
+    console.log( row.first_name, row.last_name, err, res );
+  });
+});
