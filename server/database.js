@@ -7,6 +7,9 @@ var DB = process.env.DATABASE_URL || "tomscallon:tomscallon@localhost/isugreekwe
 var client = new pg.Client( DB );
 client.connect();
 
+// Export useful functionality!
 module.exports = {
-  
+  addMemberToRoster: function( member ) {
+
+  }
 };

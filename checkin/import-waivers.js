@@ -1,5 +1,5 @@
 var xlsx = require("xlsx");
-    //db   = require("../server/database");
+    db   = require("../server/database");
 
 var encode = xlsx.utils.encode_cell;
 
@@ -39,7 +39,7 @@ var reduceRow = function( sheet, row, cols ) {
   return res;
 };
 
-var readWaiverBookToDatabase = function( name ) {
+var readBookToDatabase = function( name ) {
   // First, open the workbook and grab the first sheet
   var book = xlsx.readFile( `waivers-${name}.xls` );
   var sheet = book.Sheets[ book.SheetNames[0] ];
@@ -65,4 +65,4 @@ var readWaiverBookToDatabase = function( name ) {
 };
 
 // Read each of the books into the database
-BOOKS.forEach( readWaiverBookToDatabase );
+BOOKS.forEach( readBookToDatabase );
