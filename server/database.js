@@ -27,11 +27,19 @@ var STMT = {
 
   ADD_MEMBER: function( info ) {
     return `INSERT INTO event_roster (id, isu_id, net_id, first_name, last_name, chapter) VALUES ('${genId(20)}', '${info.isu_id}', '${info.net_id}', '${info.first_name}', '${info.last_name}', '${info.chapter}');`;
+  },
+
+  GET_MEMBERS_BY_NAME: function( first, last ) {
+    return `SELECT first_name AS first, last_name AS last, chapter FROM event_roster WHERE first_name='${first}' AND last_name='${last}'`;
   }
 };
 
 // Export useful functionality!
 module.exports = {
+  disconnect: function() {
+    client.end();
+  },
+
   addMemberToRoster: function( member, cb ) {
     // First, check if the member exists
     client.query( STMT.CHECK_IF_MEMBER_EXISTS( member.isu_id ), function( err, res ) {
@@ -58,5 +66,22 @@ module.exports = {
         });
       }
     });
+  },
+  
+  // 'member' should be an object with AT LEAST the properties 'first' and 'last'
+  // Additionally, 'chapter' is helpful to differentiate the (hopefully rare) duplicate name
+  setWaiverStatus: function( member, waiverType, status, cb ) {
+    // Start by getting members with the given first and last name
+    client.query( STMT.GET_MEMBERS_BY_NAME( member.first, member.last ), function( err, res ) {
+      // If an error occurred, quit now
+      if( err ) {
+        cb( err );
+        return;
+      }
+
+      // Otherwise (temp) print the found names
+      console.log( res );
+      cb( undefined, true );
+    })
   }
 };

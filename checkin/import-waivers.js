@@ -1,5 +1,6 @@
 var xlsx = require("xlsx");
-    db   = require("../server/database");
+    db   = require("../server/database"),
+    chapters = require("./chapters");
 
 var encode = xlsx.utils.encode_cell;
 
@@ -39,7 +40,7 @@ var reduceRow = function( sheet, row, cols ) {
   return res;
 };
 
-var readBookToDatabase = function( name ) {
+var readBookToDatabase = function( name, cb ) {
   // First, open the workbook and grab the first sheet
   var book = xlsx.readFile( `waivers-${name}.xls` );
   var sheet = book.Sheets[ book.SheetNames[0] ];
@@ -61,8 +62,33 @@ var readBookToDatabase = function( name ) {
     rows.push( reduceRow( sheet, i, cols ) );
   }
 
-  console.log( rows );
+  // Attempt to mark each row in the database
+  var len = rows.length,
+      count = 0;
+  var failed = [];
+  
+  // Callback checking so we know when to close the db
+  var checkDone = function() {
+    if( count === len ) {
+      console.log("Done importing '%s' waivers. (%d attempted, %d failed.)", name, len, failed.length );
+      cb( failed );
+    }
+  }
+  
+  rows.forEach(function( row ) {
+    db.setWaiverStatus( row, name, true, function( err, res ) {
+      count++;
+      
+      // If an error occurred, add it to the stack of errors
+      if( err ) {
+        failed.push([ row, err ]);
+      }
+    });
+  });
 };
 
 // Read each of the books into the database
 BOOKS.forEach( readBookToDatabase );
+
+// Disconnect from the database
+//db.disconnect();

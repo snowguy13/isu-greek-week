@@ -60,8 +60,23 @@ for( var i = 1, end = sheet['!range'].e.r - 1; i < end; i++ ) {
 }
 
 // Add each of the rows to the database, if it isn't there already
+var len = rows.length,
+    count = 0,
+    added = 0;
+
+var checkDone = function() {
+  if( count === len ) {
+    console.log("Done. Checked %d members, added %d new.", count, added );
+
+    // Disconnect from the database
+    db.disconnect();
+  }
+};
+
 rows.forEach(function( row ) {
   db.addMemberToRoster( row, function( err, res ) {
-    console.log( row.first_name, row.last_name, err, res );
+    count++;
+    res.created && added++;
+    checkDone();
   });
 });
