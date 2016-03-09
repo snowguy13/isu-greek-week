@@ -19,6 +19,11 @@ var genId = function( len ) {
   return id;
 };
 
+// Escapes single quotes in strings (to handle names like "O'Hora")
+var escapeSingleQuote = function( str ) {
+  return str.replace(/'/, "''");
+};
+
 // Statements
 var STMT = {
   CHECK_IF_MEMBER_EXISTS: function( isu_id ) {
@@ -26,11 +31,15 @@ var STMT = {
   },
 
   ADD_MEMBER: function( info ) {
-    return `INSERT INTO event_roster (id, isu_id, net_id, first_name, last_name, chapter) VALUES ('${genId(20)}', '${info.isu_id}', '${info.net_id}', '${info.first_name}', '${info.last_name}', '${info.chapter}');`;
+    return `INSERT INTO event_roster (id, isu_id, net_id, first_name, last_name, chapter) VALUES ('${genId(20)}', '${info.isu_id}', '${info.net_id}', '${escapeSingleQuote( info.first_name )}', '${escapeSingleQuote( info.last_name )}', '${info.chapter}');`;
   },
 
   GET_MEMBERS_BY_NAME: function( first, last ) {
-    return `SELECT first_name AS first, last_name AS last, chapter FROM event_roster WHERE first_name='${first}' AND last_name='${last}'`;
+    return `SELECT id, first_name AS first, last_name AS last, chapter FROM event_roster WHERE first_name='${escapeSingleQuote( first )}' AND last_name='${escapeSingleQuote( last )}'`;
+  },
+
+  UPDATE_WAIVER_STATUS: function( id, waiverType, status ) {
+    return `UPDATE event_roster SET w_${waiverType}=${status} WHERE id='${id}'`;
   }
 };
 
@@ -79,9 +88,29 @@ module.exports = {
         return;
       }
 
-      // Otherwise (temp) print the found names
-      console.log( res );
-      cb( undefined, true );
+      var rows = res.rows, row;
+
+      // If no matches were found or more than one was found...
+      if( rows.length === 0 ) {
+        cb( undefined, { updated: false, options: rows });
+      } else {
+        // Otherwise... update that person's status!
+        row = rows[0];
+
+        client.query( STMT.UPDATE_WAIVER_STATUS( row.id, waiverType, status ), function( err, res ) {
+          // If an error occurred, quit now
+          if( err ) {
+            cb( err );
+            return;
+          }
+
+          var result = res.rows[0];
+          console.log( res );
+
+          // Otherwise, note the success
+          cb( undefined, { updated: true });
+        });
+      }
     })
   }
 };

@@ -64,25 +64,51 @@ var readBookToDatabase = function( name, cb ) {
 
   // Attempt to mark each row in the database
   var len = rows.length,
-      count = 0;
-  var failed = [];
+      counts = {
+        seen: 0,
+        erred: 0,
+        failNone: 0,
+        failMany: 0,
+        success: 0
+      };
+  var failed = [],
+      succeeded = [];
   
   // Callback checking so we know when to close the db
   var checkDone = function() {
-    if( count === len ) {
-      console.log("Done importing '%s' waivers. (%d attempted, %d failed.)", name, len, failed.length );
-      cb( failed );
-    }
+    if( counts.seen < len ) return;
+
+    console.log("Done importing '%s' waivers. (%d attempted, %d failed.)", name, len, failed.length );
+    console.log("  %d erred", counts.erred );
+    console.log("  %d failed because no matching roster entry was found", counts.failNone );
+    console.log("  %d failed because more than one matching roster entry was found", counts.failMany );
+    console.log("  %d succeeded", counts.success );
+
+    db.disconnect();
   }
   
   rows.forEach(function( row ) {
     db.setWaiverStatus( row, name, true, function( err, res ) {
-      count++;
+      counts.seen++;
       
       // If an error occurred, add it to the stack of errors
       if( err ) {
-        failed.push([ row, err ]);
+        counts.erred++;
+        failed.push([ row, "error", err ]);
+      } else {
+        if( res.updated ) {
+          counts.success++;
+          succeeded.push( row );
+        } else if( res.options.length ) {
+          counts.failMany++;
+          failed.push([ row, "many", res.options ]);
+        } else {
+          counts.failNone++;
+          failed.push([ row, "none", res.options ]);
+        }
       }
+
+      checkDone();
     });
   });
 };
