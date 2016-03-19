@@ -1,4 +1,5 @@
-var pg = require("pg");
+var pg = require("pg"),
+    _  = require("underscore");
 
 // Should work remotely or locally
 var DB = process.env.DATABASE_URL || "tomscallon:tomscallon@localhost/isugreekweek";
@@ -55,7 +56,7 @@ var invokeAndCollect = function( cb, stmts ) {
 
       // If this is the last statement to execute, run the callback
       if( !count ) {
-        cb( error, error ? undefined : result );
+        cb( error, error ? undefined : _.uniq( result, false, p => p.net_id ) );
       }
     });
   });
