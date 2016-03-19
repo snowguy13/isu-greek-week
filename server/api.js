@@ -2,7 +2,9 @@ var apparel = require("./apparel.json"),
     twitter = require("./twitter"),
 
     Router  = require("express").Router,
+
     checkin = Router(),
+    auth    = require("./checkin-auth"),
 
     router  = Router();
 
@@ -21,7 +23,7 @@ checkin.post("/login", function( req, res ) {
   var u = req.body.username,
       p = req.body.password;
 
-  
+
 });
 
 // Mount the router
