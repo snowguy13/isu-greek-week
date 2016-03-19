@@ -15,5 +15,6 @@ CREATE TABLE event_roster(
   chapter     VARCHAR(20) NOT NULL REFERENCES teams(chapter),
   w_lipsync   BOOLEAN NOT NULL DEFAULT false, -- true if this person has filled out a lipsync waiver
   w_general   BOOLEAN NOT NULL DEFAULT false, -- true if this person has filled out a general waiver
+  technical   BOOLEAN NOT NULL DEFAULT false, -- true if this person has received a technical foul in a tournament (this prohibits him or her from participating in other tournaments)
   events      TEXT[] NOT NULL DEFAULT Array[]::TEXT[] -- array of events this person has checked in to
 );

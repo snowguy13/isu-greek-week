@@ -81,6 +81,7 @@ var readBookToDatabase = function( name, cb ) {
     console.log("Done importing '%s' waivers. (%d attempted, %d failed.)", name, len, failed.length );
     console.log("  %d erred", counts.erred );
     console.log("  %d failed because no matching roster entry was found", counts.failNone );
+    failed.filter( row => row[1] === "none" ).forEach( row => console.log( row[0] ) );
     console.log("  %d failed because more than one matching roster entry was found", counts.failMany );
     console.log("  %d succeeded", counts.success );
 

@@ -1,10 +1,11 @@
 var xlsx = require("xlsx"),
     db   = require("../server/database");
 
-var encode = xlsx.utils.encode_cell;
+var encode = xlsx.utils.encode_cell,
+    decode = xlsx.utils.decode_cell;
 
 // The local name of the workbook containing member information
-var BOOK = "members.xls";
+var BOOK = "members.xlsx";
 
 // Mapping desired columns to their database column names
 var COLS = {
@@ -17,6 +18,13 @@ var COLS = {
 
 var readRow = function( sheet, row ) {
   var vals = [];
+
+  /*// Testing
+  for( var prop in sheet ) {
+    if( prop[0] === '!' ) {
+      console.log( prop, ":", sheet[ prop ] );
+    }
+  }*/
   
   // Read across the row until the last relevant column is hit
   for( var i = 0, e = sheet['!range'].e.c; i < e; i++ ) {
@@ -42,6 +50,27 @@ var reduceRow = function( sheet, row, cols ) {
 var book = xlsx.readFile( BOOK );
 var sheet = book.Sheets[ book.SheetNames[0] ];
 
+// Make sure the sheet has a !range property
+if( !sheet['!range'] ) {
+  var ref = sheet['!ref'], e;
+
+  if( !ref ) {
+    console.log("Unable to determine bounds of worksheet");
+    process.exit();
+  }
+
+  // Determine the bounds from !ref
+  ref = ref.split(":");
+  sheet['!range'] = {
+    s: decode( ref[0] ),
+    e: e = decode( ref[1] )
+  }
+
+  // Update end positions (to make them behave like array lengths)
+  e.r++;
+  e.c++;
+}
+
 // Then, locate the indices of the requested columns
 var cols = readRow( sheet, 0 ).reduce(function( colMap, colName, index ) {
   // If the current column name is requested, add it to the map
@@ -62,11 +91,17 @@ for( var i = 1, end = sheet['!range'].e.r - 1; i < end; i++ ) {
 // Add each of the rows to the database, if it isn't there already
 var len = rows.length,
     count = 0,
-    added = 0;
+    added = 0,
+    erred = 0,
+    errors = {};
 
 var checkDone = function() {
   if( count === len ) {
-    console.log("Done. Checked %d members, added %d new.", count, added );
+    console.log("Errors:");
+    for( var err in errors ) {
+      console.log("  %d\t%s", errors[err], err );
+    }
+    console.log("\nDone. Checked %d members, added %d new. %d failed (see errors above).", count, added, erred );
 
     // Disconnect from the database
     db.disconnect();
@@ -76,7 +111,19 @@ var checkDone = function() {
 rows.forEach(function( row ) {
   db.addMemberToRoster( row, function( err, res ) {
     count++;
-    res.created && added++;
+
+    if( err ) {
+      erred++;
+      
+      if( !( err.message in errors ) ) {
+        errors[ err.message ] = 1;
+      } else {
+        errors[ err.message ]++;
+      }
+    } else {
+      res.created && added++;
+    }
+
     checkDone();
   });
 });

@@ -19,27 +19,65 @@ var genId = function( len ) {
   return id;
 };
 
+// Characters used in people's names
+var NAME_CHARS = 'rebcafnzosikygqutmdhwlxpvj -.\''; 
+
 // Escapes single quotes in strings (to handle names like "O'Hora")
 var escapeSingleQuote = function( str ) {
   return str.replace(/'/, "''");
 };
 
+// Adds a 'happenedWhile' field to an error, then invokes the callback (failing)
+var markAndFail = function( err, cb, mark ) {
+  err.happenedWhile = mark;
+  cb( err );
+};
+
+var invokeAndCollect = function( cb/*, stmt1, stmt2, ..., stmtN */) {
+  var stmts = Array.prototype.slice.call( arguments, 1 );
+  var res = [];
+  
+  stmts.forEach(function( stmt, index ) {
+    
+  });
+};
+
 // Statements
 var STMT = {
-  CHECK_IF_MEMBER_EXISTS: function( isu_id ) {
-    return `SELECT EXISTS( SELECT true FROM event_roster WHERE isu_id='${isu_id}' )`;
+  CHECK_IF_MEMBER_EXISTS: function( id, uniqueId ) {
+    return `SELECT EXISTS( SELECT true FROM event_roster WHERE ${uniqueId ? "id" : "isu_id"} = '${id}' )`;
   },
 
   ADD_MEMBER: function( info ) {
     return `INSERT INTO event_roster (id, isu_id, net_id, first_name, last_name, chapter) VALUES ('${genId(20)}', '${info.isu_id}', '${info.net_id}', '${escapeSingleQuote( info.first_name )}', '${escapeSingleQuote( info.last_name )}', '${info.chapter}');`;
   },
 
+  SEARCH_MEMBER_BY_ISU_ID: function( id ) {
+    return `SELECT net_id, first_name AS first, last_name AS last, chapter, w_lipsync, w_general, technical FROM event_roster WHERE isu_id = '${id}';`;
+  },
+
+  SEARCH_MEMBERS_BY_NET_ID: function( text ) {
+    return `SELECT net_id, first_name AS first, last_name AS last, chapter, w_lipsync, w_general, technical FROM event_roster WHERE lower(net_id) LIKE '%${text}%';`;
+  },
+
+  SEARCH_MEMBERS_BY_NAME: function( firstText, lastText ) {
+    return `SELECT net_id, first_name AS first, last_name AS last, chapter, w_lipsync, w_general, technical FROM event_roster WHERE lower(first) LIKE '%${firstText}%' ${lastText ? 'AND' : 'OR'} lower(last) LIKE '%${lastText || firstText}%';`;
+  },
+
   GET_MEMBERS_BY_NAME: function( first, last ) {
-    return `SELECT id, first_name AS first, last_name AS last, chapter FROM event_roster WHERE first_name='${escapeSingleQuote( first )}' AND last_name='${escapeSingleQuote( last )}'`;
+    return `SELECT id, first_name AS first, last_name AS last, chapter FROM event_roster WHERE first_name = '${escapeSingleQuote( first )}'${ last ? `AND last_name = '${escapeSingleQuote( last )}'` : '' }`;
   },
 
   UPDATE_WAIVER_STATUS: function( id, waiverType, status ) {
-    return `UPDATE event_roster SET w_${waiverType}=${status} WHERE id='${id}'`;
+    return `UPDATE event_roster SET w_${waiverType} = ${status} WHERE id = '${id}'`;
+  },
+  
+  CHECK_IF_MEMBER_IS_CHECKED_IN: function( id, event ) {
+    return `SELECT '${event}'::Text = ANY(events) AS checked_in FROM event_roster WHERE id = '${id}';`;
+  },
+
+  CHECK_IN_MEMBER: function( id, event ) {
+    return `UPDATE event_roster SET events = events || '${event}'::Text WHERE id = '${id}' AND '${event}'::Text <> ALL(events)`;
   }
 };
 
@@ -54,8 +92,7 @@ module.exports = {
     client.query( STMT.CHECK_IF_MEMBER_EXISTS( member.isu_id ), function( err, res ) {
       // If the was an error, fail now
       if( err ) {
-        cb( err );
-        return;
+        return markAndFail( err, cb, "checking member existence");
       }
 
       // Otherwise, if the member already exists, stop now
@@ -66,8 +103,7 @@ module.exports = {
         client.query( STMT.ADD_MEMBER( member ), function( err, res ) {
           // If there was an error, fail
           if( err ) {
-            cb( err );
-            return;
+            return markAndFail( err, cb, "adding new member");
           }
 
           // Otherwise, note the success!
@@ -84,14 +120,13 @@ module.exports = {
     client.query( STMT.GET_MEMBERS_BY_NAME( member.first, member.last ), function( err, res ) {
       // If an error occurred, quit now
       if( err ) {
-        cb( err );
-        return;
+        return markAndFail( err, cb, "getting members");
       }
 
       var rows = res.rows, row;
 
       // If no matches were found or more than one was found...
-      if( rows.length === 0 ) {
+      if( rows.length !== 1 ) {
         cb( undefined, { updated: false, options: rows });
       } else {
         // Otherwise... update that person's status!
@@ -100,17 +135,75 @@ module.exports = {
         client.query( STMT.UPDATE_WAIVER_STATUS( row.id, waiverType, status ), function( err, res ) {
           // If an error occurred, quit now
           if( err ) {
-            cb( err );
-            return;
+            return markAndFail( err, cb, "updating waiver status");
           }
 
           var result = res.rows[0];
-          console.log( res );
 
           // Otherwise, note the success
           cb( undefined, { updated: true });
         });
       }
     })
+  },
+
+  checkInMemberToEvent: function( memberId, eventName, cb ) {
+    // Start by making sure the given member exists
+    client.query( STMT.CHECK_IF_MEMBER_EXISTS( memberId, true ), function( err, res ) {
+      // If an error occurred, quit now
+      if( err ) {
+        return markAndFail( err, cb, "checking member existence");
+      }
+
+      // Otherwise, if no such member exists, fail now
+      if( !res.rows[0].exists ) {
+        cb(new Error("No such member exists"));
+        return;
+      }
+
+      // If we're here, then the member exists -- now, see if the member is already checked in
+      client.query( STMT.CHECK_IF_MEMBER_IS_CHECKED_IN( memberId, eventName ), function( err, res ) {
+        // If an error occurred, quit now
+        if( err ) {
+          return markAndFail( err, cb, "checking if member is checked in already");
+        }
+
+        // Otherwise, if the member is already checked in, finish row
+        if( res.rows[0].checked_in ) {
+          cb( undefined, { updated: false });
+          return;
+        }
+
+        // Finally, if we get here, add the event to the member's list
+        client.query( STMT.CHECK_IN_MEMBER( memberId, eventName ), function( err, res ) {
+          // If an error occurred, quit now
+          if( err ) {
+            return markAndFail( err, cb, "adding event to member's list of events");
+          }
+
+          // Otherwise, the event was added successfully!
+          cb( undefined, { updated: true });
+        });
+      });
+    });
+  },
+
+  // Determines which columns need search, then returns first_name, last_name, 
+  // chapter, net_id, w_lipsync, w_general, and technical
+  // For now, matches must be exact
+  searchForMember: function( string, cb ) {
+    string = string.toLowerCase();
+
+    // If string contains only digits, search by isu_id\
+    if( /^\d+$/.test( string ) ) {
+
+    } else if( string.indexOf(" ") > -1 ) {
+      // If string contains a space, search by name
+      // (Only first two space-separated values are used)
+
+    } else {
+      // Otherwise, search by name and by net_id
+
+    }
   }
 };
