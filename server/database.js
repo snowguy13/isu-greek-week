@@ -33,12 +33,31 @@ var markAndFail = function( err, cb, mark ) {
   cb( err );
 };
 
-var invokeAndCollect = function( cb/*, stmt1, stmt2, ..., stmtN */) {
-  var stmts = Array.prototype.slice.call( arguments, 1 );
-  var res = [];
+var invokeAndCollect = function( cb, stmts ) {
+  var result = [], error, count = stmts.length;
   
   stmts.forEach(function( stmt, index ) {
-    
+    client.query( stmt, function( err, res ) {
+      // Increase the count
+      count--;
+
+      // An error has already occurred, just fail silently
+      if( !error ) {
+        // This is the first statement to fail -- note it and quit
+        if( err ) {
+          err.happenedWhile = `executing statement ${index + 1} of ${stmts.length}: '${stmt}'`;
+          error = err;
+        } else {
+          // Otherwise, all is well! Add the result to the list
+          result = result.concat( res.rows );
+        }
+      }
+
+      // If this is the last statement to execute, run the callback
+      if( !count ) {
+        cb( error, error ? undefined : result );
+      }
+    });
   });
 };
 
@@ -61,7 +80,7 @@ var STMT = {
   },
 
   SEARCH_MEMBERS_BY_NAME: function( firstText, lastText ) {
-    return `SELECT net_id, first_name AS first, last_name AS last, chapter, w_lipsync, w_general, technical FROM event_roster WHERE lower(first) LIKE '%${firstText}%' ${lastText ? 'AND' : 'OR'} lower(last) LIKE '%${lastText || firstText}%';`;
+    return `SELECT net_id, first_name AS first, last_name AS last, chapter, w_lipsync, w_general, technical FROM event_roster WHERE lower(first_name) LIKE '%${firstText}%' ${lastText ? 'AND' : 'OR'} lower(last_name) LIKE '%${lastText || firstText}%';`;
   },
 
   GET_MEMBERS_BY_NAME: function( first, last ) {
@@ -192,18 +211,26 @@ module.exports = {
   // chapter, net_id, w_lipsync, w_general, and technical
   // For now, matches must be exact
   searchForMember: function( string, cb ) {
-    string = string.toLowerCase();
+    var stmts = [], parts;
 
-    // If string contains only digits, search by isu_id\
+    // Convert the input to lower case, ignoring leading and trailing spaces
+    string = string.trim().toLowerCase();
+
+    // If string contains only digits, search by isu_id
     if( /^\d+$/.test( string ) ) {
-
+      stmts.push( STMT.SEARCH_MEMBER_BY_ISU_ID( string ) );
     } else if( string.indexOf(" ") > -1 ) {
       // If string contains a space, search by name
       // (Only first two space-separated values are used)
-
+      parts = string.split(/\s+/g);
+      stmts.push( STMT.SEARCH_MEMBERS_BY_NAME( parts[0], parts[1] ) );
     } else {
       // Otherwise, search by name and by net_id
-
+      stmts.push( STMT.SEARCH_MEMBERS_BY_NET_ID( string ) );
+      stmts.push( STMT.SEARCH_MEMBERS_BY_NAME( string ) );
     }
+
+    // Execute the statements!
+    invokeAndCollect( cb, stmts );
   }
 };
