@@ -20,6 +20,8 @@ router.get(/\/apparel(\.js(on)?)?/, function( req, res ) {
 checkin.post("/login", function( req, res ) {
   var u = req.body.username,
       p = req.body.password;
+
+  
 });
 
 // Mount the router
