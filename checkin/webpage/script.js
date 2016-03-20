@@ -22,6 +22,32 @@ var elem = {
 
 // State stuff
 var searching = false;
+var results;
+
+var personElement = function( person ) {
+  var el = $("<div />").addClass("person");
+
+  el.append($("<span />").addClass("name").text( person.first + " " + person.last ));
+  el.append($("<span />").addClass("netid").text( person.net_id ));
+  el.append($("<span />").addClass("icon general").attr("data-checked", person.w_general ));
+  el.append($("<span />").addClass("icon lipsync").attr("data-checked", person.w_lipsync ));
+  el.append($("<span />").addClass("icon technical").attr("data-checked", !person.technical ));
+
+  return el;
+};
+
+var updateResult = function( data ) {
+  // Save the new results
+  results = data;
+
+  // Empty the result container
+  elem.checkin.result.empty();
+
+  // For each entry, add a new result object
+  results.forEach(function( person ) {
+    elem.checkin.result.append( personElement( person ) );
+  });
+};
 
 // Auth stuff
 var auth;
@@ -161,8 +187,8 @@ elem.checkin.search.keypress(function( ev ) {
       searching = false;
       elem.checkin.container.removeClass("searching");
 
-      // Log the data
-      console.log( data );
+      // Populate the result div
+      updateResult( data );
     },
 
     error: function( xhr, text, error ) {

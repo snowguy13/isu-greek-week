@@ -17,20 +17,17 @@ var checkAuth = function( req, res, next ) {
 
   // If there is no identity or token, fail now
   if( !identity || !token ) {
-    console.log("Missing identity or token");
     res.status(401).send("Missing identity or token");
     return false;
   }
 
   // If the token doesn't match the identity or the action isn't allowed, fail now
   if( !(result = auth.isAuthorized( identity, token, req.url )).authorized ) {
-    console.log("Identity and token don't match");
     res.status(401).send( result.reason );
     return false;
   }
 
   // Otherwise, we're good; invoke the next callback
-  console.log("Invoking callback");
   next();
   return true;
 };
@@ -61,7 +58,6 @@ checkin.post("/login", function( req, res ) {
 
 // Search for members
 checkin.get("/search", function( req, res ) {
-  console.log( req );
   db.searchForMember( req.query.query, function( err, result ) {
     if( err ) {
       res.status(500).send( err );

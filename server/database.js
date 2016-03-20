@@ -73,15 +73,15 @@ var STMT = {
   },
 
   SEARCH_MEMBER_BY_ISU_ID: function( id ) {
-    return `SELECT net_id, first_name AS first, last_name AS last, chapter, w_lipsync, w_general, technical FROM event_roster WHERE isu_id = '${id}';`;
+    return `SELECT id, net_id, first_name AS first, last_name AS last, chapter, w_lipsync, w_general, technical FROM event_roster WHERE isu_id = '${id}';`;
   },
 
   SEARCH_MEMBERS_BY_NET_ID: function( text ) {
-    return `SELECT net_id, first_name AS first, last_name AS last, chapter, w_lipsync, w_general, technical FROM event_roster WHERE lower(net_id) LIKE '%${text}%';`;
+    return `SELECT id, net_id, first_name AS first, last_name AS last, chapter, w_lipsync, w_general, technical FROM event_roster WHERE lower(net_id) LIKE '%${text}%';`;
   },
 
   SEARCH_MEMBERS_BY_NAME: function( firstText, lastText ) {
-    return `SELECT net_id, first_name AS first, last_name AS last, chapter, w_lipsync, w_general, technical FROM event_roster WHERE lower(first_name) LIKE '%${firstText}%' ${lastText ? 'AND' : 'OR'} lower(last_name) LIKE '%${lastText || firstText}%';`;
+    return `SELECT id, net_id, first_name AS first, last_name AS last, chapter, w_lipsync, w_general, technical FROM event_roster WHERE lower(first_name) LIKE '%${firstText}%' ${lastText ? 'AND' : 'OR'} lower(last_name) LIKE '%${lastText || firstText}%';`;
   },
 
   GET_MEMBERS_BY_NAME: function( first, last ) {
