@@ -4,14 +4,19 @@ $(function() {
 var $ = jQuery.noConflict();
 
 // References to important elements
+var body = $( document.body );
 var elem = {
   login: {
     username: $( document.forms.item("login-form").username ),
     password: $( document.forms.item("login-form").password ),
-    submit:   $( document.forms.item("login-form").submit )
+    submit:   $( document.forms.item("login-form").submit ),
+    error:    $("#login-error")
   },
   eventDropdown: $("#event")
 };
+
+// Auth stuff
+var;
 
 // Constants
 
@@ -75,7 +80,46 @@ elem.login.username.add( elem.login.password )
   });
 
 elem.login.submit.click(function() {
-  
+  var u = elem.login.username.val(),
+      p = elem.login.password.val()
+      t = $(this).attr("disabled", true);
+
+  // Hide the error text
+  elem.login.error.removeClass("shown");
+
+  // Attempt to login
+  $.ajax({
+    method:      "POST",
+    url:         "/api/checkin/login",
+    contentType: "application/json",
+    data: JSON.stringify({
+      username: u,
+      password: p
+    }),
+
+    success: function( res ) {
+      if( !res.success ) {
+        // Login failed -- shown the given message
+        elem.login.error.addClass("shown").text( res.reason );
+      } else {
+        // Login succeeded -- update the page, and save the auth info!
+        body.addClass("logged-in");
+        auth = {
+          identity: res.identity,
+          token: res.token
+        };
+      }
+
+      // Finally, re-enable the button
+      t.attr("disabled", false);
+    },
+
+    error: function( xhr, text, error ) {
+      // An error occurred, so update the error text and re-enable the button
+      elem.login.error.addClass("shown").text( error );
+      t.attr("disabled", false);
+    }
+  });
 });
 
 console.log( eventOptions );

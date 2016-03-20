@@ -7,7 +7,7 @@ var app = require("./server/app"),
 
 // Use HTTP POST parsers
 app.use( bodyParser.json() );
-app.use( bodyParser.urlencoded() );
+app.use( bodyParser.urlencoded({ extended: true }) );
 
 // Determine the port to bind to (process.env.PORT is for Heroku)
 app.set('port', ( process.env.PORT || 5000 ));

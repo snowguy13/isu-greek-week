@@ -52,6 +52,15 @@ main {
   display: block;
 }
 
+.error {
+  display: none;
+  color: #A71930;
+}
+
+.error.shown {
+  display: initial;
+}
+
 fieldset {
   border-width: 0;
 }

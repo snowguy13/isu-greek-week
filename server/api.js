@@ -18,12 +18,13 @@ router.get(/\/apparel(\.js(on)?)?/, function( req, res ) {
   res.json( apparel );
 });
 
-// Create the checkin router
+// Login for checkin stuff
 checkin.post("/login", function( req, res ) {
   var u = req.body.username,
       p = req.body.password;
-
-
+  console.log("here");
+  // Attempt the login, and send the result
+  res.send( auth.logIn( u, p ) );
 });
 
 // Mount the router

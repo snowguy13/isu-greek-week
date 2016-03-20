@@ -52,12 +52,12 @@ module.exports = {
     // If no such user exists, or wrong password
     if( !( username in CREDS ) || password !== CREDS[ username ] ) {
       ret.success = false;
-      ret.reason = `The provided username and password do no match.`;
+      ret.reason = "The provided username and password do no match.";
     } else {
       // Otherwise, generate an identity and a token
       ret.success  = true;
       ret.identity = genIdentity( username );
-      ret.token    = getToken();
+      ret.token    = genToken();
 
       // Save these in the logons cache
       identities[ identity ] = {
@@ -108,7 +108,7 @@ module.exports = {
 
     // Otherwise, if we got here, all is good!
     return {
-      authorized: true;
+      authorized: true
     }
   },
 
