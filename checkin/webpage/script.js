@@ -12,11 +12,19 @@ var elem = {
     submit:   $( document.forms.item("login-form").submit ),
     error:    $("#login-error")
   },
-  eventDropdown: $("#event")
+  checkin: {
+    container: $("#check-in-container"),
+    events:    $("#event"),
+    search:    $("#search"),
+    result:    $("#result-container")
+  }
 };
 
+// State stuff
+var searching = false;
+
 // Auth stuff
-var;
+var auth;
 
 // Constants
 
@@ -55,7 +63,7 @@ eventOptions = eventOptions.map(function( event, index ) {
   };
 
   // Add the event to the events dropdown
-  elem.eventDropdown.append("<option value='" + index + "'>" + result[1] + "</option>");
+  elem.checkin.events.append("<option value='" + index + "'>" + result[1] + "</option>");
 
   return {
     name:       result[1],
@@ -87,6 +95,9 @@ elem.login.submit.click(function() {
   // Hide the error text
   elem.login.error.removeClass("shown");
 
+  // Empty the password field
+  elem.login.password.val("");
+
   // Attempt to login
   $.ajax({
     method:      "POST",
@@ -105,6 +116,7 @@ elem.login.submit.click(function() {
         // Login succeeded -- update the page, and save the auth info!
         body.addClass("logged-in");
         auth = {
+          username: u,
           identity: res.identity,
           token: res.token
         };
@@ -122,6 +134,51 @@ elem.login.submit.click(function() {
   });
 });
 
-console.log( eventOptions );
+// Add search functionality
+elem.checkin.search.keypress(function( ev ) {
+  var t = $(this),
+      text = t.val();
+
+  // If already searching, the key is not [Enter], or there is no text, quit
+  if( searching || (ev.keyCode || ev.which) !== 13 || !text ) return;
+
+  // Otherwise, perform a search request
+  searching = true;
+  elem.checkin.container.addClass("searching");
+  t.blur();
+  $.ajax({
+    method:      "GET",
+    url:         "/api/checkin/search",
+    contentType: "application/json",
+    data: {
+      identity: auth.identity,
+      token:    auth.token,
+      query:    text
+    },
+
+    success: function( data ) {
+      // Done searching, note that now
+      searching = false;
+      elem.checkin.container.removeClass("searching");
+
+      // Log the data
+      console.log( data );
+    },
+
+    error: function( xhr, text, error ) {
+      // Done searching, note that now
+      searching = false;
+      elem.checkin.container.removeClass("searching");
+
+      // If it was a 'not authorized' issue, handle specially
+      if( xhr.status === 401 ) {
+        // Must have gotten logged out somehow
+        body.removeClass("logged-in");
+        auth = undefined;
+        elem.login.error.text("Your login is no longer valid. Please log in again.").addClass("shown");
+      }
+    }
+  });
+});
 
 });

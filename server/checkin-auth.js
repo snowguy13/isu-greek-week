@@ -60,9 +60,9 @@ module.exports = {
       ret.token    = genToken();
 
       // Save these in the logons cache
-      identities[ identity ] = {
+      identities[ ret.identity ] = {
         user:  username,
-        token: token
+        token: ret.token
       };
     }
 
@@ -81,8 +81,9 @@ module.exports = {
     };
   },
 
-  isAuthorized: function( identity, token, action ) {
+  isAuthorized: function( identity, token, path ) {
     // First, make sure the identity exists
+    console.log( identity, token, identities );
     if( !( identity in identities ) ) {
       return {
         authorized: false,
@@ -99,7 +100,7 @@ module.exports = {
     }
 
     // Finally, if there is an action, make sure the identity's user has access
-    if( action && !checkAccess( action, identity ) ) {
+    if( path && !checkAccess( path, identity ) ) {
       return  {
         authorized: false,
         reason: "Insufficient access"
