@@ -97,9 +97,31 @@ main {
   flex-direction: column;
 }
 
-#check-in-container.searching #search-container,
-#check-in-container.searching #result-container {
+.searching #search-container,
+.searching #result-container {
   display: none;
+}
+
+#result-container {
+  /*padding: 10px;*/
+}
+
+#result-container.results {
+  margin: 0 -10px -10px;
+}
+
+#result-container.results.some {
+  margin-top: -1px;
+  border-top: 1px solid black;
+}
+
+#result-container.results.none {
+  padding-top: 10px;
+}
+
+#result-container.results.none::before {
+  display: block;
+  content: "Couldn't find anyone matching that description!";
 }
 
 #check-in-container #loading {
@@ -110,7 +132,7 @@ main {
   display: block;
 }
 
-#loading, #result-container {
+#loading {
   margin-top: 10px;
 }
 
@@ -247,21 +269,17 @@ select {
   text-align: center;
 }
 
-#result {
-  overflow-y: scroll;
-}
-
 .person {
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  margin: 10px 0;
+  /*margin: 10px 0;*/
   padding: 10px;
 
   background-color: white;
   background-color: rgba( 255, 255, 255, 0.7 );
-  box-shadow: 0 0 5px rgba( 0, 0, 0, 0.3 );
+  /*box-shadow: 0 0 5px rgba( 0, 0, 0, 0.3 );*/
 }
 
 .person:first-child {

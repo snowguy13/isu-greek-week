@@ -16,7 +16,7 @@ var elem = {
     container: $("#check-in-container"),
     events:    $("#event"),
     search:    $("#search"),
-    result:    $("#result-container")
+    result:    $("#result")
   }
 };
 
