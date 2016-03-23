@@ -388,6 +388,9 @@ elem.checkin.result.mousedown(function( ev ) {
           elem.checkin.result.empty()
             .parent().removeClass("results some");
 
+          // Remove classes from the body
+          body.removeClass("invalid valid")
+
           // Re-enable the result container
           t.removeClass("checking-in");
         },
