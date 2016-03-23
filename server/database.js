@@ -91,10 +91,6 @@ var STMT = {
   UPDATE_WAIVER_STATUS: function( id, waiverType, status ) {
     return `UPDATE event_roster SET w_${waiverType} = ${status} WHERE id = '${id}'`;
   },
-  
-  CHECK_IF_MEMBER_IS_CHECKED_IN: function( id, event ) {
-    return `SELECT '${event}'::Text = ANY(events) AS checked_in FROM event_roster WHERE id = '${id}';`;
-  },
 
   CHECK_IN_MEMBER: function( id, event ) {
     return `UPDATE event_roster SET events = events || '${event}'::Text WHERE id = '${id}' AND '${event}'::Text <> ALL(events)`;
@@ -181,29 +177,15 @@ module.exports = {
         return;
       }
 
-      // If we're here, then the member exists -- now, see if the member is already checked in
-      client.query( STMT.CHECK_IF_MEMBER_IS_CHECKED_IN( memberId, eventName ), function( err, res ) {
+      // If we get here, add the event to the member's list
+      client.query( STMT.CHECK_IN_MEMBER( memberId, eventName ), function( err, res ) {
         // If an error occurred, quit now
         if( err ) {
-          return markAndFail( err, cb, "checking if member is checked in already");
+          return markAndFail( err, cb, "adding event to member's list of events");
         }
 
-        // Otherwise, if the member is already checked in, finish row
-        if( res.rows[0].checked_in ) {
-          cb( undefined, { updated: false });
-          return;
-        }
-
-        // Finally, if we get here, add the event to the member's list
-        client.query( STMT.CHECK_IN_MEMBER( memberId, eventName ), function( err, res ) {
-          // If an error occurred, quit now
-          if( err ) {
-            return markAndFail( err, cb, "adding event to member's list of events");
-          }
-
-          // Otherwise, the event was added successfully!
-          cb( undefined, { updated: true });
-        });
+        // Otherwise, the event was added successfully!
+        cb( undefined, { updated: true });
       });
     });
   },
