@@ -1,7 +1,13 @@
 var app = require("./server/app"),
     api = require("./server/api"),
 
+    bodyParser = require("body-parser"),
+
     express = require("express");
+
+// Use HTTP POST parsers
+app.use( bodyParser.json() );
+app.use( bodyParser.urlencoded({ extended: true }) );
 
 // Determine the port to bind to (process.env.PORT is for Heroku)
 app.set('port', ( process.env.PORT || 5000 ));
@@ -13,6 +19,14 @@ app.set('dir', __dirname );
 app.get("/", function( req, res ) {
   res.sendFile( __dirname + "/webapp/index.htm" );
 });
+
+// On /checkin, return the checkin page
+app.get("/checkin", function( req, res ) {
+  res.sendFile( __dirname + "/checkin/webpage/index.htm" );
+});
+
+// Serve /checkin files when requested
+app.use("/checkin", express.static( __dirname + "/checkin/webpage" ));
 
 // Mount the API router
 app.use("/api", api );
@@ -27,9 +41,9 @@ app.use("/image", express.static( __dirname + "/webapp/image" ));
 app.use("/js",    express.static( __dirname + "/webapp/js" ));
 app.use("/doc",   express.static( __dirname + "/webapp/doc" ));
 
-// Placeholder response -- just echo the path for now
+// Placeholder response -- redirect to index
 app.use(function( req, res ) {
-  res.send("You requested the path \"<strong>" + req.url + "</strong>\"");
+  res.redirect("/");
 });
 
 // Listen on the designated port

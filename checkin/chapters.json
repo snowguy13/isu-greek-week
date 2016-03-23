@@ -1,5 +1,4 @@
-define(function() {
-return [
+[
   "Alpha Chi Omega",
   "Alpha Delta Pi",
   "Alpha Gamma Delta",
@@ -23,7 +22,6 @@ return [
   "Alpha Sigma Phi",
   "Alpha Tau Omega",
   "Beta Sigma Psi",
-  /*"Beta Theta Pi",*/  // not participating this year
   "Chi Phi",
   "Delta Chi",
   "Delta Sigma Phi",
@@ -50,7 +48,6 @@ return [
   "Delta Lambda Phi",
   "Delta Phi Lambda",
   "Gamma Rho Lambda",
-  /*"Lambda Theta Alpha",*/  // withdrew, too many inactive members
   "Lambda Theta Nu",
   "Lambda Theta Phi",
   "Pi Alpha Phi",
@@ -61,5 +58,4 @@ return [
   "Delta Sigma Theta",
   "Kappa Alpha Psi",
   "Zeta Phi Beta"
-];
-});
+]

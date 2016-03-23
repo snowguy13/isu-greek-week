@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Greek Week Check-In</title>
+  <link rel="stylesheet" type="text/css" href="/checkin/style.css" />
+  <script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+  <script src="/checkin/script.js"></script>
+</head>
+<body>
+  <main>
+    <div id="login-container" class="container">
+      <h2>GW 2016 Check-in Login</h2>
+      <p id="login-error" class="error"></p>
+      <form id="login-form" name="login">
+        <fieldset>
+          <label for="username">Username</label>
+          <input autofocus type="text" name="username" placeholder="Enter your username" />
+        </fieldset>
+        <fieldset>
+          <label for="password">Password</label>
+          <input type="password" name="password" placeholder="Type your password" />
+        </fieldset>
+        <input disabled type="button" name="submit" value="Log in" />
+      </form>
+    </div>
+    <div id="check-in-container" class="container">
+      <h2>GW 2016 Check-in System</h2>
+      <div id="selection-container">
+        <select id="event">
+          <option value="">(pick an event)</option>
+        </select>
+      </div>
+      <div id="search-container">
+        <input id="search" type="text" placeholder="Type an ISU ID, Net ID, or name, then hit [Enter]" />
+      </div>
+      <div id="loading">
+        <div>Loading</div>
+        <div>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+        </div>
+      <div id="result-container">
+        <div id="result"></div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
