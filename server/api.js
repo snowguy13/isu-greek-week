@@ -73,7 +73,32 @@ checkin.get("/search", function( req, res ) {
 
 // Check in a member
 checkin.post("/", function( req, res ) {
-  console.log( req.body );
+  // If a force is requested, first update the waiver status
+  if( req.body.force ) {
+    db.setWaiverStatus( req.body.id, req.body.force, true, function( err, result ) {
+      if( err ) {
+        res.status(500).send( err );
+      } else {
+        // Do the check-in now, once the waiver has been granted
+        db.checkInMemberToEvent( req.body.id, req.body.event, function( err, result ) {
+          if( err ) {
+            res.status(500).send( err );
+          } else {
+            res.send({});
+          }
+        });
+      }
+    });
+  } else {
+    // Otherwise, just do the check-in
+    db.checkInMemberToEvent( req.body.id, req.body.event, function( err, result ) {
+      if( err ) {
+        res.status(500).send( err );
+      } else {
+        res.send({});
+      }
+    });
+  }
 });
 
 // Mount the router

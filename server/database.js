@@ -132,35 +132,49 @@ module.exports = {
   // 'member' should be an object with AT LEAST the properties 'first' and 'last'
   // Additionally, 'chapter' is helpful to differentiate the (hopefully rare) duplicate name
   setWaiverStatus: function( member, waiverType, status, cb ) {
-    // Start by getting members with the given first and last name
-    client.query( STMT.GET_MEMBERS_BY_NAME( member.first, member.last ), function( err, res ) {
-      // If an error occurred, quit now
-      if( err ) {
-        return markAndFail( err, cb, "getting members");
-      }
+    if( typeof member === "string" ) {
+      client.query( STMT.UPDATE_WAIVER_STATUS( member, waiverType, status ), function( err, res ) {
+        // If an error occurred, quit now
+        if( err ) {
+          return markAndFail( err, cb, "updating waiver status");
+        }
 
-      var rows = res.rows, row;
+        var result = res.rows[0];
 
-      // If no matches were found or more than one was found...
-      if( rows.length !== 1 ) {
-        cb( undefined, { updated: false, options: rows });
-      } else {
-        // Otherwise... update that person's status!
-        row = rows[0];
+        // Otherwise, note the success
+        cb( undefined, { updated: true });
+      });
+    } else {
+      // Start by getting members with the given first and last name
+      client.query( STMT.GET_MEMBERS_BY_NAME( member.first, member.last ), function( err, res ) {
+        // If an error occurred, quit now
+        if( err ) {
+          return markAndFail( err, cb, "getting members");
+        }
 
-        client.query( STMT.UPDATE_WAIVER_STATUS( row.id, waiverType, status ), function( err, res ) {
-          // If an error occurred, quit now
-          if( err ) {
-            return markAndFail( err, cb, "updating waiver status");
-          }
+        var rows = res.rows, row;
 
-          var result = res.rows[0];
+        // If no matches were found or more than one was found...
+        if( rows.length !== 1 ) {
+          cb( undefined, { updated: false, options: rows });
+        } else {
+          // Otherwise... update that person's status!
+          row = rows[0];
 
-          // Otherwise, note the success
-          cb( undefined, { updated: true });
-        });
-      }
-    })
+          client.query( STMT.UPDATE_WAIVER_STATUS( row.id, waiverType, status ), function( err, res ) {
+            // If an error occurred, quit now
+            if( err ) {
+              return markAndFail( err, cb, "updating waiver status");
+            }
+
+            var result = res.rows[0];
+
+            // Otherwise, note the success
+            cb( undefined, { updated: true });
+          });
+        }
+      });
+    }
   },
 
   checkInMemberToEvent: function( memberId, eventName, cb ) {
@@ -185,7 +199,7 @@ module.exports = {
         }
 
         // Otherwise, the event was added successfully!
-        cb( undefined, { updated: true });
+        cb( undefined, {});
       });
     });
   },

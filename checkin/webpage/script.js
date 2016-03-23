@@ -381,18 +381,31 @@ elem.checkin.result.mousedown(function( ev ) {
 
         success: function( data ) {
           // The update was successful -- select the input
-          elem.checkin.search.focus();
+          elem.checkin.search.val("").focus();
+
+          // Remove any results
+          results = [];
+          elem.checkin.result.empty()
+            .parent().removeClass("results some");
 
           // Re-enable the result container
           t.removeClass("checking-in");
         },
 
         error: function( xhr, text, error ) {
-          // Update was not successful -- show an alert
-          alert("Something went wrong during the check-in: " + text );
-
           // Re-enable the result container
           t.removeClass("checking-in");
+
+          // If it was a 'not authorized' issue, handle specially
+          if( xhr.status === 401 ) {
+            // Must have gotten logged out somehow
+            body.removeClass("logged-in");
+            auth = undefined;
+            elem.login.error.text("Your login is no longer valid. Please log in again.").addClass("shown");
+          } else {
+            // Update was not successful -- show an alert
+            alert("Something went wrong during the check-in: " + text );
+          }
         }
       });
     }
