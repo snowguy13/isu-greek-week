@@ -1,7 +1,7 @@
 // Login credentials
 var CREDS = {
   "gwcentral": "password",
-  "gwcochairs": "password"
+  "gwgencos":  "password"
 };
 
 // Logged-in users
@@ -29,7 +29,7 @@ var genRandom = function( len ) {
   return string;
 };
 
-var genIdentity = function( username ) {
+var genIdentity = function() {
   var identity;
   
   // Make sure the identity is unique
@@ -46,6 +46,8 @@ var genToken = function() {
 
 
 module.exports = {
+  IDENTITY_LEN: IDENTITY_LEN,
+
   logIn: function( username, password ) {
     var ret = {}, identity, token;
 
@@ -83,7 +85,6 @@ module.exports = {
 
   isAuthorized: function( identity, token, path ) {
     // First, make sure the identity exists
-    console.log( identity, token, identities );
     if( !( identity in identities ) ) {
       return {
         authorized: false,

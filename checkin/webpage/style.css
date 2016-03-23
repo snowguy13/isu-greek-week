@@ -68,6 +68,14 @@ body.logged-in {
   background-color: #FDC82F;
 }
 
+body.logged-in.valid {
+  background-color: #a4d275;
+}
+
+body.logged-in.invalid {
+  background-color: #a71930;
+}
+
 main {
   flex: 1 1 auto;
   max-width: 500px;
@@ -116,7 +124,7 @@ main {
 }
 
 #result-container.results.none {
-  padding-top: 10px;
+  padding: 10px 0;
 }
 
 #result-container.results.none::before {
@@ -290,6 +298,38 @@ select {
   margin-bottom: 0;
 }
 
+.person:focus {
+  position: relative;
+  z-index: 1;
+  background-color: white;
+  box-shadow: 0 0 3px rgba( 0, 0, 0, 0.3 );
+  outline: 0;
+}
+
+.person .message {
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  display: none;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 5px;
+  background-color: #EEE;
+}
+
+.valid .person .message {
+  background-color: #a4d275;
+}
+
+.invalid .person .message {
+  color: #EEE;
+  background-color: #a71930;
+}
+
+.person:focus .message {
+  display: block;
+}
+
 .person .name {
   flex: 0 0 150px;
 }
@@ -354,4 +394,9 @@ select {
 
 .person .icon.technical::after {
   content: "Technical";
+}
+
+.person:last-child {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }

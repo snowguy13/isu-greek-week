@@ -12,8 +12,9 @@ var apparel = require("./apparel.json"),
 
 var checkAuth = function( req, res, next ) {
   var result,
-      identity = req.query.identity || req.body.identity,
-      token    = req.query.token || req.body.token;
+      authorization = req.headers.authorization,
+      identity = authorization.substring( 0, auth.IDENTITY_LEN ),
+      token    = authorization.substring( auth.IDENTITY_LEN );
 
   // If there is no identity or token, fail now
   if( !identity || !token ) {
@@ -27,7 +28,10 @@ var checkAuth = function( req, res, next ) {
     return false;
   }
 
-  // Otherwise, we're good; invoke the next callback
+  // Otherwise, we're good -- create a new token...
+  res.header("Next-Authorization", auth.generateNextToken( identity ));
+
+  // ...and invoke the next callback
   next();
   return true;
 };
@@ -65,6 +69,11 @@ checkin.get("/search", function( req, res ) {
       res.send( result );
     }
   });
+});
+
+// Check in a member
+checkin.post("/", function( req, res ) {
+  console.log( req.body );
 });
 
 // Mount the router
