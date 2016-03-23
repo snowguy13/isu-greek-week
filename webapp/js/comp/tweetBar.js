@@ -80,12 +80,13 @@ tweetToHTML = function( tweetData ) {
         end = offset + indices[1],
         href = urlData.expanded_url,
         text = html.substring( start, end ),
-        link = "<a href='" + href + "'>" + text + "</a>";
+        link = "<a href='" + href + "'>" + urlData.display_url + "</a>";
+    
     // Add the link to the html
     html = html.substring( 0, start ) + link + html.substring( end );
 
     // And update the offset
-    offset += (start - end);
+    offset += link.length - (start - end);
   });
 
   // Add the html to the Tweet span
