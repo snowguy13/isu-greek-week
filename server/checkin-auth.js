@@ -1,7 +1,7 @@
 // Login credentials
 var CREDS = {
-  "gwcentral": "gosseramundt",
-  "gwgencos":  "getbent"
+  "gwcentral": "getbent",
+  "gwgencos":  "gosseramundt"
 };
 
 // Logged-in users
