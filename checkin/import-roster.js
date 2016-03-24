@@ -16,6 +16,74 @@ var COLS = {
   "Chapter":   "chapter"
 };
 
+// Members in central
+var CENTRAL = [
+  "ljgosse",
+  "sramundt",
+  "brgeiger",
+  "mdharm",
+  "vanscoy",
+  "rsmccc",
+  "banwartl",
+  "kmkassel",
+  "hannahb",
+  "asposeto",
+  "kohlmann",
+  "hemeador",
+  "bbiegger",
+  "cjroyer",
+  "dschertz",
+  "bpick",
+  "laurac",
+  "dheppner",
+  "tegavin",
+  "nsuvorov",
+  "tscallon",
+  "pthenn",
+  "jmcentee"
+];
+
+// Members in crew
+var CREW = [
+  "aditya",
+  "ajoder",
+  "jthurin",
+  "tameraa",
+  "maggwen",
+  "rglenarz",
+  "gmperrin",
+  "mcarlson",
+  "stalians",
+  "kaf",
+  "mtguion",
+  "afarniok",
+  "nateholl",
+  "pearsonz",
+  "bzimm",
+  "mwilwerd",
+  "njyeager",
+  "tdwiese",
+  "wforsyth",
+  "konradi",
+  "jgremel",
+  "willman",
+  "camandt",
+  "rekinney",
+  "bherren",
+  "lbrooke",
+  "rachbill",
+  "mteubert",
+  "aburney",
+  "bkdarr",
+  "ocweaver",
+  "jxglass",
+  "jkruse2",
+  "bbye",
+  "endecott",
+  "whsmith",
+  "fbeeler"
+];
+
 var readRow = function( sheet, row ) {
   var vals = [];
 
@@ -40,7 +108,7 @@ var reduceRow = function( sheet, row, cols ) {
   // Grab the relevant columns
   for( var col in cols ) {
     val = sheet[ encode({ r: row, c: cols[ col ] }) ];
-    res[ col ] = val ? val.v : "";
+    res[ col ] = val ? val.v.trim() : "";
   }
 
   return res;
@@ -109,6 +177,13 @@ var checkDone = function() {
 };
 
 rows.forEach(function( row ) {
+  // Check if the member is in crew or central
+  if( CENTRAL.indexOf( row.net_id ) > -1 ) {
+    row.gw_role = "Central";
+  } else if( CREW.indexOf( row.net_id ) > -1 ) {
+    row.gw_role = "Crew";
+  }
+
   db.addMemberToRoster( row, function( err, res ) {
     count++;
 
