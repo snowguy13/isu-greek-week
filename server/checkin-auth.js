@@ -1,6 +1,6 @@
 // Login credentials
 var CREDS = {
-  "gwcentral": "password",
+  "gwcentral": "getbent",
   "gwgencos":  "gosseramundt"
 };
 

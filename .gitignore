@@ -2,5 +2,6 @@
 node_modules/
 local/
 .DS_Store
-checkin/members.xls
+checkin/members*.xls
+checkin/members*.xlsx
 checkin/waivers-*.xls
