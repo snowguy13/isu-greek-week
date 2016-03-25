@@ -84,16 +84,20 @@ var STMT = {
     return `SELECT id, net_id, first_name AS first, last_name AS last, chapter, w_lipsync, w_general, technical FROM event_roster WHERE lower(first_name) LIKE '%${firstText}%' ${lastText ? 'AND' : 'OR'} lower(last_name) LIKE '%${lastText || firstText}%';`;
   },
 
+  GET_MEMBER_BY_NET_ID: function( netId ) {
+    return `SELECT id, first_name AS first, last_name AS last, chapter FROM event_roster WHERE net_id='${netId}';`;
+  },
+
   GET_MEMBERS_BY_NAME: function( first, last ) {
-    return `SELECT id, first_name AS first, last_name AS last, chapter FROM event_roster WHERE first_name = '${escapeSingleQuote( first )}'${ last ? `AND last_name = '${escapeSingleQuote( last )}'` : '' }`;
+    return `SELECT id, first_name AS first, last_name AS last, chapter FROM event_roster WHERE first_name = '${escapeSingleQuote( first )}'${ last ? `AND last_name = '${escapeSingleQuote( last )}'` : '' };`;
   },
 
   UPDATE_WAIVER_STATUS: function( id, waiverType, status ) {
-    return `UPDATE event_roster SET w_${waiverType} = ${status} WHERE id = '${id}'`;
+    return `UPDATE event_roster SET w_${waiverType} = ${status} WHERE id = '${id}';`;
   },
 
   CHECK_IN_MEMBER: function( id, event ) {
-    return `UPDATE event_roster SET events = events || '${event}'::Text WHERE id = '${id}' AND '${event}'::Text <> ALL(events)`;
+    return `UPDATE event_roster SET events = events || '${event}'::Text WHERE id = '${id}' AND '${event}'::Text <> ALL(events);`;
   }
 };
 
@@ -124,6 +128,33 @@ module.exports = {
 
           // Otherwise, note the success!
           cb( undefined, { created: true });
+        });
+      }
+    });
+  },
+
+  setWaiverStatusByNetID: function( netId, waiverType, status, cb ) {
+    // Start by grabbing the member's id
+    client.query( STMT.GET_MEMBER_BY_NET_ID( netId ), function( err, res ) {
+      // If an error occurred, quit now
+      if( err ) {
+        return markAndFail( err, cb, "grabbing member id");
+      }
+
+      // Otherwise, update the waiver
+      if( !res.rows.length ) {
+        // No match found
+        cb( undefined, { success: false });
+      } else {
+        // Otherwise, match found -- update the waiver!
+        client.query( STMT.UPDATE_WAIVER_STATUS( res.rows[0].id, waiverType, status ), function( err, res ) {
+          // If an error occurred, quit now
+          if( err ) {
+            return markAndFail( err, cb, "grabbing member id");
+          }
+
+          // Otherwise, it worked!
+          cb( undefined, { success: true });
         });
       }
     });

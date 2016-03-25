@@ -10,6 +10,11 @@ var encode = xlsx.utils.encode_cell;
 // called waivers.<name>
 var BOOKS = ["lipsync"];
 
+var doneCount = 0;
+var checkDisconnect = function() {
+  if( ++doneCount === BOOKS.length + 1 ) db.disconnect();
+};
+
 // A mapping from column headers to property names
 var COLS = {
   "First Name":   "first",
@@ -85,7 +90,7 @@ var readBookToDatabase = function( name, cb ) {
     console.log("  %d failed because more than one matching roster entry was found", counts.failMany );
     console.log("  %d succeeded", counts.success );
 
-    db.disconnect();
+    checkDisconnect();
   }
   
   rows.forEach(function( row ) {
@@ -116,6 +121,28 @@ var readBookToDatabase = function( name, cb ) {
 
 // Read each of the books into the database
 BOOKS.forEach( readBookToDatabase );
+
+// PIKE sent paper general waivers, their netids are in "pikes.json"
+// Read PIKEs into the database
+var pikes = require("./pikes.json");
+var failed = [], notFound = [], count = 0;
+var printResults = function() {
+  console.log("Failed: ", failed);
+  console.log("Not found: ", notFound);
+  checkDisconnect();
+}
+pikes.forEach(function( netId ) {
+  // Add it to the database!
+  db.setWaiverStatusByNetID( netId, "general", true, function( err, res ) {
+    if( err ) {
+      failed.push( netId );
+    } else if( !res.success ) {
+      notFound.push( netId );
+    }
+
+    if( ++count === pikes.length ) printResults();
+  });
+});
 
 // Disconnect from the database
 //db.disconnect();
