@@ -108,7 +108,7 @@ var reduceRow = function( sheet, row, cols ) {
   // Grab the relevant columns
   for( var col in cols ) {
     val = sheet[ encode({ r: row, c: cols[ col ] }) ];
-    res[ col ] = val ? val.v.trim() : "";
+    res[ col ] = (val ? val.v + "" : "").trim();
   }
 
   return res;
