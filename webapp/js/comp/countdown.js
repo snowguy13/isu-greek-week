@@ -32,13 +32,13 @@ return function() {
     }
     
     // Then create the countdown
-    $( this ).countdown("2016/03/27")
+    $( this ).countdown("2016/03/27 20:00:00")
       .on("update.countdown", function( evt ) {
         Object.keys( parts ).forEach(function( part ) {
           var time = evt.offset[ timeParts[ part ] ],
               timeEl = parts[ part ].find(".time"),
               last = timeEl.text();
-          
+
           // Indicate plural if need be
           parts[ part ].attr("data-plural", time !== 1 );
           
