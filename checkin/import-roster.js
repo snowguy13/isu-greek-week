@@ -167,7 +167,10 @@ var checkDone = function() {
   if( count === len ) {
     console.log("Errors:");
     for( var err in errors ) {
-      console.log("  %d\t%s", errors[err], err );
+      console.log("  %d\t%s", errors[err].count, err );
+      errors[err].rows.forEach(function( row ) {
+        console.log("    ", row );
+      });
     }
     console.log("\nDone. Checked %d members, added %d new. %d failed (see errors above).", count, added, erred );
 
@@ -191,9 +194,13 @@ rows.forEach(function( row ) {
       erred++;
       
       if( !( err.message in errors ) ) {
-        errors[ err.message ] = 1;
+        errors[ err.message ] = {
+          count: 1,
+          rows: [ row ]
+        };
       } else {
-        errors[ err.message ]++;
+        errors[ err.message ].count++;
+        errors[ err.message ].rows.push( row );
       }
     } else {
       res.created && added++;
