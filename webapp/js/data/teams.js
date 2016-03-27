@@ -81,7 +81,7 @@ return [
     "chapters": [
       "Gamma Phi Beta",
       "Phi Gamma Delta",
-      "Delta Sigma Psi",
+      "Delta Sigma Phi",
       "Gamma Rho Lambda"
     ]
   },
