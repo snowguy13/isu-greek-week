@@ -128,8 +128,9 @@ BOOKS.forEach( readBookToDatabase );
 var pikes = require("./pikes.json");
 var failed = [], notFound = [], count = 0;
 var printResults = function() {
-  console.log("Failed: ", failed);
-  console.log("Not found: ", notFound);
+  console.log("\n-----Pike stuff-----")
+  console.log("  Failed: ", failed);
+  console.log("  Not found: ", notFound);
   checkDisconnect();
 }
 pikes.forEach(function( netId ) {
