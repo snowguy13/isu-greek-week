@@ -1,9 +1,10 @@
 define(["jquery", "util/mobile"],
 function( $, Mobile ) {
 
-var current = "Dodgeball";
+var current;
 var URLS = {
-  "Dodgeball": "3ab8lozd"
+  "Dodgeball": "3ab8lozd",
+  "Volleyball": "dez7oldl"
 };
 
 var makeChallongeURL = function( url ) {
@@ -26,7 +27,7 @@ var select = function( button ) {
 
   // Deselect the current button
   if( selected ) {
-    button.removeClass("selected");
+    selected.removeClass("selected");
   }
 
   // Update the URL
@@ -59,7 +60,9 @@ var prepare = function( el, done ) {
   }
 
   // Grab a reference to the current tournament's button
-  current = el.find("button[data-name='" + current + "']");
+  if( current ) {
+    current = el.find("button[data-name='" + current + "']");
+  }
 
   // Attach a listener to the button container
   buttons.click(function( ev ) {
@@ -79,7 +82,7 @@ return {
   prepare: prepare,
   onShow: function() {
     // Select the current if nothing is selected (and we're not mobile)
-    if( !selected ) select( current );
+    if( !selected && current ) select( current );
   }
 };
 
