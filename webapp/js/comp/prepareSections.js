@@ -1,5 +1,5 @@
-define(["jquery", "util/SectionManager", "comp/sections/apparel", "comp/sections/rulebook", "comp/sections/teams"], 
-function( $,       SectionManager,        apparel,                 rulebook,                 teams ) {
+define(["jquery", "util/SectionManager", "comp/sections/apparel", "comp/sections/rulebook", "comp/sections/teams", "comp/sections/brackets"], 
+function( $,       SectionManager,        apparel,                 rulebook,                 teams,                 brackets ) {
 
 var manager;
 
@@ -7,7 +7,8 @@ var opts = {
   sections: {
     //Apparel: apparel
     Rulebook: rulebook,
-    Teams:    teams
+    Teams:    teams,
+    Brackets: brackets
   },
 
   onShow: function() {

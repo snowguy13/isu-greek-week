@@ -1,0 +1,26 @@
+#bracket-button-container {
+  position: relative;
+  z-index: 1;
+
+  margin-top: -10px;
+
+  .bracket-button {
+    display: inline-block;
+    padding: 7px;
+    margin: 5px;
+
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+
+    background-color: #a4d275;
+
+    border: none;
+    border-radius: 3px;
+  }
+}
+
+#bracket-view {
+  box-sizing: border-box;
+  padding-top: 154px;
+}
