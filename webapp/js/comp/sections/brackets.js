@@ -1,6 +1,7 @@
 define(["jquery", "util/mobile"],
 function( $, Mobile ) {
 
+var current = "Dodgeball";
 var URLS = {
   "Dodgeball": "3ab8lozd"
 };
@@ -57,6 +58,9 @@ var prepare = function( el, done ) {
     buttons.append( makeBracketButton( tourney, URLS[ tourney ] ) );
   }
 
+  // Grab a reference to the current tournament's button
+  current = el.find("button[data-name='" + current + "']");
+
   // Attach a listener to the button container
   buttons.click(function( ev ) {
     var target = $( ev.target );
@@ -72,7 +76,11 @@ var prepare = function( el, done ) {
 };
 
 return {
-  prepare: prepare
+  prepare: prepare,
+  onShow: function() {
+    // Select the current if nothing is selected (and we're not mobile)
+    if( !selected ) select( current );
+  }
 };
 
 });
