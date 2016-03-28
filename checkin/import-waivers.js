@@ -8,7 +8,7 @@ var encode = xlsx.utils.encode_cell;
 // If <name> is an element of BOOKS, then the script will look for a book
 // called waivers-<name>.xls and will import the waiver data into a table
 // called waivers.<name>
-var BOOKS = ["lipsync"];
+var BOOKS = ["lipsync", "general"];
 
 var doneCount = 0;
 var checkDisconnect = function() {
@@ -39,7 +39,7 @@ var reduceRow = function( sheet, row, cols ) {
   // Grab the relevant columns
   for( var col in cols ) {
     val = sheet[ encode({ r: row, c: cols[ col ] }) ];
-    res[ col ] = val ? val.v : "";
+    res[ col ] = val ? val.v.trim() : "";
   }
 
   return res;
@@ -88,6 +88,7 @@ var readBookToDatabase = function( name, cb ) {
     console.log("  %d failed because no matching roster entry was found", counts.failNone );
     failed.filter( row => row[1] === "none" ).forEach( row => console.log( row[0] ) );
     console.log("  %d failed because more than one matching roster entry was found", counts.failMany );
+    failed.filter( row => row[1] === "many" ).forEach( row => console.log( row[0] ) );
     console.log("  %d succeeded", counts.success );
 
     checkDisconnect();
@@ -127,8 +128,9 @@ BOOKS.forEach( readBookToDatabase );
 var pikes = require("./pikes.json");
 var failed = [], notFound = [], count = 0;
 var printResults = function() {
-  console.log("Failed: ", failed);
-  console.log("Not found: ", notFound);
+  console.log("\n-----Pike stuff-----")
+  console.log("  Failed: ", failed);
+  console.log("  Not found: ", notFound);
   checkDisconnect();
 }
 pikes.forEach(function( netId ) {

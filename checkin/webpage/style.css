@@ -85,6 +85,10 @@ main {
   text-align: center;
 }
 
+:focus {
+  outline: none;
+}
+
 .container {
   padding: 10px;
   

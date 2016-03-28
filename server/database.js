@@ -69,19 +69,19 @@ var STMT = {
   },
 
   ADD_MEMBER: function( info ) {
-    return `INSERT INTO event_roster (id, isu_id, net_id, first_name, last_name, chapter) VALUES ('${genId(20)}', '${info.isu_id}', '${info.net_id}', '${escapeSingleQuote( info.first_name )}', '${escapeSingleQuote( info.last_name )}', '${info.chapter}');`;
+    return `INSERT INTO event_roster (id, isu_id, net_id, first_name, last_name, chapter${info.gw_role ? ', gw_role' : ''}) VALUES ('${genId(20)}', '${info.isu_id}', '${info.net_id}', '${escapeSingleQuote( info.first_name )}', '${escapeSingleQuote( info.last_name )}', '${info.chapter}'${info.gw_role ? `, '${info.gw_role}'` : ''});`;
   },
 
   SEARCH_MEMBER_BY_ISU_ID: function( id ) {
-    return `SELECT id, net_id, first_name AS first, last_name AS last, chapter, w_lipsync, w_general, technical FROM event_roster WHERE isu_id = '${id}';`;
+    return `SELECT id, net_id, first_name AS first, last_name AS last, chapter, gw_role, w_lipsync, w_general, technical, events FROM event_roster WHERE isu_id = '${id}';`;
   },
 
   SEARCH_MEMBERS_BY_NET_ID: function( text ) {
-    return `SELECT id, net_id, first_name AS first, last_name AS last, chapter, w_lipsync, w_general, technical FROM event_roster WHERE lower(net_id) LIKE '%${text}%';`;
+    return `SELECT id, net_id, first_name AS first, last_name AS last, chapter, gw_role, w_lipsync, w_general, technical, events FROM event_roster WHERE lower(net_id) LIKE '%${text}%';`;
   },
 
   SEARCH_MEMBERS_BY_NAME: function( firstText, lastText ) {
-    return `SELECT id, net_id, first_name AS first, last_name AS last, chapter, w_lipsync, w_general, technical FROM event_roster WHERE lower(first_name) LIKE '%${firstText}%' ${lastText ? 'AND' : 'OR'} lower(last_name) LIKE '%${lastText || firstText}%';`;
+    return `SELECT id, net_id, first_name AS first, last_name AS last, chapter, gw_role, w_lipsync, w_general, technical, events FROM event_roster WHERE lower(first_name) LIKE '%${firstText}%' ${lastText ? 'AND' : 'OR'} lower(last_name) LIKE '%${lastText || firstText}%';`;
   },
 
   GET_MEMBER_BY_NET_ID: function( netId ) {
@@ -183,27 +183,49 @@ module.exports = {
           return markAndFail( err, cb, "getting members");
         }
 
-        var rows = res.rows, row;
+        var rows = res.rows, row, filtered;
 
         // If no matches were found or more than one was found...
-        if( rows.length !== 1 ) {
+        if( rows.length === 0 ) {
           cb( undefined, { updated: false, options: rows });
+          return;
+        }
+
+        if( rows.length > 1 ) {
+          // More than one entry was found, try to pick the one with the correct chapter
+          // If no chapter is present, just fail now
+          if( !member.chapter ) {
+            cb( undefined, { updated: false, options: rows });
+            return;
+          }
+
+          // Otherwise, attempt to find the entry with a matching chapter
+          filtered = rows.filter( row => row.chapter === member.chapter );
+
+          // If there isn't exactly one match, fail
+          if( filtered.length !== 1 ) {
+            cb( undefined, { updated: false, options: rows });
+            return;
+          }
+
+          // Otherwise, use that member
+          row = filtered[0];
         } else {
           // Otherwise... update that person's status!
           row = rows[0];
-
-          client.query( STMT.UPDATE_WAIVER_STATUS( row.id, waiverType, status ), function( err, res ) {
-            // If an error occurred, quit now
-            if( err ) {
-              return markAndFail( err, cb, "updating waiver status");
-            }
-
-            var result = res.rows[0];
-
-            // Otherwise, note the success
-            cb( undefined, { updated: true });
-          });
         }
+
+        client.query( STMT.UPDATE_WAIVER_STATUS( row.id, waiverType, status ), function( err, res ) {
+          // If an error occurred, quit now
+          if( err ) {
+            return markAndFail( err, cb, "updating waiver status");
+          }
+
+          var result = res.rows[0];
+
+          // Otherwise, note the success
+          cb( undefined, { updated: true });
+        });
       });
     }
   },

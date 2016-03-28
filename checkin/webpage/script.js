@@ -64,6 +64,16 @@ var updateResultActions = function() {
       message.html("You have to select an event before checking " + person.first + " in.");
       person.valid = false;
       person.canForce = false;
+    } else if( person.events.indexOf( event.name ) > -1 ) {
+      // Otherwise, if the member is already checked in, say so!
+      message.html( person.first + " is <strong>already checked in</strong> to " + event.name + "!");
+      person.valid = true;
+      //person.canForce doesn't matter here
+    } else if( person.gw_role ) {
+      // Otherwise, if the member is on Crew or Central, they can't be checked in!
+      message.html("Isn't " + person.first + " supposed to be <strong>disaffiliated</strong>...?");
+      person.valid = false;
+      person.canForce = false;
     } else if( event.waiver && !person["w_" + event.waiver] ) {
       // Otherwise, if there is an event and the member doesn't have the required waiver, note that
       message.html("In order to check in, " + person.first + " must fill out a <strong>" + event.waiver + "</strong> waiver.<br />Press [Control] + [Enter] to force a check-in (this will also mark " + person.first + " as having filled out a waiver).");
@@ -76,7 +86,7 @@ var updateResultActions = function() {
       person.canForce = false;
     } else {
       // Otherwise, either there's no waiver requirement or the requirement is met
-      message.html("Hit [Enter] to check " + person.first + " in!");
+      message.html("<strong>Hit [Enter]</strong> to check " + person.first + " in!");
       person.valid = true;
       //person.canForce doesn't matter here
     }
