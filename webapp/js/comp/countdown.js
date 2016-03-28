@@ -52,6 +52,12 @@ return function() {
             timeEl.removeClass("changed");
           }, 500 );
         });
+      })
+      .on("finish.countdown", function() {
+        var t = $(this);
+
+        t.text("Greek Week is here!!!!")
+         .prev().text("");
       });
   });
 };
