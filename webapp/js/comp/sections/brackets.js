@@ -12,6 +12,11 @@ var makeChallongeURL = function( url ) {
 var frame;
 var selected;
 var select = function( button ) {
+  // If the requested button is selected, quit
+  if( button.is(".selected") ) {
+    return;
+  }
+
   // Deselect the current button
   if( selected ) {
     button.removeClass("selected");
@@ -21,7 +26,7 @@ var select = function( button ) {
   frame.attr("src", button.attr("data-url") );
 
   // And change the selected object
-  selected = button;
+  (selected = button).addClass("selected");
 };
 
 var makeBracketButton = function( name, url ) {
