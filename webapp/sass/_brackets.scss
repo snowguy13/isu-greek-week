@@ -7,8 +7,9 @@
   .bracket-button {
     cursor: pointer;
     position: relative;
+    top: 0;
 
-    transition-property: top, border-radius;
+    transition-property: top, border-radius, box-shadow, background-color;
     transition-duration: 0.3s;
 
     display: inline-block;
@@ -18,20 +19,24 @@
     font-family: inherit;
     font-size: 20px;
     font-weight: inherit;
-
-    background-color: #a4d275;
+    
+    color: #a4d275;
+    background-color: #41542e;
 
     border: none;
-    border-radius: 3px;
+    border-radius: 5px;
 
     &:hover {
-      background-color: #83a85d;
+      background-color: #627e46;
       box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
     }
 
     &.selected {
       cursor: default;
       top: 5px;
+
+      background-color: rgba(60,60,60,0.8);
+
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
     }
