@@ -1,5 +1,5 @@
-define(["jquery"],
-function( $ ) {
+define(["jquery", "util/mobile"],
+function( $, Mobile ) {
 
 var URLS = {
   "Dodgeball": "3ab8lozd"
@@ -14,6 +14,12 @@ var selected;
 var select = function( button ) {
   // If the requested button is selected, quit
   if( button.is(".selected") ) {
+    return;
+  }
+
+  // If we're on a mobile device, redirect instead of loading in the iframe
+  if( Mobile.mobile() ) {
+    window.location.href = button.attr("data-ext-url");
     return;
   }
 
@@ -36,7 +42,8 @@ var makeBracketButton = function( name, url ) {
     .addClass("bracket-button")
     .attr({
       "data-name": name,
-      "data-url":  url
+      "data-url":  makeChallongeURL( url ),
+      "data-ext-url": "http://challonge.com/" + url
     });
 };
 
@@ -47,7 +54,7 @@ var prepare = function( el, done ) {
 
   // Add buttons for each tournament
   for( var tourney in URLS ) {
-    buttons.append( makeBracketButton( tourney, makeChallongeURL( URLS[ tourney ] ) ) );
+    buttons.append( makeBracketButton( tourney, URLS[ tourney ] ) );
   }
 
   // Attach a listener to the button container
