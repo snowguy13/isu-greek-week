@@ -8,7 +8,7 @@ var URLS = {
 };
 
 var makeChallongeURL = function( url ) {
-  return "http://challonge.com/" + url + "/module";
+  return "https://challonge.com/" + url + "/module";
 };
 
 var frame;
@@ -45,7 +45,7 @@ var makeBracketButton = function( name, url ) {
     .attr({
       "data-name": name,
       "data-url":  makeChallongeURL( url ),
-      "data-ext-url": "http://challonge.com/" + url
+      "data-ext-url": "https://challonge.com/" + url
     });
 };
 
