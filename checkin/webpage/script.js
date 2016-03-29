@@ -14,9 +14,16 @@ var elem = {
   },
   checkin: {
     container: $("#check-in-container"),
+    innerContainer: $("#inner-check-in-container"),
     events:    $("#event"),
     search:    $("#search"),
     result:    $("#result")
+  },
+  totals: {
+    openLinkContainer: $("#totals-link-container"),
+    openLink: $("#totals-link"),
+    closeLink: $("#checkin-link"),
+    container: $("#totals-container")
   }
 };
 
@@ -232,6 +239,12 @@ elem.login.submit.click(function() {
           token: res.token
         };
 
+        // If the user was "gwgencos", show the totals link
+        elem.totals.openLink.detach();
+        if( u === "gwgencos" ) {
+          elem.totals.openLinkContainer.append( elem.totals.openLink );
+        }
+
         // Focus the search input box
         elem.checkin.search.focus();
       }
@@ -423,6 +436,27 @@ elem.checkin.result.mousedown(function( ev ) {
       });
     }
   }
+});
+
+// Initially, detach the totals container
+elem.totals.container.detach();
+
+elem.totals.openLink.click(function() {
+  // Hide the inner check in container
+  elem.checkin.innerContainer.css("display", "none");
+  elem.totals.openLinkContainer.hide();
+
+  // Append the totals container
+  elem.checkin.innerContainer.before( elem.totals.container );
+});
+
+elem.totals.closeLink.click(function() {
+  // Detach the totals container
+  elem.totals.container.detach();
+
+  // And show the inner container
+  elem.checkin.innerContainer.css("display", "");
+  elem.totals.openLinkContainer.show()
 });
 
 });

@@ -31,13 +31,25 @@
     </div>
     <div id="check-in-container" class="container">
       <h2>GW 2016 Check-in System</h2>
-      <div id="selection-container">
-        <select id="event">
-          <option value="">(pick an event)</option>
-        </select>
+      <div id="totals-link-container"><a id="totals-link">View Totals</a></div>
+      <div id="totals-container">
+        <div><a id="checkin-link">Back to Check-In</a></div>
+        hey hey hey
+        <table id="totals-table">
+        </table>
       </div>
-      <div id="search-container">
-        <input id="search" type="text" placeholder="Type an ISU ID, Net ID, or name, then hit [Enter]" />
+      <div id="inner-check-in-container">
+        <div id="selection-container">
+          <select id="event">
+            <option value="">(pick an event)</option>
+          </select>
+        </div>
+        <div id="search-container">
+          <input id="search" type="text" placeholder="Type an ISU ID, Net ID, or name, then hit [Enter]" />
+        </div>
+        <div id="result-container">
+          <div id="result"></div>
+        </div>
       </div>
       <div id="loading">
         <div>Loading</div>
@@ -48,9 +60,6 @@
           <span class="dot"></span>
           <span class="dot"></span>
         </div>
-        </div>
-      <div id="result-container">
-        <div id="result"></div>
       </div>
     </div>
   </main>
