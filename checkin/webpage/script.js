@@ -23,7 +23,8 @@ var elem = {
     openLinkContainer: $("#totals-link-container"),
     openLink: $("#totals-link"),
     closeLink: $("#checkin-link"),
-    container: $("#totals-container")
+    container: $("#totals-container"),
+    table: $("#totals-table")
   }
 };
 
@@ -241,6 +242,7 @@ elem.login.submit.click(function() {
 
         // If the user was "gwgencos", show the totals link
         elem.totals.openLink.detach();
+
         if( u === "gwgencos" ) {
           elem.totals.openLinkContainer.append( elem.totals.openLink );
         }
@@ -448,6 +450,12 @@ elem.totals.openLink.click(function() {
 
   // Append the totals container
   elem.checkin.innerContainer.before( elem.totals.container );
+
+  // Hide the results table until the request has finished
+  elem.totals.table.hide();
+
+  // Make the request to get stuff
+  elem.totals.table.show();
 });
 
 elem.totals.closeLink.click(function() {

@@ -1,5 +1,8 @@
 var pg = require("pg"),
-    _  = require("underscore");
+    _  = require("underscore"),
+    Promise = require("promise");
+    console.log( Promise );
+    
 
 // Should work remotely or locally
 var DB = process.env.DATABASE_URL || "tomscallon:tomscallon@localhost/isugreekweek";
@@ -98,7 +101,36 @@ var STMT = {
 
   CHECK_IN_MEMBER: function( id, event ) {
     return `UPDATE event_roster SET events = events || '${event}'::Text WHERE id = '${id}' AND '${event}'::Text <> ALL(events);`;
+  },
+
+  GET_EVENT_TOTALS_BY_TEAM: function( event ) {
+    return `SELECT   teams.team_name as team, COUNT(*) as members
+            FROM     teams LEFT OUTER JOIN event_roster ON (teams.chapter=event_roster.chapter) 
+            WHERE    '${event}' = ANY(event_roster.events)
+            GROUP BY teams.team_name;`;
+  },
+
+  GET_EVENT_TOTALS_BY_CHAPTER: function( event ) {
+    return `SELECT   teams.chapter as chapter, teams.team_name as team, COUNT(*) as members
+            FROM     teams LEFT OUTER JOIN event_roster ON (teams.chapter=event_roster.chapter) 
+            WHERE    '${event}' = ANY(event_roster.events)
+            GROUP BY teams.chapter;`;
   }
+};
+
+var promisify = function( sql ) {
+  return new Promise(function( resolve, reject ) {
+    client.query( sql, function( err, res ) {
+      // If there was an error, reject with that error
+      if( err ) {
+        console
+        reject( err );
+      } else {
+        // Otherwise, resolve with the result rows of the query
+        resolve( res.rows );
+      }
+    });
+  });
 };
 
 // Export useful functionality!
@@ -282,5 +314,64 @@ module.exports = {
 
     // Execute the statements!
     invokeAndCollect( cb, stmts );
+  },
+
+  collectEventTotals: function( events, cb ) {
+    var ret = { 
+          events: events, 
+          teams: {} 
+        }, 
+        teams = ret.teams;
+
+    // First, work by team
+    Promise
+      .all( events.map( ev => promisify( STMT.GET_EVENT_TOTALS_BY_TEAM( ev ) ) ) )
+      .catch(function( err ) {
+        console.log("Hit an issue while tallying teams: ", err );
+      })
+      .then(function( results ) {
+        // Reduce the results into 'teams'
+        results.forEach(function( teamCounts, index ) {
+          var eventName = events[ index ];
+
+          // For each team...
+          teamCounts.forEach(function( count ) {
+            // Make the team object if it doesn't exist
+            var team = teams[ count.team ];
+            if( !team ) team = teams[ count.team ] = {};
+
+            // Add the count to the team object
+            team[ eventName ] = +count.members;
+          });
+        });
+
+        // Log output
+        console.log( ret );
+
+        // Then work by chapter
+        return Promise.all( events.map( ev => promisify( STMT.GET_EVENT_TOTALS_BY_CHAPTER( ev ) ) ) );
+      })
+      .catch(function( err ) {
+        console.log("Hit an issue while tallying chapters: ", err );
+      })
+      .then(function( results ) {
+        // Reduce the results into the appropriate team object
+        results.forEach(function( chapterCounts, index ) {
+          var eventName = events[ index ];
+
+          // For each chapter...
+          teamsCounts.forEach(function( count ) {
+            // Make the chapter object if it doesn't exist
+            var chapter = teams[ count.team ].chapters[ count.chapter ];
+            if( !chapter ) chapter = teams[ count.team ].chapters[ count.chapter ] = {};
+
+            // Add the count to the team object
+            chapter[ eventName ] = +count.members;
+          });
+        });
+
+        // Log the result
+        console.log( ret );
+      });
   }
 };
