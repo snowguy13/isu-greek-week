@@ -58,7 +58,7 @@ var personElement = function( person ) {
 var updateResultActions = function() {
   results.forEach(function( person ) {
     var message = person.element.find(".message");
-
+    
     // If there is no event selected, message should be to select an event
     if( !event ) {
       message.html("You have to select an event before checking " + person.first + " in.");
@@ -74,7 +74,7 @@ var updateResultActions = function() {
       message.html("Isn't " + person.first + " supposed to be <strong>disaffiliated</strong>...?");
       person.valid = false;
       person.canForce = false;
-    } else if( event.waiver && !person["w_" + event.waiver] ) {
+    } else if( event.waiver && (!person["w_" + event.waiver] && !person.w_general) ) {
       // Otherwise, if there is an event and the member doesn't have the required waiver, note that
       message.html("In order to check in, " + person.first + " must fill out a <strong>" + event.waiver + "</strong> waiver.<br />Press [Control] + [Enter] to force a check-in (this will also mark " + person.first + " as having filled out a waiver).");
       person.valid = false;
