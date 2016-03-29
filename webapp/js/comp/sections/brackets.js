@@ -1,7 +1,7 @@
 define(["jquery", "util/mobile"],
 function( $, Mobile ) {
 
-var current;
+var current = "Volleyball";
 var URLS = {
   "Dodgeball": "3ab8lozd",
   "Volleyball": "dez7oldl"
