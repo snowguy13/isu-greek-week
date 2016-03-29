@@ -68,7 +68,7 @@ return [
   },
 
   {
-    "name": "The Greek Awakenening",
+    "name": "The Greek Awakens",
     "chapters": [
       "Alpha Chi Omega",
       "Alpha Tau Omega",
