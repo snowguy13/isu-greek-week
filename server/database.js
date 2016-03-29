@@ -349,29 +349,29 @@ module.exports = {
         console.log( ret );
 
         // Then work by chapter
-        return Promise.all( events.map( ev => promisify( STMT.GET_EVENT_TOTALS_BY_CHAPTER( ev ) ) ) );
+        return Promise.all( events.map( ev => promisify( STMT.GET_EVENT_TOTALS_BY_CHAPTER( ev ) ) ) )
+          .catch(function( err ) {
+            console.log("Hit an issue while tallying chapters: ", err );
+          })
+          .then(function( results ) {
+            // Reduce the results into the appropriate team object
+            results.forEach(function( chapterCounts, index ) {
+              var eventName = events[ index ];
+
+              // For each chapter...
+              teamsCounts.forEach(function( count ) {
+                // Make the chapter object if it doesn't exist
+                var chapter = teams[ count.team ].chapters[ count.chapter ];
+                if( !chapter ) chapter = teams[ count.team ].chapters[ count.chapter ] = {};
+
+                // Add the count to the team object
+                chapter[ eventName ] = +count.members;
+              });
+            });
+
+            // Log the result
+            console.log( ret );
       })
-      .catch(function( err ) {
-        console.log("Hit an issue while tallying chapters: ", err );
-      })
-      .then(function( results ) {
-        // Reduce the results into the appropriate team object
-        results.forEach(function( chapterCounts, index ) {
-          var eventName = events[ index ];
-
-          // For each chapter...
-          teamsCounts.forEach(function( count ) {
-            // Make the chapter object if it doesn't exist
-            var chapter = teams[ count.team ].chapters[ count.chapter ];
-            if( !chapter ) chapter = teams[ count.team ].chapters[ count.chapter ] = {};
-
-            // Add the count to the team object
-            chapter[ eventName ] = +count.members;
-          });
-        });
-
-        // Log the result
-        console.log( ret );
       });
   }
 };
