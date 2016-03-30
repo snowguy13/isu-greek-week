@@ -315,7 +315,12 @@ module.exports = {
     // Execute the statements!
     invokeAndCollect( cb, stmts );
   },
-
+  
+  // Returned format:
+  //   events : String[]
+  //   teams : Object<String, TeamObject> where String is team name and TeamObject is as follows:
+  //     chapters : Object<String, Object<String, Int>> where String is the chapter name, and Object<String, Int> maps event name to total check-ins
+  //     totals : Object<String, Int> where String is the event name and Int is the total number of check-ins
   collectEventTotals: function( events, cb ) {
     var ret = { 
           events: events, 
@@ -327,7 +332,8 @@ module.exports = {
     Promise
       .all( events.map( ev => promisify( STMT.GET_EVENT_TOTALS_BY_TEAM( ev ) ) ) )
       .catch(function( err ) {
-        console.log("Hit an issue while tallying teams: ", err );
+        //console.log("Hit an issue while tallying teams: ", err );
+        cb( err, undefined );
       })
       .then(function( results ) {
         // Reduce the results into 'teams'
@@ -338,40 +344,45 @@ module.exports = {
           teamCounts.forEach(function( count ) {
             // Make the team object if it doesn't exist
             var team = teams[ count.team ];
-            if( !team ) team = teams[ count.team ] = {};
+            if( !team ) team = teams[ count.team ] = {
+              totals: {},   // initialize this for later
+              chapters: {}  // same here
+            };
 
             // Add the count to the team object
-            team[ eventName ] = +count.members;
+            team.totals[ eventName ] = +count.members;
           });
         });
 
-        // Log output
-        console.log( ret );
-
         // Then work by chapter
-        return Promise.all( events.map( ev => promisify( STMT.GET_EVENT_TOTALS_BY_CHAPTER( ev ) ) ) )
-          .catch(function( err ) {
-            console.log("Hit an issue while tallying chapters: ", err );
-          })
-          .then(function( results ) {
-            // Reduce the results into the appropriate team object
-            results.forEach(function( chapterCounts, index ) {
-              var eventName = events[ index ];
-
-              // For each chapter...
-              teamsCounts.forEach(function( count ) {
-                // Make the chapter object if it doesn't exist
-                var chapter = teams[ count.team ].chapters[ count.chapter ];
-                if( !chapter ) chapter = teams[ count.team ].chapters[ count.chapter ] = {};
-
-                // Add the count to the team object
-                chapter[ eventName ] = +count.members;
-              });
-            });
-
-            // Log the result
-            console.log( ret );
+        return Promise.all( events.map( ev => promisify( STMT.GET_EVENT_TOTALS_BY_CHAPTER( ev ) ) ) );
       })
+      .catch(function( err ) {
+        //console.log("Hit an issue while tallying chapters: ", err );
+        cb( err, undefined );
+      })
+      .then(function( results ) {
+        // Reduce the results into the appropriate team object
+        results.forEach(function( chapterCounts, index ) {
+          var eventName = events[ index ];
+
+          // For each chapter...
+          chapterCounts.forEach(function( count ) {
+            // Make the chapter object if it doesn't exist
+            var chapter = teams[ count.team ].chapters[ count.chapter ];
+            if( !chapter ) chapter = teams[ count.team ].chapters[ count.chapter ] = {};
+
+            // Add the count to the team object
+            chapter[ eventName ] = +count.members;
+          });
+        });
+
+        // Invoke the callback
+        cb( undefined, ret );
+      })
+      .catch(function( err ) { 
+        //console.log( err );
+        cb( err, undefined );
       });
   }
 };
