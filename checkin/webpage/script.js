@@ -126,6 +126,63 @@ var updateResult = function( data ) {
   results.length && select(0);
 };
 
+var round = function( val, places ) {
+  return Math.round( Math.pow( 10, places ) * val ) / Math.pow( 10, places );
+};
+
+var makeTotalsRow = function( events, name, totals, percentages, header ) {
+  return events.reduce(function( row, event ) {
+    // Create a cell for the event
+    var type = header ? "<th />" : "<td />";
+
+    // Append a span with totals and with percentages
+    row.append( $( type ).addClass("total").text( totals[ event ] || 0 ) );
+    row.append( $( type ).addClass("percent").text( round( percentages[ event ] || 0, 2 )  + "%" ) );
+
+    return row;
+  }, $("<tr />").append( $("<th />").text( name ) ) );
+};
+
+var makeTotalsBody = function( events, teamName, teamData ) {
+  var b = $("<tbody />"), c;
+
+  // Add a totals row for the team
+  b.append( makeTotalsRow( events, teamName, teamData.totals, teamData.percentages, true ) );
+
+  // Add a totals row for each of the team's chapters
+  for( var chapter in teamData.chapters ) {
+    c = teamData.chapters[ chapter ];
+    b.append( makeTotalsRow( events, chapter, c.totals, c.percentages ) );
+  }
+
+  return b;
+};
+
+var makeTotalsTable = function( data ) {
+  var t = elem.totals.table,
+      e = data.events,
+      h = $("<thead />");
+
+  // First, empty the table
+  t.empty();
+
+  // Begin by creating the table header
+  e.reduce(function( h, e ) {
+    return h.append($("<th />").text( e ).attr("colspan", 2));
+  }, h.append("<th />"));
+
+  // Now append it to the table
+  t.append( h );
+
+  // For each team, append a body
+  for( var team in data.teams ) {
+    t.append( makeTotalsBody( e, team, data.teams[ team ] ) );
+  }
+
+  // Add padding to the table
+  t.css("padding-top", h.outerHeight() + "px" );
+};
+
 // Constants
 
 /* Event options: array of string with special format
@@ -448,6 +505,9 @@ elem.totals.openLink.click(function() {
   elem.checkin.innerContainer.css("display", "none");
   elem.totals.openLinkContainer.hide();
 
+  // Make the main container wide
+  $("main").addClass("wide");
+
   // Append the totals container
   elem.checkin.innerContainer.before( elem.totals.container );
 
@@ -468,7 +528,7 @@ elem.totals.openLink.click(function() {
 
     success: function( data ) {
       // Import the data into the table
-
+      makeTotalsTable( data );
 
       // Finally, show the table!
       elem.totals.table.show();
@@ -484,6 +544,9 @@ elem.totals.openLink.click(function() {
 elem.totals.closeLink.click(function() {
   // Detach the totals container
   elem.totals.container.detach();
+
+  // Make the main container normal
+  $("main").removeClass("wide");
 
   // And show the inner container
   elem.checkin.innerContainer.css("display", "");
