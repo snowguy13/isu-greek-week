@@ -101,6 +101,24 @@ checkin.post("/", function( req, res ) {
   }
 });
 
+// Get totals for stuff
+checkin.get("/totals", function( req, res ) {
+  // Make sure the user is "gwgencos"
+  if( auth.userFor( req.headers.authorization.substring( 0, auth.IDENTITY_LEN ) ) !== "gwgencos" ) {
+    res.status(401).send("Only the general co-chairs can view totals");
+    return;
+  }
+
+  // Then send the data
+  db.collectEventTotals( req.query.events, function( err, result ) {
+    if( err ) {
+      res.status(500).send( err );
+    } else {
+      res.send( result );
+    }
+  })
+});
+
 // Mount the router
 router.use("/checkin", checkin );
 
