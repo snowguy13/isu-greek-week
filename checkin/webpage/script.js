@@ -386,7 +386,7 @@ elem.checkin.result.mousedown(function( ev ) {
         data: JSON.stringify({
           id:    p.id,
           event: e.name,
-          force: p.valid ? false : e.waiver
+          force: p.valid ? false : /*e.waiver*/ "general"
         }),
 
         success: function( data ) {
