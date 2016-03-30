@@ -103,6 +103,18 @@ var STMT = {
     return `UPDATE event_roster SET events = events || '${event}'::Text WHERE id = '${id}' AND '${event}'::Text <> ALL(events);`;
   },
 
+  GET_TOTAL_MEMBERS_BY_TEAM: function() {
+    return `SELECT   teams.team_name as team, COUNT(*) as count
+            FROM     teams LEFT OUTER JOIN event_roster ON (teams.chapter=event_roster.chapter) 
+            GROUP BY teams.team_name;`
+  },
+
+  GET_TOTAL_MEMBERS_BY_CHAPTER: function() {
+    return `SELECT   teams.chapter, teams.team_name as team, COUNT(*) as count
+            FROM     teams LEFT OUTER JOIN event_roster ON (teams.chapter=event_roster.chapter) 
+            GROUP BY teams.chapter;`;
+  },
+
   GET_EVENT_TOTALS_BY_TEAM: function( event ) {
     return `SELECT   teams.team_name as team, COUNT(*) as members
             FROM     teams LEFT OUTER JOIN event_roster ON (teams.chapter=event_roster.chapter) 
@@ -319,8 +331,11 @@ module.exports = {
   // Returned format:
   //   events : String[]
   //   teams : Object<String, TeamObject> where String is team name and TeamObject is as follows:
-  //     chapters : Object<String, Object<String, Int>> where String is the chapter name, and Object<String, Int> maps event name to total check-ins
+  //     chapters : Object<String, ChapterObject> where String is the chapter name, ChapterObject is as follows:
+  //       totals : Object<String, Int> where String is the event name and Int is the total number of check-ins
+  //       percentages : Object<String, Double> where String is the event name and Double is the % checked in
   //     totals : Object<String, Int> where String is the event name and Int is the total number of check-ins
+  //     percentages : Object<String, Double> where String is the event name and Double is the % checked in
   collectEventTotals: function( events, cb ) {
     var ret = { 
           events: events, 
@@ -328,11 +343,12 @@ module.exports = {
         }, 
         teams = ret.teams;
 
+    // Begin by retrieving team and chapter totals
+    promisify(  )
     // First, work by team
     Promise
       .all( events.map( ev => promisify( STMT.GET_EVENT_TOTALS_BY_TEAM( ev ) ) ) )
       .catch(function( err ) {
-        //console.log("Hit an issue while tallying teams: ", err );
         cb( err, undefined );
       })
       .then(function( results ) {
@@ -358,7 +374,6 @@ module.exports = {
         return Promise.all( events.map( ev => promisify( STMT.GET_EVENT_TOTALS_BY_CHAPTER( ev ) ) ) );
       })
       .catch(function( err ) {
-        //console.log("Hit an issue while tallying chapters: ", err );
         cb( err, undefined );
       })
       .then(function( results ) {
@@ -380,8 +395,7 @@ module.exports = {
         // Invoke the callback
         cb( undefined, ret );
       })
-      .catch(function( err ) { 
-        //console.log( err );
+      .catch(function( err ) {
         cb( err, undefined );
       });
   }

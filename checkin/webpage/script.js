@@ -468,9 +468,10 @@ elem.totals.openLink.click(function() {
 
     success: function( data ) {
       // Import the data into the table
-      elem.totals.table.show();
 
-      console.log( data );
+
+      // Finally, show the table!
+      elem.totals.table.show();
     },
 
     error: function() {
