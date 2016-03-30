@@ -1,10 +1,11 @@
 define(["jquery", "util/mobile"],
 function( $, Mobile ) {
 
-var current = "Volleyball";
+var current;
 var URLS = {
   "Dodgeball": "3ab8lozd",
-  "Volleyball": "dez7oldl"
+  "Volleyball": "dez7oldl",
+  "Treds": "nboutlid"
 };
 
 var makeChallongeURL = function( url ) {
