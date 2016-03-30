@@ -455,7 +455,29 @@ elem.totals.openLink.click(function() {
   elem.totals.table.hide();
 
   // Make the request to get stuff
-  elem.totals.table.show();
+  $.ajax({
+    method: "GET",
+    url:    "/api/checkin/totals",
+    contentType: "application/json",
+    headers: {
+      Authorization: auth.identity + auth.token
+    },
+    data: {
+      events: eventOptions.map( opt => opt.name )
+    },
+
+    success: function( data ) {
+      // Import the data into the table
+      elem.totals.table.show();
+
+      console.log( data );
+    },
+
+    error: function() {
+      // Just close everything -- rage quit
+      elem.totals.closeLink.click();
+    }
+  });
 });
 
 elem.totals.closeLink.click(function() {
