@@ -114,6 +114,10 @@ module.exports = {
     }
   },
 
+  userFor: function( identity ) {
+    return (identities[ identity ] || {}).user;
+  },
+
   generateNextToken: function( identity ) {
     var token = genToken();
 
