@@ -331,7 +331,9 @@ module.exports = {
   // Returned format:
   //   events : String[]
   //   teams : Object<String, TeamObject> where String is team name and TeamObject is as follows:
+  //     totalMembers : Int
   //     chapters : Object<String, ChapterObject> where String is the chapter name, ChapterObject is as follows:
+  //       totalMembers : Int
   //       totals : Object<String, Int> where String is the event name and Int is the total number of check-ins
   //       percentages : Object<String, Double> where String is the event name and Double is the % checked in
   //     totals : Object<String, Int> where String is the event name and Int is the total number of check-ins
@@ -341,16 +343,43 @@ module.exports = {
           events: events, 
           teams: {} 
         }, 
-        teams = ret.teams;
+        teams = ret.teams,
+        fail = function( err ) { cb( err, undefined ); return; };
 
-    // Begin by retrieving team and chapter totals
-    promisify(  )
-    // First, work by team
-    Promise
-      .all( events.map( ev => promisify( STMT.GET_EVENT_TOTALS_BY_TEAM( ev ) ) ) )
-      .catch(function( err ) {
-        cb( err, undefined );
+    // Begin by retrieving team totals
+    promisify( STMT.GET_TOTAL_MEMBERS_BY_TEAM() )
+      .catch( fail )
+      .then(function( totals ) {
+        // For each team...
+        totals.forEach(function( total ) {
+          // ...create its object and add the count to it
+          teams[ total.team ] = {
+            totalMembers: total.count,
+            chapters:     {},
+            totals:       {},
+            percentages:  {}
+          }
+        });
+
+        // Then, request total members per chapter
+        return promisify( STMT.GET_TOTAL_MEMBERS_BY_CHAPTER() );
       })
+      .catch( fail )
+      .then(function( totals ) {
+        // For each chapter...
+        totals.forEach(function( total ) {
+          // ...create its object and add the count to it
+          teams[ total.team ].chapters[ total.chapter ] = {
+            totalMembers: total.count,
+            totals:       {},
+            percentages:  {}
+          };
+        });
+
+        // Then, request events by team
+        return Promise.all( events.map( ev => promisify( STMT.GET_EVENT_TOTALS_BY_TEAM( ev ) ) ) )
+      })
+      .catch( fail )
       .then(function( results ) {
         // Reduce the results into 'teams'
         results.forEach(function( teamCounts, index ) {
@@ -360,22 +389,17 @@ module.exports = {
           teamCounts.forEach(function( count ) {
             // Make the team object if it doesn't exist
             var team = teams[ count.team ];
-            if( !team ) team = teams[ count.team ] = {
-              totals: {},   // initialize this for later
-              chapters: {}  // same here
-            };
 
-            // Add the count to the team object
+            // Add the count and the percentage to the team object
             team.totals[ eventName ] = +count.members;
+            team.percentages[ eventName ] = +count.members * 100 / team.totalMembers;
           });
         });
 
         // Then work by chapter
         return Promise.all( events.map( ev => promisify( STMT.GET_EVENT_TOTALS_BY_CHAPTER( ev ) ) ) );
       })
-      .catch(function( err ) {
-        cb( err, undefined );
-      })
+      .catch( fail )
       .then(function( results ) {
         // Reduce the results into the appropriate team object
         results.forEach(function( chapterCounts, index ) {
@@ -385,18 +409,16 @@ module.exports = {
           chapterCounts.forEach(function( count ) {
             // Make the chapter object if it doesn't exist
             var chapter = teams[ count.team ].chapters[ count.chapter ];
-            if( !chapter ) chapter = teams[ count.team ].chapters[ count.chapter ] = {};
 
-            // Add the count to the team object
-            chapter[ eventName ] = +count.members;
+            // Add the count and percentage to the team object
+            chapter.totals[ eventName ] = +count.members;
+            chapter.percentages[ eventName ] = +count.members * 100 / chapter.totalMembers;
           });
         });
 
         // Invoke the callback
         cb( undefined, ret );
       })
-      .catch(function( err ) {
-        cb( err, undefined );
-      });
+      .catch( fail );
   }
 };
