@@ -3,9 +3,10 @@ function( $, Mobile ) {
 
 var current;
 var URLS = {
-  "Dodgeball": "3ab8lozd",
+  "Dodgeball":  "3ab8lozd",
   "Volleyball": "dez7oldl",
-  "Treds": "nboutlid"
+  "Treds":      "nboutlid",
+  "Basketball": "r35q13vj"
 };
 
 var makeChallongeURL = function( url ) {
