@@ -87,7 +87,7 @@ return {
   prepare: prepare,
   onShow: function() {
     // Select the current if nothing is selected (and we're not mobile)
-    if( !selected && current !Mobile.mobile() ) select( current );
+    if( !selected && current && !Mobile.mobile() ) select( current );
   }
 };
 
