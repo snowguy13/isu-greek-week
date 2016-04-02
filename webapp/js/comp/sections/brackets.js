@@ -1,14 +1,15 @@
 define(["jquery", "util/mobile"],
 function( $, Mobile ) {
 
-var current = "LARP";
+var current = "Tug-O-War";
 var URLS = {
   "Dodgeball":  "3ab8lozd",
   "Volleyball": "dez7oldl",
   "Treds":      "nboutlid",
   "Basketball": "r35q13vj",
   "Broomball":  "kwhuok97",
-  "LARP":       "ifj011w"
+  "LARP":       "ifj011w",
+  "Tug-O-War":  "149my8a5"
 };
 
 var makeChallongeURL = function( url ) {
@@ -86,7 +87,7 @@ return {
   prepare: prepare,
   onShow: function() {
     // Select the current if nothing is selected (and we're not mobile)
-    if( !selected && current ) select( current );
+    if( !selected && current !Mobile.mobile() ) select( current );
   }
 };
 
