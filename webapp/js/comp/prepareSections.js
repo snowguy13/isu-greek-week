@@ -8,7 +8,8 @@ var opts = {
     //Apparel: apparel
     Rulebook: rulebook,
     Teams:    teams,
-    Brackets: brackets
+    Brackets: brackets,
+    LiveStream: {}
   },
 
   onShow: function() {
@@ -20,11 +21,11 @@ var opts = {
   }
 };
 
-var makeSectionButton = function( name ) {
+var makeSectionButton = function( sName, dispName ) {
   var button = $("<button class='button' />")
-    .text( name )
+    .text( dispName || sName )
     .click(function() {
-      manager.show( name );
+      manager.show( sName );
     });
 
   return button;
@@ -57,13 +58,16 @@ return function() {
 
   // Get the section elements, create a button for each one
   for( var sName in sections ) {
+    var el   = $(".section[name='" + sName + "']"),
+        name = el.attr("data-display-name") || sName;
+
     // Have the section refer to the element
-    sections[ sName ].element = $(".section[name='" + sName + "']")
+    sections[ sName ].element = el
       // Create a header in the section
-      .prepend("<h3>" + sName + "</h3>");
+      .prepend("<h3>" + name + "</h3>");
     
     // Create a button for the element
-    buttonContainer.append( makeSectionButton( sName, manager ) );
+    buttonContainer.append( makeSectionButton( sName, name ) );
   }
 
   // Create the SectionManager
