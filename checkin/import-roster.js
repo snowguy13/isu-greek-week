@@ -5,7 +5,7 @@ var encode = xlsx.utils.encode_cell,
     decode = xlsx.utils.decode_cell;
 
 // The local name of the workbook containing member information
-var BOOK = "members.xlsx";
+var BOOK = "../homecoming-members.xlsx";
 
 // Mapping desired columns to their database column names
 var COLS = {
@@ -16,84 +16,9 @@ var COLS = {
   "Chapter":   "chapter"
 };
 
-// Members in central
-var CENTRAL = [
-  "ljgosse",
-  "sramundt",
-  "brgeiger",
-  "mdharm",
-  "vanscoy",
-  "rsmccc",
-  "banwartl",
-  "kmkassel",
-  "hannahb",
-  "asposeto",
-  "kohlmann",
-  "hemeador",
-  "bbiegger",
-  "cjroyer",
-  "dschertz",
-  "bpick",
-  "laurac",
-  "dheppner",
-  "tegavin",
-  "nsuvorov",
-  "tscallon",
-  "pthenn",
-  "jmcentee"
-];
-
-// Members in crew
-var CREW = [
-  "aditya",
-  "ajoder",
-  "jthurin",
-  "tameraa",
-  "maggwen",
-  "rglenarz",
-  "gmperrin",
-  "mcarlson",
-  "stalians",
-  "kaf",
-  "mtguion",
-  "afarniok",
-  "nateholl",
-  "pearsonz",
-  "bzimm",
-  "mwilwerd",
-  "njyeager",
-  "tdwiese",
-  "wforsyth",
-  "konradi",
-  "jgremel",
-  "willman",
-  "camandt",
-  "rekinney",
-  "bherren",
-  "lbrooke",
-  "rachbill",
-  "mteubert",
-  "aburney",
-  "bkdarr",
-  "ocweaver",
-  "jxglass",
-  "jkruse2",
-  "bbye",
-  "endecott",
-  "whsmith",
-  "fbeeler"
-];
-
 var readRow = function( sheet, row ) {
   var vals = [];
 
-  /*// Testing
-  for( var prop in sheet ) {
-    if( prop[0] === '!' ) {
-      console.log( prop, ":", sheet[ prop ] );
-    }
-  }*/
-  
   // Read across the row until the last relevant column is hit
   for( var i = 0, e = sheet['!range'].e.c; i < e; i++ ) {
     vals.push( sheet[ encode({ r: row, c: i }) ].v );
@@ -180,19 +105,12 @@ var checkDone = function() {
 };
 
 rows.forEach(function( row ) {
-  // Check if the member is in crew or central
-  if( CENTRAL.indexOf( row.net_id ) > -1 ) {
-    row.gw_role = "Central";
-  } else if( CREW.indexOf( row.net_id ) > -1 ) {
-    row.gw_role = "Crew";
-  }
-
   db.addMemberToRoster( row, function( err, res ) {
     count++;
 
     if( err ) {
       erred++;
-      
+
       if( !( err.message in errors ) ) {
         errors[ err.message ] = {
           count: 1,
