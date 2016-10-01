@@ -17,7 +17,8 @@ app.set('dir', __dirname );
 
 // On empty url, return the main file
 app.get("/", function( req, res ) {
-  res.sendFile( __dirname + "/webapp/index.htm" );
+  // Homecoming only uses the checkin page, so force redirects to there
+  res.redirect("/checkin");
 });
 
 // On /checkin, return the checkin page
