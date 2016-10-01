@@ -1,6 +1,7 @@
 // Login credentials
 var CREDS = {
-  "hccentral": "isublooddrive"
+  "hccentral": "isublooddrive",
+  "hcservice": "pleasebeatkstate"
 };
 
 // Logged-in users

@@ -296,10 +296,10 @@ elem.login.submit.click(function() {
           token: res.token
         };
 
-        // If the user was "gwgencos", show the totals link
+        // If the user was "hcservice", show the totals link
         elem.totals.openLink.detach();
 
-        if( u === "gwgencos" ) {
+        if( u === "hcservice" ) {
           elem.totals.openLinkContainer.append( elem.totals.openLink );
         }
 
