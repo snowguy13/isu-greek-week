@@ -5,7 +5,7 @@ var encode = xlsx.utils.encode_cell,
     decode = xlsx.utils.decode_cell;
 
 // The local name of the workbook containing member information
-var BOOK = "../homecoming-members.xlsx";
+var BOOK = "../local/homecoming-members-16.xlsx";
 
 // Mapping desired columns to their database column names
 var COLS = {

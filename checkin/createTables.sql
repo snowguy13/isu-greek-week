@@ -1,6 +1,6 @@
 CREATE TABLE teams(
   chapter    VARCHAR(20) PRIMARY KEY,
-  team_name  VARCHAR(20) NOT NULL
+  team_name  VARCHAR(26) NOT NULL
 );
 
 -- Adding all the teams to the teams table
@@ -50,7 +50,11 @@ INSERT INTO teams VALUES
   ('Pi Kappa Phi', 'Iowa State Greek Community'),
   ('Alpha Phi', 'Iowa State Greek Community'),
   ('Sigma Phi Epsilon', 'Iowa State Greek Community'),
-  ('ACACIA', 'Iowa State Greek Community');
+  ('ACACIA', 'Iowa State Greek Community'),
+  ('Beta Theta Pi', 'Iowa State Greek Community'),
+  ('Delta Gamma', 'Iowa State Greek Community'),
+  ('Phi Kappa Tau', 'Iowa State Greek Community'),
+  ('Theta Xi', 'Iowa State Greek Community');
 
 CREATE TABLE event_roster(
   id          CHAR(20)    PRIMARY KEY,
