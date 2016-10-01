@@ -1,7 +1,6 @@
 // Login credentials
 var CREDS = {
-  "gwcentral": "getbent",
-  "gwgencos":  "gosseramundt"
+  "hccentral": "isublooddrive"
 };
 
 // Logged-in users
@@ -31,7 +30,7 @@ var genRandom = function( len ) {
 
 var genIdentity = function() {
   var identity;
-  
+
   // Make sure the identity is unique
   do {
     identity = genRandom( IDENTITY_LEN );
@@ -54,7 +53,7 @@ module.exports = {
     // If no such user exists, or wrong password
     if( !( username in CREDS ) || password !== CREDS[ username ] ) {
       ret.success = false;
-      ret.reason = "The provided username and password do no match.";
+      ret.reason = "The provided username and password do not match.";
     } else {
       // Otherwise, generate an identity and a token
       ret.success  = true;
