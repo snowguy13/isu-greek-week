@@ -61,9 +61,9 @@ var personElement = function( person ) {
   el.append($("<div />").addClass("message"));
   el.append($("<span />").addClass("name").text( person.first + " " + person.last ));
   el.append($("<span />").addClass("netid").text( person.net_id ));
-  el.append($("<span />").addClass("icon general").attr("data-checked", person.w_general ));
-  el.append($("<span />").addClass("icon lipsync").attr("data-checked", person.w_lipsync ));
-  el.append($("<span />").addClass("icon technical").attr("data-checked", !person.technical ));
+  // el.append($("<span />").addClass("icon general").attr("data-checked", person.w_general ));
+  // el.append($("<span />").addClass("icon lipsync").attr("data-checked", person.w_lipsync ));
+  // el.append($("<span />").addClass("icon technical").attr("data-checked", !person.technical ));
 
   return el;
 };
