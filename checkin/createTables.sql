@@ -59,5 +59,5 @@ CREATE TABLE event_roster(
   first_name  VARCHAR(20) NOT NULL,
   last_name   VARCHAR(20) NOT NULL,
   chapter     VARCHAR(20) NOT NULL REFERENCES teams(chapter),
-  blood_drive BOOLEAN     NOT NULL DEFAULT false, -- true if the member went to the blood drive
+  events      TEXT[]      NOT NULL DEFAULT Array[]::TEXT[] -- array of events this person has checked in to
 );
