@@ -12,7 +12,7 @@ var apparel = require("./apparel.json"),
 
 var checkAuth = function( req, res, next ) {
   var result,
-      authorization = req.headers.authorization,
+      authorization = req.headers.authorization || "",
       identity = authorization.substring( 0, auth.IDENTITY_LEN ),
       token    = authorization.substring( auth.IDENTITY_LEN );
 
