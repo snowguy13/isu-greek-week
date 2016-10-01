@@ -1,3 +1,8 @@
+if( !jQuery ) {
+  // If jquery didn't load for some reason, reload. That usually fixes it.
+  location.reload();
+}
+
 $(function() {
 
 // Private jQuery reference
@@ -66,7 +71,7 @@ var personElement = function( person ) {
 var updateResultActions = function() {
   results.forEach(function( person ) {
     var message = person.element.find(".message");
-    
+
     // If there is no event selected, message should be to select an event
     if( !event ) {
       message.html("You have to select an event before checking " + person.first + " in.");
@@ -118,7 +123,7 @@ var updateResult = function( data ) {
     .removeClass("some none")
     .addClass("results")
     .addClass( data.length ? "some" : "none" );
-  
+
   // Update result actions
   updateResultActions();
 
@@ -195,18 +200,7 @@ var makeTotalsTable = function( data ) {
  *     t -- indicates the event is a tournament event
  */
 var eventOptions = [
-  "Dodgeball:ct",
-  "Volleyball:ct",
-  "Show Me The Greeks:c",
-  "Karaoke 1st Cuts:c",
-  "Lip Sync:l",
-  "Educational Speaker:nc",
-  "Polar Bear Plunge:c",
-  "Treds:ct",
-  "Karaoke 2nd Cuts:c",
-  "Trivia Blast:ct",
-  "Basketball:ct",
-  "Broomball:ct"
+  "Blood Drive:nc"
 ];
 
 // Convert eventOptions into JSON
@@ -220,7 +214,9 @@ eventOptions = eventOptions.map(function( event, index ) {
   };
 
   // Add the event to the events dropdown
-  elem.checkin.events.append("<option value='" + index + "'>" + result[1] + "</option>");
+  // TODO If editing this, remove the 'selected' below -- it was only
+  // added under the assumption that 'blood drive' is the only event
+  elem.checkin.events.append("<option value='" + index + "' selected>" + result[1] + "</option>");
 
   return {
     name:       result[1],
@@ -229,6 +225,9 @@ eventOptions = eventOptions.map(function( event, index ) {
     tournament: !!result[4]
   };
 });
+
+// Get the initial event
+event = eventOptions[ elem.checkin.events.val() ];
 
 // Anytime ajax finishes successfully, check for a 'Next-Authorization' header
 $( document ).ajaxSuccess(function( ev, xhr ) {
@@ -340,7 +339,7 @@ elem.checkin.search.keypress(function( ev ) {
     // If not searching and [Enter] was pressed, search now
     // Disable the input
     t.attr("disabled", true );
-    
+
     // Check if the input is card-swiped (naively, first char is ';')
     if( text[0] === ';' ) {
       // Since an ID would otherwise be shown in the text box, empty it now
