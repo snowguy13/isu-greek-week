@@ -32,7 +32,7 @@ return function() {
     }
     
     // Then create the countdown
-    $( this ).countdown("2016/03/27 20:00:00")
+    $( this ).countdown("2017/03/26 11:00:00")
       .on("update.countdown", function( evt ) {
         Object.keys( parts ).forEach(function( part ) {
           var time = evt.offset[ timeParts[ part ] ],
