@@ -2,132 +2,142 @@ define(function() {
 
 return [
   {
-    "name": "3<sup>rd</sup> Termz the Charm",
-    "chapters": [
-      "Kappa Kappa Gamma",
-      "Delta Tau Delta",
-      "Phi Beta Chi"
-    ]
-  },
-
-  {
-    "name": "ACDZ",
-    "chapters": [
-      "Delta Zeta",
-      "Sigma Chi",
-      "Adelante",
-      "Alpha Kappa Lambda"
-    ]
-  },
-
-  {
-    "name": "GREEKLINE BLING",
-    "chapters": [
-      "Kappa Alpha Theta",
-      "Pi Kappa Alpha",
-      "Theta Chi"
-    ]
-  },
-
-  {
-    "name": "G.I. Greeks",
-    "chapters": [
-      "Alpha Gamma Delta",
-      "Alpha Gamma Rho",
-      "Phi Kappa Theta",
-      "Alpha Sigma Kappa"
-    ]
-  },
-
-  {
-    "name": "Kappa Phi Delta Chi",
-    "chapters": [
-      "Kappa Delta",
-      "Phi Delta Theta",
-      "Delta Chi"
-    ]
-  },
-
-  {
-    "name": "Quad Squad",
-    "chapters": [
-      "Delta Delta Delta",
-      "Phi Kappa Psi",
-      "Triangle",
-      "Chi Phi"
-    ]
-  },
-
-  {
-    "name": "Scream Team",
+    "name": "Alpha Trifecta",
     "chapters": [
       "Alpha Delta Pi",
-      "Sigma Pi",
-      "Delta Lambda Phi"
+      "Alpha Kappa Lambda",
+      "Pi Kappa Alpha"
     ]
   },
 
   {
-    "name": "The Greek Awakens",
+    "name": "The Ash Branch",
     "chapters": [
-      "Alpha Chi Omega",
-      "Alpha Tau Omega",
-      "Beta Sigma Psi"
-    ]
-  },
-
-  {
-    "name": "The Olympians",
-    "chapters": [
-      "Gamma Phi Beta",
+      "Lambda Chi Alpha",
       "Phi Gamma Delta",
-      "Delta Sigma Phi",
-      "Gamma Rho Lambda"
+      "Pi Beta Phi"
     ]
   },
 
   {
-    "name": "The Omicron Empire",
+    "name": "DAAKstreet Boyz",
     "chapters": [
-      "Alpha Omicron Pi",
-      "FarmHouse",
+      "ACACIA",
+      "Alpha Sigma Kappa",
+      "Delta Zeta",
       "Kappa Sigma"
     ]
   },
 
   {
-    "name": "The SKuad",
+    "name": "Gamma Kappa Psi",
     "chapters": [
-      "Sigma Kappa",
-      "Tau Kappa Epsilon",
-      "Theta Delta Chi"
+      "Alpha Gamma Rho",
+      "Beta Sigma Psi",
+      "Kappa Delta"
     ]
   },
 
   {
-    "name": "The Young Pharaohs",
+    "name": "Greek AtTaK",
+    "chapters": [
+      "Alpha Tau Omega",
+      "Kappa Kappa Gamma",
+      "Triangle"
+    ]
+  },
+
+  {
+     "name": "Greek Madness",
+     "chapters": [
+       "Alpha Gamma Delta",
+       "Chi Phi",
+       "Lambda Theta Alpha",
+       "Sigma Chi"
+    ]
+  },
+
+  {
+    "name": "GreekBusters",
+    "chapters": [
+      "Beta Theta Pi",
+      "Pi Kappa Phi",
+      "Sigma Kappa"
+    ]
+  },
+
+  {
+    "name": "Greekelodeon",
+    "chapters": [
+      "Alpha Omicron Pi",
+      "Delta Chi",
+      "Phi Kappa Psi"
+    ]
+  },
+
+  {
+    "name": "The Greek Gatsby",
+    "chapters": [
+      "Alpha Sigma Phi",
+      "Delta Gamma",
+      "Delta Lambda Phi",
+      "Delta Tau Delta"
+    ]
+  },
+
+  {
+    "name": "IV League",
+    "chapters": [
+      "Delta Delta Delta",
+      "Phi Kappa Theta",
+      "Tau Kappa Epsilon",
+      "Theta Chi"
+    ]
+  },
+
+  {
+    "name": "Juju on that Greek",
+    "chapters": [
+      "Adelante",
+      "Alpha Phi",
+      "Delta Sigma Phi",
+      "Farmhouse"
+    ]
+  },
+
+  {
+    "name": "The Mighty Greeks",
     "chapters": [
       "Chi Omega",
+      "Phi Beta Chi",
+      "Sigma Pi"
+    ]
+  },
+
+  {
+    "name": "Peace Love Greeks",
+    "chapters": [
+      "Alpha Chi Omega",
       "Delta Upsilon",
-      "Lambda Chi Alpha"
+      "Phi Kappa Tau"
     ]
   },
 
   {
-    "name": "TriPhis",
+    "name": "The Pirates of Greekland",
     "chapters": [
-      "Pi Beta Phi",
-      "Alpha Sigma Phi",
-      "Pi Kappa Phi"
-    ]
-  },
-
-  {
-    "name": "USAΦ",
-    "chapters": [
-      "Alpha Phi",
+      "Gamma Phi Beta",
       "Sigma Phi Epsilon",
-      "ACACIA"
+      "Theta Xi"
+    ]
+  },
+
+  {
+    "name": "Threat Level Theta",
+    "chapters": [
+      "Kappa Alpha Theta",
+      "Phi Delta Theta",
+      "Theta Delta Chi"
     ]
   }
 ];
