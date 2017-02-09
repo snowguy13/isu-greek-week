@@ -9,7 +9,6 @@ var HEX_SPACING      = 0,
 var swapBGs = function( current, hexCanvas ) {
   var next = current.data("next"),
       imageData,
-       
       ready = false,
       swapAgain;
 
@@ -88,3 +87,4 @@ return function() {
 };
 
 });
+
