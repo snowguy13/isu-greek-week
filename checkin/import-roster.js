@@ -18,70 +18,71 @@ var COLS = {
 
 // Members in central
 var CENTRAL = [
-  "ljgosse",
-  "sramundt",
-  "brgeiger",
-  "mdharm",
-  "vanscoy",
-  "rsmccc",
-  "banwartl",
-  "kmkassel",
-  "hannahb",
-  "asposeto",
-  "kohlmann",
-  "hemeador",
-  "bbiegger",
-  "cjroyer",
-  "dschertz",
-  "bpick",
-  "laurac",
-  "dheppner",
-  "tegavin",
-  "nsuvorov",
-  "tscallon",
-  "pthenn",
-  "jmcentee"
+  "rsmccc",     //Riley McCloskey
+  "vanscoy",    //Jordan VanScoy
+  "aditya",     //Aditya Navale
+  "ajoder",     //Allie Oder
+  "laurac",     //Laura Campbell
+  "afarniok",   //Abby Farniok
+  "annkiam",    //Annika Mikkelson
+  "kkmoss",     //Keith Moss
+  "khahn",      //Kaylee Hahn
+  "bpick",      //Brad Pickhinke
+  "cjroyer",    //Cooper Royer
+  "mcarlson",   //Paige Carlson
+  "mtguion",    //Mia Guion
+  "wforsyth",   //Wyatt Forsyth
+  "gmperrin",   //Grace Perrin
+  "natblock",   //Natalie Blockhus
+  "maggwen",    //Maggie Feldman
+  "endecott",   //Luke Endecott
+  "ocweaver",   //Olivia Weaver
+  "jryoung",    //Jordan Young
+  "hemeador",   //Hannah Meador
+  "pearsonz"    //Zoe Pearson
 ];
 
 // Members in crew
 var CREW = [
-  "aditya",
-  "ajoder",
-  "jthurin",
-  "tameraa",
-  "maggwen",
-  "rglenarz",
-  "gmperrin",
-  "mcarlson",
-  "stalians",
-  "kaf",
-  "mtguion",
-  "afarniok",
-  "nateholl",
-  "pearsonz",
-  "bzimm",
-  "mwilwerd",
-  "njyeager",
-  "tdwiese",
-  "wforsyth",
-  "konradi",
+  "hannahjo",
+  "mrc",
   "jgremel",
-  "willman",
-  "camandt",
-  "rekinney",
-  "bherren",
   "lbrooke",
-  "rachbill",
-  "mteubert",
   "aburney",
-  "bkdarr",
-  "ocweaver",
-  "jxglass",
-  "jkruse2",
-  "bbye",
-  "endecott",
-  "whsmith",
-  "fbeeler"
+  "sbbetts",
+  "jglanz",
+  "aburns",
+  "ruer",
+  "bskubal",
+  "ginac1",
+  "lindsayj",
+  "arsmith2",
+  "macy",
+  "mij",
+  "reinx058",
+  "jahrens",
+  "smbailey",
+  "lmbeck",
+  "nboehlje",
+  "amdewitt",
+  "disae",
+  "sgflumer",
+  "abbyg20",
+  "kjgeolat",
+  "dlhinton",
+  "jhumke",
+  "aliyaj",
+  "carlyem",
+  "aemclean",
+  "kemoody",
+  "sjneavor",
+  "jppoferi",
+  "trog0724",
+  "schipper",
+  "jsillman",
+  "lkstu",
+  "harvardw",
+  "twzeller"
 ];
 
 var readRow = function( sheet, row ) {
