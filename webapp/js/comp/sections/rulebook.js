@@ -6,7 +6,7 @@ var tweetWrapper = $("#tweet-wrapper");
 
 var iframe = $("<iframe />")
   .addClass("full")
-  .attr("src", "/doc/GW2017PreliminaryRulebook.pdf")
+  .attr("src", "/doc/GW2017FinalRulebook.pdf")
   .html("Whoops, looks like your browser doesn't support iframes. You can <a href='/doc/GW2017PreliminaryRulebook.pdf'>view the rulebook here</a>.");
 
 var prepare = function( el, done ) {
