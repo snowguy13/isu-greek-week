@@ -1,4 +1,4 @@
-var xlsx = require("xlsx"),
+var xlsx = require("./members.xlsx"),
     db   = require("../server/database");
 
 var encode = xlsx.utils.encode_cell,
