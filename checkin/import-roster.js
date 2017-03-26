@@ -9,7 +9,7 @@ var BOOK = "GW17roster.xlsx";
 
 // Mapping desired columns to their database column names
 var COLS = {
-  // "ISU ID": "isu_id", // Not provided in 2017.
+  "ISU ID": "isu_id",
   "Email":   "net_id",
   "First":   "first_name",
   "Last":    "last_name",
