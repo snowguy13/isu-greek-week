@@ -2,7 +2,8 @@ var xlsx = require("xlsx");
     db   = require("../server/database"),
     chapters = require("./chapters");
 
-var encode = xlsx.utils.encode_cell;
+var encode = xlsx.utils.encode_cell,
+    decode = xlsx.utils.decode_cell;
 
 // A list of workbooks to read in
 // If <name> is an element of BOOKS, then the script will look for a book
@@ -47,8 +48,24 @@ var reduceRow = function( sheet, row, cols ) {
 
 var readBookToDatabase = function( name, cb ) {
   // First, open the workbook and grab the first sheet
-  var book = xlsx.readFile( `${name}-waivers17.xls` );
+  var book;
+
+  try {
+    book = xlsx.readFile( `${name}-waivers17.xls` );
+  } catch( e ) {
+    book = xlsx.readFile( `${name}-waivers17.xlsx` );
+  }
+
   var sheet = book.Sheets[ book.SheetNames[0] ];
+
+  // If the sheet has no range, add one from ref.
+  if( !sheet['!range'] && sheet['!ref'] ) {
+    const parts = sheet['!ref'].split(':');
+    sheet['!range'] = {
+      s: decode(parts[0]),
+      e: decode(parts[1])
+    }
+  }
 
   // Then, locate the indices of the requested columns
   var cols = readRow( sheet, 0 ).reduce(function( colMap, colName, index ) {
@@ -94,7 +111,7 @@ var readBookToDatabase = function( name, cb ) {
     failed.filter( row => row[1] === "many" ).forEach( row => {
       console.log( row[0], "Options are:", row[2] )
     });
-    console.log("\n  %d succeeded", counts.success );
+    console.log("\n  %d succeeded\n", counts.success );
 
     checkDisconnect();
   }
