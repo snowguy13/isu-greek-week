@@ -2,7 +2,7 @@ var pg = require("pg"),
     _  = require("underscore"),
     Promise = require("promise");
     console.log( Promise );
-    
+
 
 // Should work remotely or locally
 var DB = process.env.DATABASE_URL || "tomscallon:tomscallon@localhost/isugreekweek";
@@ -24,7 +24,7 @@ var genId = function( len ) {
 };
 
 // Characters used in people's names
-var NAME_CHARS = 'rebcafnzosikygqutmdhwlxpvj -.\''; 
+var NAME_CHARS = 'rebcafnzosikygqutmdhwlxpvj -.\'';
 
 // Escapes single quotes in strings (to handle names like "O'Hora")
 var escapeSingleQuote = function( str ) {
@@ -39,7 +39,7 @@ var markAndFail = function( err, cb, mark ) {
 
 var invokeAndCollect = function( cb, stmts ) {
   var result = [], error, count = stmts.length;
-  
+
   stmts.forEach(function( stmt, index ) {
     client.query( stmt, function( err, res ) {
       // Increase the count
@@ -68,7 +68,7 @@ var invokeAndCollect = function( cb, stmts ) {
 // Statements
 var STMT = {
   CHECK_IF_MEMBER_EXISTS: function( id, uniqueId ) {
-    return `SELECT EXISTS( SELECT true FROM event_roster WHERE ${uniqueId ? "id" : "isu_id"} = '${id}' )`;
+    return `SELECT EXISTS( SELECT true FROM event_roster WHERE ${uniqueId ? "id" : "net_id"} = '${id}' )`;
   },
 
   ADD_MEMBER: function( info ) {
@@ -105,26 +105,26 @@ var STMT = {
 
   GET_TOTAL_MEMBERS_BY_TEAM: function() {
     return `SELECT   teams.team_name as team, COUNT(*) as count
-            FROM     teams LEFT OUTER JOIN event_roster ON (teams.chapter=event_roster.chapter) 
+            FROM     teams LEFT OUTER JOIN event_roster ON (teams.chapter=event_roster.chapter)
             GROUP BY teams.team_name;`
   },
 
   GET_TOTAL_MEMBERS_BY_CHAPTER: function() {
     return `SELECT   teams.chapter, teams.team_name as team, COUNT(*) as count
-            FROM     teams LEFT OUTER JOIN event_roster ON (teams.chapter=event_roster.chapter) 
+            FROM     teams LEFT OUTER JOIN event_roster ON (teams.chapter=event_roster.chapter)
             GROUP BY teams.chapter;`;
   },
 
   GET_EVENT_TOTALS_BY_TEAM: function( event ) {
     return `SELECT   teams.team_name as team, COUNT(*) as members
-            FROM     teams LEFT OUTER JOIN event_roster ON (teams.chapter=event_roster.chapter) 
+            FROM     teams LEFT OUTER JOIN event_roster ON (teams.chapter=event_roster.chapter)
             WHERE    '${event}' = ANY(event_roster.events)
             GROUP BY teams.team_name;`;
   },
 
   GET_EVENT_TOTALS_BY_CHAPTER: function( event ) {
     return `SELECT   teams.chapter as chapter, teams.team_name as team, COUNT(*) as members
-            FROM     teams LEFT OUTER JOIN event_roster ON (teams.chapter=event_roster.chapter) 
+            FROM     teams LEFT OUTER JOIN event_roster ON (teams.chapter=event_roster.chapter)
             WHERE    '${event}' = ANY(event_roster.events)
             GROUP BY teams.chapter;`;
   }
@@ -153,7 +153,7 @@ module.exports = {
 
   addMemberToRoster: function( member, cb ) {
     // First, check if the member exists
-    client.query( STMT.CHECK_IF_MEMBER_EXISTS( member.isu_id ), function( err, res ) {
+    client.query( STMT.CHECK_IF_MEMBER_EXISTS( member.net_id ), function( err, res ) {
       // If the was an error, fail now
       if( err ) {
         return markAndFail( err, cb, "checking member existence");
@@ -203,7 +203,7 @@ module.exports = {
       }
     });
   },
-  
+
   // 'member' should be an object with AT LEAST the properties 'first' and 'last'
   // Additionally, 'chapter' is helpful to differentiate the (hopefully rare) duplicate name
   setWaiverStatus: function( member, waiverType, status, cb ) {
@@ -301,7 +301,7 @@ module.exports = {
     });
   },
 
-  // Determines which columns need search, then returns first_name, last_name, 
+  // Determines which columns need search, then returns first_name, last_name,
   // chapter, net_id, w_lipsync, w_general, and technical
   // For now, matches must be exact
   searchForMember: function( string, cb ) {
@@ -327,7 +327,7 @@ module.exports = {
     // Execute the statements!
     invokeAndCollect( cb, stmts );
   },
-  
+
   // Returned format:
   //   events : String[]
   //   teams : Object<String, TeamObject> where String is team name and TeamObject is as follows:
@@ -339,10 +339,10 @@ module.exports = {
   //     totals : Object<String, Int> where String is the event name and Int is the total number of check-ins
   //     percentages : Object<String, Double> where String is the event name and Double is the % checked in
   collectEventTotals: function( events, cb ) {
-    var ret = { 
-          events: events, 
-          teams: {} 
-        }, 
+    var ret = {
+          events: events,
+          teams: {}
+        },
         teams = ret.teams,
         fail = function( err ) { cb( err, undefined ); return; };
 

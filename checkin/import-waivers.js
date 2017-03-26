@@ -8,7 +8,7 @@ var encode = xlsx.utils.encode_cell;
 // If <name> is an element of BOOKS, then the script will look for a book
 // called waivers-<name>.xls and will import the waiver data into a table
 // called waivers.<name>
-var BOOKS = ["lipsync", "general"];
+var BOOKS = [/*"lipsync", */"general"];
 
 var doneCount = 0;
 var checkDisconnect = function() {
@@ -24,7 +24,7 @@ var COLS = {
 
 var readRow = function( sheet, row ) {
   var vals = [];
-  
+
   // Read across the row until the last relevant column is hit
   for( var i = 0, e = sheet['!range'].e.c; i < e; i++ ) {
     vals.push( sheet[ encode({ r: row, c: i }) ].v );
@@ -47,7 +47,7 @@ var reduceRow = function( sheet, row, cols ) {
 
 var readBookToDatabase = function( name, cb ) {
   // First, open the workbook and grab the first sheet
-  var book = xlsx.readFile( `waivers-${name}.xls` );
+  var book = xlsx.readFile( `${name}-waivers17.xls` );
   var sheet = book.Sheets[ book.SheetNames[0] ];
 
   // Then, locate the indices of the requested columns
@@ -78,7 +78,7 @@ var readBookToDatabase = function( name, cb ) {
       };
   var failed = [],
       succeeded = [];
-  
+
   // Callback checking so we know when to close the db
   var checkDone = function() {
     if( counts.seen < len ) return;
@@ -93,11 +93,11 @@ var readBookToDatabase = function( name, cb ) {
 
     checkDisconnect();
   }
-  
+
   rows.forEach(function( row ) {
     db.setWaiverStatus( row, name, true, function( err, res ) {
       counts.seen++;
-      
+
       // If an error occurred, add it to the stack of errors
       if( err ) {
         counts.erred++;
@@ -123,9 +123,11 @@ var readBookToDatabase = function( name, cb ) {
 // Read each of the books into the database
 BOOKS.forEach( readBookToDatabase );
 
+// TODO this was only for 2016. Left here as a reference in case it
+// happens again.
 // PIKE sent paper general waivers, their netids are in "pikes.json"
 // Read PIKEs into the database
-var pikes = require("./pikes.json");
+/*var pikes = require("./pikes.json");
 var failed = [], notFound = [], count = 0;
 var printResults = function() {
   console.log("\n-----Pike stuff-----")
@@ -144,7 +146,7 @@ pikes.forEach(function( netId ) {
 
     if( ++count === pikes.length ) printResults();
   });
-});
+});*/
 
 // Disconnect from the database
 //db.disconnect();

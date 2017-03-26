@@ -1,19 +1,19 @@
-var xlsx = require("./members.xlsx"),
+var xlsx = require("xlsx"),
     db   = require("../server/database");
 
 var encode = xlsx.utils.encode_cell,
     decode = xlsx.utils.decode_cell;
 
 // The local name of the workbook containing member information
-var BOOK = "members.xlsx";
+var BOOK = "GW17roster.xlsx";
 
 // Mapping desired columns to their database column names
 var COLS = {
-  "ISU ID":    "isu_id",
-  "ISU NetID": "net_id",
-  "First":     "first_name",
-  "Last":      "last_name",
-  "Chapter":   "chapter"
+  // "ISU ID": "isu_id", // Not provided in 2017.
+  "Email":   "net_id",
+  "First":   "first_name",
+  "Last":    "last_name",
+  "Chapter": "chapter"
 };
 
 // Members in central
@@ -85,19 +85,22 @@ var CREW = [
   "twzeller"
 ];
 
+// Simple function to grab value from a sheet cell.
+const getValue = ({ r, c }) => ( sheet[ encode({ r, c }) ] || {} ).v || "";
+
 var readRow = function( sheet, row ) {
   var vals = [];
 
-  /*// Testing
-  for( var prop in sheet ) {
+  // Testing
+  /*for( var prop in sheet ) {
     if( prop[0] === '!' ) {
       console.log( prop, ":", sheet[ prop ] );
     }
   }*/
-  
+
   // Read across the row until the last relevant column is hit
   for( var i = 0, e = sheet['!range'].e.c; i < e; i++ ) {
-    vals.push( sheet[ encode({ r: row, c: i }) ].v );
+    vals.push( getValue({ r: row, c: i }) );
   }
 
   return vals;
@@ -108,8 +111,8 @@ var reduceRow = function( sheet, row, cols ) {
 
   // Grab the relevant columns
   for( var col in cols ) {
-    val = sheet[ encode({ r: row, c: cols[ col ] }) ];
-    res[ col ] = (val ? val.v + "" : "").trim();
+    val = getValue({ r: row, c: cols[ col ] });
+    res[ col ] = val.trim();
   }
 
   return res;
@@ -168,7 +171,7 @@ var checkDone = function() {
   if( count === len ) {
     console.log("Errors:");
     for( var err in errors ) {
-      console.log("  %d\t%s", errors[err].count, err );
+      console.log("\n  %d\t%s\n", errors[err].count, err );
       errors[err].rows.forEach(function( row ) {
         console.log("    ", row );
       });
@@ -181,6 +184,28 @@ var checkDone = function() {
 };
 
 rows.forEach(function( row ) {
+  // If the row is missing a netid, don't add it.
+  if( !row.net_id ) {
+    const message = "Row is missing a net id.";
+
+    if( !( message in errors ) ) {
+      errors[ message ] = {
+        count: 1,
+        rows: [ row ]
+      };
+    } else {
+      errors[ message ].count++;
+      errors[ message ].rows.push( row );
+    }
+
+    // Skip this row.
+    erred++;
+    count++;
+
+    checkDone();
+    return;
+  }
+
   // Check if the member is in crew or central
   if( CENTRAL.indexOf( row.net_id ) > -1 ) {
     row.gw_role = "Central";
@@ -188,12 +213,16 @@ rows.forEach(function( row ) {
     row.gw_role = "Crew";
   }
 
+  // TODO Change after 2017. In 2017, netids are provided
+  // in the form netid@iastate.edu. We must remove the @iastate.edu.
+  row.net_id = row.net_id.split('@')[0];
+
   db.addMemberToRoster( row, function( err, res ) {
     count++;
 
     if( err ) {
       erred++;
-      
+
       if( !( err.message in errors ) ) {
         errors[ err.message ] = {
           count: 1,
