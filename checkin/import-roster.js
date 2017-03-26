@@ -9,11 +9,11 @@ var BOOK = "GW17roster.xlsx";
 
 // Mapping desired columns to their database column names
 var COLS = {
-  "ISU ID": "isu_id",
-  "Email":   "net_id",
-  "First":   "first_name",
-  "Last":    "last_name",
-  "Chapter": "chapter"
+  "Student ID #": "isu_id",
+  "Email":        "net_id",
+  "First":        "first_name",
+  "Last":         "last_name",
+  "Chapter":      "chapter"
 };
 
 // Members in central
@@ -112,7 +112,7 @@ var reduceRow = function( sheet, row, cols ) {
   // Grab the relevant columns
   for( var col in cols ) {
     val = getValue({ r: row, c: cols[ col ] });
-    res[ col ] = val.trim();
+    res[ col ] = (val + "").trim();
   }
 
   return res;
