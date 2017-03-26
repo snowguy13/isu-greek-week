@@ -84,12 +84,17 @@ var readBookToDatabase = function( name, cb ) {
     if( counts.seen < len ) return;
 
     console.log("Done importing '%s' waivers. (%d attempted, %d failed.)", name, len, failed.length );
-    console.log("  %d erred", counts.erred );
-    console.log("  %d failed because no matching roster entry was found", counts.failNone );
-    failed.filter( row => row[1] === "none" ).forEach( row => console.log( row[0] ) );
-    console.log("  %d failed because more than one matching roster entry was found", counts.failMany );
-    failed.filter( row => row[1] === "many" ).forEach( row => console.log( row[0] ) );
-    console.log("  %d succeeded", counts.success );
+    console.log("\n  %d erred", counts.erred );
+    failed.filter( row => row[1] === "error" ).forEach( row => {
+      console.log( row[0], row[2] );
+    });
+    console.log("\n  %d failed because no matching roster entry was found", counts.failNone );
+    failed.filter( row => row[1] === "none" ).forEach( row => console.log( row[0] ));
+    console.log("\n  %d failed because more than one matching roster entry was found", counts.failMany );
+    failed.filter( row => row[1] === "many" ).forEach( row => {
+      console.log( row[0], "Options are:", row[2] )
+    });
+    console.log("\n  %d succeeded", counts.success );
 
     checkDisconnect();
   }
