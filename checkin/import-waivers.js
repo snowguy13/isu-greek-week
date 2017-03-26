@@ -8,7 +8,7 @@ var encode = xlsx.utils.encode_cell;
 // If <name> is an element of BOOKS, then the script will look for a book
 // called waivers-<name>.xls and will import the waiver data into a table
 // called waivers.<name>
-var BOOKS = [/*"lipsync", */"general"];
+var BOOKS = ["lipsync", "general"];
 
 var doneCount = 0;
 var checkDisconnect = function() {

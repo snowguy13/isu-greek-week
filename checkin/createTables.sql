@@ -1,6 +1,6 @@
 CREATE TABLE teams(
   chapter    VARCHAR(20) PRIMARY KEY,
-  team_name  VARCHAR(20) NOT NULL
+  team_name  VARCHAR(30) NOT NULL
 );
 
 -- Adding all the teams to the teams table
@@ -11,7 +11,7 @@ INSERT INTO teams VALUES
   ('Lambda Chi Alpha', 'The Ash Branch'),
   ('Phi Gamma Delta', 'The Ash Branch'),
   ('Pi Beta Phi', 'The Ash Branch'),
-  ('ACACIA', 'DAAKstreet Boyz');
+  ('ACACIA', 'DAAKstreet Boyz'),
   ('Alpha Sigma Kappa', 'DAAKstreet Boyz'),
   ('Delta Zeta', 'DAAKstreet Boyz'),
   ('Kappa Sigma', 'DAAKstreet Boyz'),
