@@ -1,15 +1,15 @@
 define(["jquery", "util/mobile"],
 function( $, Mobile ) {
 
-var current = "Tug-O-War";
+var current = "Dodgeball";
 var URLS = {
-  "Dodgeball":  "3ab8lozd",
-  "Volleyball": "dez7oldl",
-  "Treds":      "nboutlid",
-  "Basketball": "r35q13vj",
-  "Broomball":  "kwhuok97",
-  "LARP":       "ifj011w",
-  "Tug-O-War":  "149my8a5"
+  "Dodgeball":  "isugw18dodgeball",
+  "Volleyball": "isugwvolleyball",
+  "Treds":      "isugwtreds",
+  "Basketball": "isugwbasketball",
+  "Broomball":  "isugwbroomball"
+  //"LARP":       "",
+  //"Tug-O-War":  ""
 };
 
 var makeChallongeURL = function( url ) {
