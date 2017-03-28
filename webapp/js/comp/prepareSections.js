@@ -1,4 +1,4 @@
-define(["jquery", "util/SectionManager", "comp/sections/apparel", "comp/sections/rulebook", "comp/sections/teams", "comp/sections/brackets", "comp/sections/live-stream"], 
+define(["jquery", "util/SectionManager", "comp/sections/apparel", "comp/sections/rulebook", "comp/sections/teams", "comp/sections/brackets", "comp/sections/live-stream" ], 
 function( $,       SectionManager,        apparel,                 rulebook,                 teams,                 brackets,                 liveStream ) {
 
 var manager;
