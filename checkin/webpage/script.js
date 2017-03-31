@@ -66,7 +66,7 @@ var personElement = function( person ) {
 var updateResultActions = function() {
   results.forEach(function( person ) {
     var message = person.element.find(".message");
-    
+
     // If there is no event selected, message should be to select an event
     if( !event ) {
       message.html("You have to select an event before checking " + person.first + " in.");
@@ -118,7 +118,7 @@ var updateResult = function( data ) {
     .removeClass("some none")
     .addClass("results")
     .addClass( data.length ? "some" : "none" );
-  
+
   // Update result actions
   updateResultActions();
 
@@ -207,7 +207,7 @@ var eventOptions = [
   "Trivia Blast:ct",
   "Basketball:ct",
   "Broomball:ct",
-  "Lip Sync Performance Friday:l"
+  "Lip Sync Performance Friday:lt"
 ];
 
 // Convert eventOptions into JSON
@@ -341,7 +341,7 @@ elem.checkin.search.keypress(function( ev ) {
     // If not searching and [Enter] was pressed, search now
     // Disable the input
     t.attr("disabled", true );
-    
+
     // Check if the input is card-swiped (naively, first char is ';')
     if( text[0] === ';' ) {
       // Since an ID would otherwise be shown in the text box, empty it now
