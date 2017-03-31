@@ -207,7 +207,7 @@ var eventOptions = [
   "Trivia Blast:ct",
   "Basketball:ct",
   "Broomball:ct",
-  "Lip Sync Performance Friday:lt"
+  "Lip Sync Performance Friday:lc"
 ];
 
 // Convert eventOptions into JSON
