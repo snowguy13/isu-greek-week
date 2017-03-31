@@ -103,29 +103,32 @@ var STMT = {
     return `UPDATE event_roster SET events = events || '${event}'::Text WHERE id = '${id}' AND '${event}'::Text <> ALL(events);`;
   },
 
+  // The following four statements ignore people marked with gw_role of 'central' and 'crew'
   GET_TOTAL_MEMBERS_BY_TEAM: function() {
     return `SELECT   teams.team_name as team, COUNT(*) as count
             FROM     teams LEFT OUTER JOIN event_roster ON (teams.chapter=event_roster.chapter)
-            GROUP BY teams.team_name;`
+            WHERE    NOT gw_role = ANY('{ crew, central }')
+            GROUP BY teams.team_name;`;
   },
 
   GET_TOTAL_MEMBERS_BY_CHAPTER: function() {
     return `SELECT   teams.chapter, teams.team_name as team, COUNT(*) as count
             FROM     teams LEFT OUTER JOIN event_roster ON (teams.chapter=event_roster.chapter)
+            WHERE    NOT gw_role = ANY('{ crew, central }')
             GROUP BY teams.chapter;`;
   },
 
   GET_EVENT_TOTALS_BY_TEAM: function( event ) {
     return `SELECT   teams.team_name as team, COUNT(*) as members
             FROM     teams LEFT OUTER JOIN event_roster ON (teams.chapter=event_roster.chapter)
-            WHERE    '${event}' = ANY(event_roster.events)
+            WHERE    '${event}' = ANY(event_roster.events) AND NOT gw_role = ANY('{ crew, central }')
             GROUP BY teams.team_name;`;
   },
 
   GET_EVENT_TOTALS_BY_CHAPTER: function( event ) {
     return `SELECT   teams.chapter as chapter, teams.team_name as team, COUNT(*) as members
             FROM     teams LEFT OUTER JOIN event_roster ON (teams.chapter=event_roster.chapter)
-            WHERE    '${event}' = ANY(event_roster.events)
+            WHERE    '${event}' = ANY(event_roster.events) AND NOT gw_role = ANY('{ crew, central }')
             GROUP BY teams.chapter;`;
   }
 };
