@@ -7,9 +7,9 @@ var URLS = {
   "Volleyball": "isugwvolleyball",
   "Treds":      "isugwtreds",
   "Basketball": "isugwbasketball",
-  "Broomball":  "isugwbroomball"
-  //"LARP":       "",
-  //"Tug-O-War":  ""
+  "Broomball":  "isugwbroomball",
+  "LARP":     "isugwlarp",
+  "Tug-O-War":"isugwtugowar"
 };
 
 var makeChallongeURL = function( url ) {
