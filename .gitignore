@@ -5,3 +5,4 @@ local/
 checkin/members*.xls
 checkin/members*.xlsx
 checkin/waivers-*.xls
+db_backups/
