@@ -10,7 +10,7 @@ var URLS = {
   "Broomball":  "isugwbroomball",
   "LARP":     	"isugwlarp",
   "Tug-O-War":	"isugwtugowar",
-  "Balloon Toss": "isugwballontoss"
+  "Balloon Toss": "isugwballoontoss"
 };
 
 var makeChallongeURL = function( url ) {
