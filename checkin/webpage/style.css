@@ -96,7 +96,7 @@ main.wide {
 
 .container {
   padding: 10px;
-  
+
   background-color: white;
   background-color: rgba( 255, 255, 255, 0.7 );
 
@@ -424,10 +424,11 @@ select {
 
 .totals {
   border-spacing: 0;
+  width: 100%;
 }
 
 .totals thead {
-  position: relative;
+  position: sticky;
   left: 0;
   top: 0;
 }
@@ -440,6 +441,19 @@ select {
 .totals tbody th {
   padding: 5px;
   background-color: rgba( 255, 255, 255, 0.6 );
+}
+
+.totals td {
+  box-sizing: border-box;
+  width: 10%;
+}
+
+.totals tr:hover th {
+  background-color: rgb( 255, 255, 255 );
+}
+
+.totals tr:hover td {
+  background-color: rgba( 255, 255, 255, 0.4 );
 }
 
 .totals td.total, .totals td.percent {

@@ -84,11 +84,11 @@ var STMT = {
   },
 
   SEARCH_MEMBERS_BY_NET_ID: function( text ) {
-    return `SELECT id, net_id, first_name AS first, last_name AS last, chapter, gw_role, w_lipsync, w_general, technical, events FROM event_roster WHERE lower(net_id) LIKE '%${text}%';`;
+    return `SELECT id, net_id, first_name AS first, last_name AS last, chapter, gw_role, w_lipsync, w_general, technical, events FROM event_roster WHERE lower(net_id) = '${text}';`;
   },
 
   SEARCH_MEMBERS_BY_NAME: function( firstText, lastText ) {
-    return `SELECT id, net_id, first_name AS first, last_name AS last, chapter, gw_role, w_lipsync, w_general, technical, events FROM event_roster WHERE lower(first_name) LIKE '%${firstText}%' ${lastText ? 'AND' : 'OR'} lower(last_name) LIKE '%${lastText || firstText}%';`;
+    return `SELECT id, net_id, first_name AS first, last_name AS last, chapter, gw_role, w_lipsync, w_general, technical, events FROM event_roster WHERE lower(first_name) = '${firstText}' AND lower(last_name) = '${lastText || firstText}';`;
   },
 
   GET_MEMBER_BY_NET_ID: function( netId ) {

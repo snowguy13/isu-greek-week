@@ -1,5 +1,5 @@
 var apparel = require("./apparel.json"),
-    twitter = require("./twitter"),
+    //twitter = require("./twitter"),
 
     db      = require("./database"),
 
@@ -15,7 +15,6 @@ var checkAuth = function( req, res, next ) {
       authorization = req.headers.authorization,
       identity = authorization.substring( 0, auth.IDENTITY_LEN ),
       token    = authorization.substring( auth.IDENTITY_LEN );
-
   // If there is no identity or token, fail now
   if( !identity || !token ) {
     res.status(401).send("Missing identity or token");
@@ -106,7 +105,7 @@ checkin.post("/", function( req, res ) {
 // Get totals for stuff
 checkin.get("/totals", function( req, res ) {
   // Make sure the user is "gwgencos"
-  if( auth.userFor( req.headers.authorization.substring( 0, auth.IDENTITY_LEN ) ) !== "gwgencos" ) {
+  if( auth.userFor( req.headers.authorization.substring( 0, auth.IDENTITY_LEN ) ) !== "hcgenco" ) {
     res.status(401).send("Only the general co-chairs can view totals");
     return;
   }

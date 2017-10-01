@@ -122,8 +122,8 @@ var updateResult = function( data ) {
   // Update result actions
   updateResultActions();
 
-  // Select the first thing
-  results.length && select(0);
+  // Select the first thing, or refocus the text field
+  results.length ? select(0) : elem.checkin.search.select().focus();
 };
 
 var round = function( val, places ) {
@@ -161,18 +161,21 @@ var makeTotalsBody = function( events, teamName, teamData ) {
 var makeTotalsTable = function( data ) {
   var t = elem.totals.table,
       e = data.events,
-      h = $("<thead />");
+      h = $("<thead />")
+      c = $("<colgroup />").append("<col />");
 
   // First, empty the table
   t.empty();
 
   // Begin by creating the table header
   e.reduce(function( h, e ) {
+    c.append($("<col span=2 />"));
     return h.append($("<th />").text( e ).attr("colspan", 2));
-  }, h.append("<th />"));
+  }, h.append("<th>Chapter</th>"));
 
   // Now append it to the table
   t.append( h );
+  t.append( c );
 
   // For each team, append a body
   for( var team in data.teams ) {
@@ -195,7 +198,7 @@ var makeTotalsTable = function( data ) {
 var eventOptions = [
   'Blood Drive:n',
   'LSI 4k',
-  'Up \'til Dawn Event:n',
+  'Up til Dawn Event:n',
   'Tournaments',
 ];
 
@@ -287,10 +290,10 @@ elem.login.submit.click(function() {
           token: res.token
         };
 
-        // If the user was "gwgencos", show the totals link
+        // If the user was "hcgenco", show the totals link
         elem.totals.openLink.detach();
 
-        if( u === "gwgencos" ) {
+        if( u === "hcgenco" ) {
           elem.totals.openLinkContainer.append( elem.totals.openLink );
         }
 
@@ -313,20 +316,25 @@ elem.login.submit.click(function() {
 // React to event changes
 elem.checkin.events.change(function( ev ) {
   event = eventOptions[ $(this).val() ];
-  updateResultActions();
-  console.log( event );
+  results && updateResultActions();
 });
 
 // Add search functionality
+elem.checkin.search.keydown(function( ev ) {
+  var key = ev.keyCode || ev.which;
+
+  if( key === 40 && results.length ) {
+    // Down key, so if there are results, select the first one
+    select(0);
+  }
+});
+
 elem.checkin.search.keypress(function( ev ) {
   var t = $(this),
       text = t.val(),
       key = ev.keyCode || ev.which;
 
-  if( key === 40 && results.length ) {
-    // Down key, so if there are results, select the first one
-    select(0);
-  } else if( key === 13 && !searching ) {
+  if( key === 13 && !searching ) {
     // If not searching and [Enter] was pressed, search now
     // Disable the input
     t.attr("disabled", true );
@@ -339,6 +347,11 @@ elem.checkin.search.keypress(function( ev ) {
       // format is ;xxxxxxXXXXXXXXX..., where X is id
       // also, remove leading zeroes
       text = text.substring(7, 16).replace(/^0+/, "");
+    }
+
+    // If we're looking at an ISU id, clear the field.
+    if( /[0-9]+/.test(text) || text[0] === ';' ) {
+      t.val('');
     }
 
     // Otherwise, perform a search request
@@ -409,6 +422,7 @@ elem.checkin.result.mousedown(function( ev ) {
     // Up key pressed -- move selection up, or select input if at top
     if( selected === 0 ) {
       elem.checkin.search.focus();
+      setTimeout(() => elem.checkin.search.select(), 1);
       body.removeClass("valid invalid");
     } else {
       select( selected - 1 );
