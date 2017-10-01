@@ -186,38 +186,28 @@ var makeTotalsTable = function( data ) {
 // Constants
 
 /* Event options: array of string with special format
- *   "<EventName>:[g|l|n][c][t]"
- *     g|l|n -- indicates waiver requirement
+ *   "<EventName>:[g|n][t]"
+ *     g|n -- indicates waiver requirement
  *       g -- general waiver (default if omitted)
- *       l -- lipsync waiver
  *       n -- no waiver
- *     c -- indicates a check-in tally should be kept
  *     t -- indicates the event is a tournament event
  */
 var eventOptions = [
-  "Dodgeball:ct",
-  "Volleyball:ct",
-  "Show Me The Greeks:c",
-  "Karaoke 1st Cuts:c",
-  "Lip Sync:l",
-  "Educational Speaker:nc",
-  "Polar Bear Plunge:c",
-  "Treds:ct",
-  "Karaoke 2nd Cuts:c",
-  "Trivia Blast:ct",
-  "Basketball:ct",
-  "Broomball:ct",
-  "Lip Sync Performance Friday:lc"
+  'Blood Drive:n',
+  'LSI 4k',
+  'Up \'til Dawn Event:n',
+  'Tournaments',
 ];
 
 // Convert eventOptions into JSON
 eventOptions = eventOptions.map(function( event, index ) {
-  var result = /([A-Za-z0-9 ]+):(g|l|n)?(c?)(t?)/.exec( event ),
-      w = result[2];
+  var result = /([A-Za-z0-9 ']+)(:(g|n)?(t)?)?/.exec( event ),
+      w = result[3];
+
+  console.log(event, result);
   var waivers = {
-    "g": "general",
-    "l": "lipsync",
-    "n": false
+    g: 'general',
+    n: false,
   };
 
   // Add the event to the events dropdown
@@ -225,8 +215,7 @@ eventOptions = eventOptions.map(function( event, index ) {
 
   return {
     name:       result[1],
-    waiver:     ( w ? waivers[w] : "general" ),
-    tally:      !!result[3],
+    waiver:     ( w ? waivers[w] : 'general' ),
     tournament: !!result[4]
   };
 });
