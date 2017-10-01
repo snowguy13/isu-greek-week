@@ -55,9 +55,11 @@ checkin.use(function( req, res, next ) {
 checkin.post("/login", function( req, res ) {
   var u = req.body.username,
       p = req.body.password;
-  
+
   // Attempt the login, and send the result
-  res.send( auth.logIn( u, p ) );
+  auth.logIn( u, p, function( result ) {
+    res.send( result );
+  });
 });
 
 // Search for members

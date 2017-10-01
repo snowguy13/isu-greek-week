@@ -67,6 +67,10 @@ var invokeAndCollect = function( cb, stmts ) {
 
 // Statements
 var STMT = {
+  CHECK_LOGIN: function( username, password ) {
+    return `SELECT EXISTS( SELECT true FROM auth WHERE username='${username}' AND password='${password}' )`;
+  },
+
   CHECK_IF_MEMBER_EXISTS: function( id, uniqueId ) {
     return `SELECT EXISTS( SELECT true FROM event_roster WHERE ${uniqueId ? "id" : "net_id"} = '${id}' )`;
   },
@@ -152,6 +156,19 @@ var promisify = function( sql ) {
 module.exports = {
   disconnect: function() {
     client.end();
+  },
+
+  checkLogin: function( username, password, cb ) {
+    // Check if the given username and password match.
+    client.query( STMT.CHECK_LOGIN( username, password ), function( err, res ) {
+      // If the was an error, fail now
+      if( err ) {
+        return markAndFail( err, cb, "checking login credentials");
+      }
+
+      // Otherwise, execute the callback with the result.
+      cb( undefined, res.rows[0].exists );
+    });
   },
 
   addMemberToRoster: function( member, cb ) {

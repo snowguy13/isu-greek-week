@@ -1,3 +1,8 @@
+CREATE TABLE auth(
+  username  VARCHAR(20) PRIMARY KEY,
+  password  VARCHAR(20)
+);
+
 CREATE TABLE teams(
   chapter    VARCHAR(20) PRIMARY KEY,
   team_name  VARCHAR(30) NOT NULL

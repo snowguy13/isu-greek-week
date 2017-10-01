@@ -1,3 +1,5 @@
+var db = require('./database.js');
+
 // Login credentials
 var CREDS = {
   "gwcentral": "getbent",
@@ -31,7 +33,7 @@ var genRandom = function( len ) {
 
 var genIdentity = function() {
   var identity;
-  
+
   // Make sure the identity is unique
   do {
     identity = genRandom( IDENTITY_LEN );
@@ -48,27 +50,39 @@ var genToken = function() {
 module.exports = {
   IDENTITY_LEN: IDENTITY_LEN,
 
-  logIn: function( username, password ) {
+  logIn: function( username, password, cb ) {
     var ret = {}, identity, token;
 
-    // If no such user exists, or wrong password
-    if( !( username in CREDS ) || password !== CREDS[ username ] ) {
-      ret.success = false;
-      ret.reason = "The provided username and password do no match.";
-    } else {
-      // Otherwise, generate an identity and a token
-      ret.success  = true;
-      ret.identity = genIdentity( username );
-      ret.token    = genToken();
+    db.checkLogin( username, password, function( err, valid ) {
+      // If there was an error, fail now.
+      if( err ) {
+        cb({
+          success: false,
+          reason:  'An error occurred while checking the given credentials.',
+        });
+      }
 
-      // Save these in the logons cache
-      identities[ ret.identity ] = {
-        user:  username,
-        token: ret.token
-      };
-    }
+      // Otherwise, if the login was invalid, fail.
+      if( !valid ) {
+        cb({
+          success: false,
+          reason:  'The provided username and password do no match.',
+        });
+      } else {
+        const ret = {
+          success:  true,
+          identity: genIdentity( username ),
+          token:    genToken(),
+        };
 
-    return ret;
+        identities[ ret.identity ] = {
+          user:  username,
+          token: ret.token
+        };
+
+        cb( ret );
+      }
+    });
   },
 
   logOut: function( identity ) {
