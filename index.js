@@ -17,7 +17,8 @@ app.set('dir', __dirname );
 
 // On empty url, return the main file
 app.get("/", function( req, res ) {
-  res.sendFile( __dirname + "/webapp/index.htm" );
+  // res.sendFile( __dirname + "/webapp/index.htm" );
+  res.redirect('/checkin');
 });
 
 // On /checkin, return the checkin page
@@ -32,18 +33,18 @@ app.use("/checkin", express.static( __dirname + "/checkin/webpage" ));
 app.use("/api", api );
 
 // Server gw2016.css statically
-app.get("/gw2016.css", function( req, res ) {
+/*app.get("/gw2016.css", function( req, res ) {
   res.sendFile( __dirname + "/webapp/gw2016.css" );
 });
 
 // Serve files for paths under image/ js/ or doc/
 app.use("/image", express.static( __dirname + "/webapp/image" ));
 app.use("/js",    express.static( __dirname + "/webapp/js" ));
-app.use("/doc",   express.static( __dirname + "/webapp/doc" ));
+app.use("/doc",   express.static( __dirname + "/webapp/doc" ));*/
 
 // Placeholder response -- redirect to index
 app.use(function( req, res ) {
-  res.redirect("/");
+  res.redirect('/checkin');
 });
 
 // Listen on the designated port
