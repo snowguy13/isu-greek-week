@@ -1,7 +1,7 @@
 var pg = require("pg"),
     _  = require("underscore"),
     Promise = require("promise");
-    console.log( Promise );
+// console.log( Promise );
 
 
 // Should work remotely or locally

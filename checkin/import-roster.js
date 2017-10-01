@@ -5,19 +5,19 @@ var encode = xlsx.utils.encode_cell,
     decode = xlsx.utils.decode_cell;
 
 // The local name of the workbook containing member information
-var BOOK = "GW17roster.xlsx";
+var BOOK = "local/hc17-roster.xlsx";
 
 // Mapping desired columns to their database column names
 var COLS = {
-  "Student ID #": "isu_id",
-  "Email":        "net_id",
-  "First":        "first_name",
-  "Last":         "last_name",
-  "Chapter":      "chapter"
+  "ISU ID":    "isu_id",
+  "ISU NetID": "net_id",
+  "First":     "first_name",
+  "Last":      "last_name",
+  "Chapter":   "chapter"
 };
 
 // Members in central
-var CENTRAL = [
+/*var CENTRAL = [
   "rsmccc",     //Riley McCloskey
   "vanscoy",    //Jordan VanScoy
   "aditya",     //Aditya Navale
@@ -83,7 +83,7 @@ var CREW = [
   "lkstu",
   "harvardw",
   "twzeller"
-];
+];*/
 
 // Simple function to grab value from a sheet cell.
 const getValue = ({ r, c }) => ( sheet[ encode({ r, c }) ] || {} ).v || "";
@@ -176,6 +176,9 @@ var checkDone = function() {
         console.log("    ", row );
       });
     }
+    if( Object.keys(errors).length === 0 ) {
+      console.log("  None!");
+    }
     console.log("\nDone. Checked %d members, added %d new. %d failed (see errors above).", count, added, erred );
 
     // Disconnect from the database
@@ -207,11 +210,11 @@ rows.forEach(function( row ) {
   }
 
   // Check if the member is in crew or central
-  if( CENTRAL.indexOf( row.net_id ) > -1 ) {
+  /*if( CENTRAL.indexOf( row.net_id ) > -1 ) {
     row.gw_role = "Central";
   } else if( CREW.indexOf( row.net_id ) > -1 ) {
     row.gw_role = "Crew";
-  }
+  }*/
 
   // TODO Change after 2017. In 2017, netids are provided
   // in the form netid@iastate.edu. We must remove the @iastate.edu.
