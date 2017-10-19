@@ -199,7 +199,11 @@ var eventOptions = [
   'Blood Drive:n',
   'LSI 4k',
   'Up til Dawn Event:n',
-  'Tournaments',
+  'Tournaments Night 1',
+  'Tournaments Night 2',
+  'Tournaments Night 3',
+  'Tournaments Night 4',
+  'Tournaments Night 5'
 ];
 
 // Convert eventOptions into JSON
