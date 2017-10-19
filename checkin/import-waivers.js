@@ -9,7 +9,7 @@ var encode = xlsx.utils.encode_cell,
 // If <name> is an element of BOOKS, then the script will look for a book
 // called waivers-<name>.xls and will import the waiver data into a table
 // called waivers.<name>
-var BOOKS = ["lipsync", "general"];
+var BOOKS = ["general"];
 
 var doneCount = 0;
 var checkDisconnect = function() {
@@ -51,9 +51,9 @@ var readBookToDatabase = function( name, cb ) {
   var book;
 
   try {
-    book = xlsx.readFile( `${name}-waivers17.xls` );
+    book = xlsx.readFile( `hc17-${name}-waivers.xls` );
   } catch( e ) {
-    book = xlsx.readFile( `${name}-waivers17.xlsx` );
+    book = xlsx.readFile( `hc17-${name}-waivers.xlsx` );
   }
 
   var sheet = book.Sheets[ book.SheetNames[0] ];
